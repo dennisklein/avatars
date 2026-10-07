@@ -10,8 +10,10 @@
 //   DIR/avatars/<avatar>-<look>-expr.png, -visemes.png
 //   DIR/episodes/<theme>/<episode>/contact-sheet-*.jpg
 //
-// Avatar sheets must succeed; demo stills are best effort and reported.
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+// Avatar sheets must succeed; demo stills are best effort and reported. A run
+// replaces DIR/avatars and DIR/episodes, and refuses to when they hold files
+// it did not write.
+import { cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { launch, openEpisode } from "./browser.mjs";
@@ -112,6 +114,38 @@ async function themedStills(browser, demo, id, theme, outDir) {
   }
 }
 
+// What a gallery run writes under DIR, which the next run clears: anything
+// else there is someone's work (`--out` at a project root would otherwise
+// clear its episodes/, at this package's root its avatars/).
+const OWN_DIR = /^episodes\/[^/]+(\/[^/]+)?$/;
+const OWN_FILE = new RegExp(`^(avatars/[^/]+-(${SHEETS.join("|")})\\.png|episodes/[^/]+/[^/]+/contact-sheet[^/]*)$`);
+
+// The first entry under outDir/rel that no gallery run writes, or null.
+function strayEntry(outDir, rel) {
+  for (const e of readdirSync(path.join(outDir, rel), { withFileTypes: true })) {
+    const p = `${rel}/${e.name}`;
+    if (e.isDirectory() && OWN_DIR.test(p)) {
+      const inner = strayEntry(outDir, p);
+      if (inner) return inner;
+    } else if (!e.isFile() || !OWN_FILE.test(p)) {
+      return p;
+    }
+  }
+  return null;
+}
+
+// Clear DIR/avatars and DIR/episodes of an earlier run; refuse to clear
+// either when it holds anything a run does not write.
+function clearOutput(outDir) {
+  const dirs = ["avatars", "episodes"].filter((d) => existsSync(path.join(outDir, d)));
+  for (const d of dirs) {
+    const dir = path.join(outDir, d);
+    const stray = lstatSync(dir).isDirectory() ? strayEntry(outDir, d) : d;
+    if (stray) throw new Error(`${dir} holds files avatars gallery did not write (${stray}); choose an empty or gallery output directory`);
+  }
+  for (const d of dirs) rmSync(path.join(outDir, d), { recursive: true, force: true });
+}
+
 function fillPage(template, vars) {
   return template.replace(/\{\{(\w+)\}\}/g, (m, k) => (k in vars ? vars[k] : m));
 }
@@ -120,7 +154,7 @@ export async function buildGallery(project, out, opts = {}) {
   const outDir = path.resolve(out);
   if (!existsSync(INDEX_PAGE)) throw new Error(`${INDEX_PAGE} is missing`);
   mkdirSync(outDir, { recursive: true });
-  for (const d of ["avatars", "episodes"]) rmSync(path.join(outDir, d), { recursive: true, force: true });
+  clearOutput(outDir);
   const theme = opts.theme || (project && project.config.theme) || "midnight";
   const failures = [];
   const notes = [];
