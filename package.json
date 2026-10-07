@@ -18,7 +18,9 @@
     "core",
     "docs",
     "formats",
-    "gallery",
+    "gallery/index.html",
+    "gallery/sheet.html",
+    "gallery/README.md",
     "icons",
     "integrations",
     "lexicons",
@@ -33,7 +35,8 @@
     "voice/requirements.txt",
     "DESIGN.md",
     "LICENSE",
-    "NOTICE"
+    "NOTICE",
+    "!**/__pycache__"
   ],
   "engines": {
     "node": ">=22"
