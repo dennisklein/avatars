@@ -61,7 +61,12 @@ export async function openEpisode(browser, dir, opts = {}) {
       return;
     }
     if (u.protocol === "file:") {
-      const file = decodeURIComponent(u.pathname);
+      let file = u.pathname;
+      try {
+        file = decodeURIComponent(file);
+      } catch {
+        // A stray % (in a file name) escapes nothing: keep the path as it is.
+      }
       if (!existsSync(file)) log.missing.push(file);
     } else if (u.protocol === "http:" || u.protocol === "https:") {
       log.network.push(r.url());

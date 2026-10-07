@@ -15,9 +15,9 @@
         "required": ["id", "text"],
         "properties": {
           "id": {
-            "description": "A file name: the line's files are named after it.",
+            "description": "A file name without ?, # or %: it names the line's files, which the page loads by URL.",
             "type": "string",
-            "pattern": "^(?!\\.\\.?$)[^/\\\\]+$"
+            "pattern": "^(?!\\.\\.?$)[^/\\\\?#%]+$"
           },
           "text": { "type": "string" },
           "lead": { "description": "Seconds of silence before the speech.", "type": "number", "minimum": 0 }

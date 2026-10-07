@@ -55,10 +55,33 @@ export function fixtureLine(text, voice = "fixture") {
   return { text, voice, duration, sampleRate: 24000, words, visemes, envelope: { fps: 100, values }, fixture: true };
 }
 
+// A script.json's lines, checked as the voice tool checks them: ids name the
+// line's files, which the page loads by URL.
+function scriptLines(scriptFile) {
+  let spec;
+  try {
+    spec = JSON.parse(readFileSync(scriptFile, "utf8"));
+  } catch (e) {
+    throw new Error(`script ${scriptFile}: ${e.message}`);
+  }
+  const lines = spec && Array.isArray(spec.lines) ? spec.lines : null;
+  if (!lines) throw new Error(`script ${scriptFile}: expected {"lines": [{"id": ..., "text": ...}, ...]}`);
+  const seen = new Set();
+  lines.forEach((line, i) => {
+    if (!line || typeof line.id !== "string" || typeof line.text !== "string") throw new Error(`script ${scriptFile}: line ${i + 1} needs a string id and text`);
+    if (!line.id || /[/\\?#%]/.test(line.id) || line.id === "." || line.id === "..") {
+      throw new Error(`script ${scriptFile}: line id "${line.id}" must be a file name without / \\ ? # %`);
+    }
+    if (seen.has(line.id)) throw new Error(`script ${scriptFile}: line id "${line.id}" appears twice`);
+    seen.add(line.id);
+  });
+  return { voice: spec.voice, lines };
+}
+
 // Write <out>/<id>.json, index.json and lines.js for a script.json, as the
 // voice tool does (without WAV files).
 export function writeFixtureVoice(scriptFile, out) {
-  const spec = JSON.parse(readFileSync(scriptFile, "utf8"));
+  const spec = scriptLines(scriptFile);
   mkdirSync(out, { recursive: true });
   const bundle = {};
   const index = [];
