@@ -129,6 +129,7 @@
     const scenes = [];
     const shown = []; // terminal commands and output, code lines: for `avatars check`
     let shotName = null;
+    let shotEnd = 0; // when the last presenter move ends
     let sceneCount = 0;
 
     // Layers above the scenes: presenter, name tag, captions, fade.
@@ -190,9 +191,14 @@
     }
 
     // ---- scenes ----
+    // A move starts once the previous one has ended: a `to` tween starts
+    // from what is on screen when it first renders, so an overlap would
+    // depend on the frame a render worker's seek starts from.
     function setShot(name, at, dur, ease) {
+      at = Math.max(at, shotEnd);
       S.shot(tl, frame, name, at, dur, ease);
       shotName = name;
+      shotEnd = at + (dur || 0);
     }
 
     // A transition's duration: its motion.transition.<kind> token, else the default one.

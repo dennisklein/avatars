@@ -110,14 +110,21 @@
         },
       });
     }
-    for (const p of panels) p.top = 0;
+    for (const p of panels) {
+      p.top = 0;
+      p.scrollEnd = 0;
+    }
     for (const ev of events.sort((x, y) => x.at - y.at)) {
       const p = ev.p;
       let top = p.top;
       if (ev.last >= top + rows) top = ev.last - rows + 1;
       if (ev.first < top) top = ev.first;
       if (top !== p.top) {
-        tl.to(p.view, { y: -top * lh, duration: 0.5, ease: "power2.inOut" }, ev.at - 0.3);
+        // A scroll starts once the panel's previous one has ended, so it
+        // starts from that scroll's end whatever frame a seek starts from.
+        const at = Math.max(ev.at - 0.3, p.scrollEnd);
+        tl.to(p.view, { y: -top * lh, duration: 0.5, ease: "power2.inOut" }, at);
+        p.scrollEnd = at + 0.5;
         p.top = top;
       }
       ev.run(ev.at);
