@@ -187,7 +187,7 @@ node cli/avatars.mjs sheet sindy --look blazer-glasses --mode expr --project exa
 
 ![Sindy's moods in the blazer-glasses look](images/sindy-blazer-glasses.png)
 
-(The pictures in `docs/images/` are these sheets, cropped to equal margins.)
+(The pictures in `docs/images/` are these sheets.)
 An episode switches looks in its `episode.json`; the demo's `wardrobe`
 episode wears `blazer-glasses` on the `daylight` theme:
 

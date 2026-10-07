@@ -86,7 +86,9 @@ export async function shootSheet(browser, dir, mode, out) {
     if (log.errors.length || !state) throw new Error(`sheet ${mode}: ${log.errors.join("; ") || "the page did not finish drawing"}`);
     for (const f of log.missing) throw new Error(`sheet ${mode}: missing file ${f}`);
     mkdirSync(path.dirname(path.resolve(out)), { recursive: true });
-    await page.screenshot({ path: out, fullPage: true });
+    // The grid with its padding, so the margins are equal whatever the viewport.
+    const grid = await page.$("#grid");
+    await grid.screenshot({ path: out, captureBeyondViewport: true });
     return state;
   } finally {
     await page.close();

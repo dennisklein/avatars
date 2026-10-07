@@ -11,7 +11,7 @@
   /* The page grows with its cells, unlike a composition sized to its format. */
   html, body { width: auto; height: auto; overflow: visible; }
   body { margin: 0; background: var(--av-color-bg); font-family: var(--av-font-sans); color: var(--av-color-text-muted); }
-  #grid { display: grid; grid-template-columns: repeat(var(--cols, 4), var(--w, 300px)); gap: 12px; padding: 16px; }
+  #grid { display: grid; width: max-content; grid-template-columns: repeat(var(--cols, 4), var(--w, 300px)); gap: 12px; padding: 16px; }
   .cell { background: linear-gradient(var(--av-color-surface), var(--av-color-bg)); border-radius: 12px; overflow: hidden; }
   .cell .av { width: var(--w, 300px); height: var(--h, 400px); }
   .cell p { margin: 0; padding: 6px 10px; font-size: 14px; }
