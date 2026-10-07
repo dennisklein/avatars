@@ -43,7 +43,8 @@ glances at every item that has a cue. A new layout, such as a table, builds
 on the same frame.
 
 Four bullets start higher and closer together, so the last clears the
-captions.
+captions. A fifth runs under the captions and off the frame; the scene logs
+a warning.
 
 ## Tokens
 

@@ -43,6 +43,8 @@
       a.y = G.untitledTop;
     }
     const specs = o.panels || [{ file: o.file, lang: o.lang, text: o.text }];
+    // The panels lay out beside the right-hand bubble; `shot` only moves the presenter.
+    if (ctx.shot === "cornerL") console.warn(`code ${specs.map((p) => p.file).join(", ")}: the cornerL bubble covers the panels, which lay out for cornerR`);
     const notes = o.notes || [];
     const notesH = notes.length ? CODE.gap + notes.length * CODE.note + (notes.length - 1) * CODE.noteGap : 0;
     const pw = (a.w - CODE.gap * (specs.length - 1)) / specs.length;

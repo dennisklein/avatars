@@ -151,6 +151,11 @@
     const moods = mergeMoods(opts.moods);
     const seed = opts.seed == null ? 7 : opts.seed;
     const tracks = normalizeTracks(opts);
+    // An unknown mood shows as neutral; warn once per name, which
+    // `avatars check` reports.
+    for (const name of new Set(tracks.expr.map((e) => e.name))) {
+      if (!Object.prototype.hasOwnProperty.call(moods, name)) console.warn(`mood "${name}" is unknown and shows as neutral`);
+    }
     const blinks = blinkTimes(seed, opts.maxDuration || 600, T);
     const nSway = makeNoise(seed + 1);
     const nNod = makeNoise(seed + 2);

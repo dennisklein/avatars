@@ -10,6 +10,8 @@
     const { tl, h } = ctx;
     const T = ctx.tokens;
     const f = ctx.slideFrame("slide", o);
+    const n = (o.bullets || []).length;
+    if (n > 4) console.warn(`slide "${o.title || o.chapter || ""}": ${n} bullets; at most 4 fit above the captions`);
     const bullets = (o.bullets || []).map((b) => h("div", { class: "bullet" }, [ctx.icon(b.icon), h("div", { class: "txt" }, [h("div", { class: "t1", text: b.title }), b.text ? h("div", { class: "t2", text: b.text }) : null])]));
     f.el.append(h("div", { class: "bullets" }, bullets));
     for (const b of bullets) tl.set(b, { opacity: 0 }, 0);

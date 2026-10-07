@@ -39,7 +39,7 @@ correctly at any frame.
 | `prompt` | `"$ "` | the prompt |
 | `cps` | `terminal.cps` (32) | typing speed, characters per second |
 | `glance` | `true` | `false` stops the presenter glancing at typed commands |
-| `transition`, `transitionDur`, `shot` | | override the defaults |
+| `transition`, `transitionDur`, `shot` | | override the defaults; `shot` moves only the presenter, and the window lays out for `cornerR` (`cornerL` covers it and logs a warning) |
 
 Steps take `at` (a time reference, plus `delay` seconds) or `after`
 (seconds after the previous step; a typed command ends when its last

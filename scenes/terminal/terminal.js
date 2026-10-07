@@ -104,6 +104,8 @@
     const wide = !!o.wide;
     const shot = o.avatar === "none" ? "hidden" : wide ? "mini" : "cornerR";
     const { el, t } = ctx.begin(wide ? "terminal-wide" : "terminal", o, { transition: "push", shot });
+    // The window lays out beside the right-hand bubble; `shot` only moves the presenter.
+    if (ctx.shot === "cornerL") console.warn("terminal: the cornerL bubble covers the window, which lays out for cornerR");
     const geo = wide ? G.wide : G.normal;
     const body = h("div", { class: "term-body" });
     const win = h("div", { class: wide ? "term wide" : "term", style: `left:${geo.left}px;top:${geo.top}px;width:${geo.width}px;height:${geo.height}px` }, [ctx.windowBar(o.title || "~/work — bash"), body, h("div", { class: "term-ff" })]);

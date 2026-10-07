@@ -36,6 +36,10 @@ Everything the slide frame takes (`chapter`, `label`, `title`, `say`,
 | `marks` | `[{ text \| line, at, until, panel }]`: light up every line that contains `text` (or line number `line`) from `at` until `until` |
 | `notes` | `[{ icon, text, warn, at }]`: chips under the panels; `warn` draws a warning chip |
 
+`shot` moves only the presenter: the panels lay out beside `cornerR` (or
+in the wide area with `wide: true`), so `cornerL` puts the bubble over them,
+and the scene logs a warning.
+
 Without a `title` the panels use the whole height below the chapter label.
 The font is fitted to the longest line and the tallest panel; a panel scrolls
 to keep revealed and marked lines in view. Like terminal output, every line
