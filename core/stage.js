@@ -14,10 +14,9 @@
   const S = (global.Scenes = global.Scenes || {});
 
   const data = () => A.data || {};
-  // The same objects as Avatars.data.format.shots: GSAP's tl.set() writes its
-  // bookkeeping (duration 0, parent) into the frame vars it is given, and
-  // later moves to a shot copy those vars, so a shot that was once set
-  // without a move is reached without one afterwards.
+  // The format's shots (Avatars.data.format.shots). GSAP writes its
+  // bookkeeping (duration, parent, ease) into the vars it is given, so every
+  // tween gets a copy and the format data stays as the format wrote it.
   S.SHOTS = (data().format && data().format.shots) || {};
 
   // The base of the cast member a frame shows (data-role, default "host").
@@ -59,13 +58,15 @@
     const deco = frame.querySelectorAll(".presenter-ring, .presenter-bg");
     const stageVars = stageBox(s.stage, baseOf(frame));
     if (!dur) {
-      tl.set(frame, s.frame, at);
+      tl.set(frame, Object.assign({}, s.frame), at);
       tl.set(stage, stageVars, at);
       tl.set(deco, { opacity: s.ring }, at);
       return;
     }
     const e = ease || "power3.inOut";
-    tl.to(frame, Object.assign({ duration: dur, ease: e }, s.frame), at);
+    // The frame cuts to "hidden" (off screen) instead of gliding there; the
+    // stage and ring inside it still move.
+    tl.to(frame, Object.assign({ duration: name === "hidden" ? 0 : dur, ease: e }, s.frame), at);
     tl.to(stage, Object.assign({ duration: dur, ease: e }, stageVars), at);
     tl.to(deco, { opacity: s.ring, duration: dur * 0.6, ease: "power1.inOut" }, at + (s.ring ? dur * 0.4 : 0));
   }
