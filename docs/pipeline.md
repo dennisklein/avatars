@@ -160,9 +160,9 @@ can copy from the page what they saw:
   does not separate two words.
 - A command must occur somewhere in the pages' text.
 - An output or code line must equal a whole page line, ignoring trailing
-  whitespace but not leading whitespace; blank lines are skipped. A code
-  block indented inside a list item therefore does not match unindented
-  output.
+  whitespace but not leading whitespace; blank lines are skipped. Lines of a
+  fenced code block also count without the block's common indentation, so a
+  block nested in a list item matches unindented output.
 
 A missing page and every ungrounded line are warnings. Copy content from the
 page into the episode, never the other way round; if the page is wrong, fix

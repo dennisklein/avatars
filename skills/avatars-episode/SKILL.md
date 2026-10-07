@@ -246,8 +246,9 @@ project's sources. `check` enforces this when `avatars.json` has a
   does not separate two words.
 - A command must occur somewhere in the pages' text. Every output line and
   code line must equal a whole line of a page, ignoring trailing whitespace
-  but not leading whitespace: a code block indented inside a list item does
-  not match unindented output.
+  but not leading whitespace. Lines of a fenced code block also count
+  without the block's common indentation, so a block nested in a list item
+  matches unindented output.
 - So embed the episode on its page before running `check`, where the
   project's instructions say. The library's Hugo shortcode renders nothing
   until the episode is published, so pages can embed it early.

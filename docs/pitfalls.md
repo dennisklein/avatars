@@ -76,8 +76,9 @@ Roadblocks met while building and porting this pipeline, and their fixes.
   by its first part.
 - Terminal output and code must match the docs page. When the page changes,
   update the episode in the same change; `check` lists what no longer
-  matches. Grounding compares whole lines with their leading whitespace, so
-  a code block indented inside a Markdown list item does not match.
+  matches. Grounding compares whole lines with their leading whitespace;
+  only a fenced block's common indentation (a block nested in a list item)
+  is ignored.
 - Hugo runs shortcodes even inside code fences, so a Hugo page cannot show
   a line that contains one, such as the grounding snippet of `avatars.json`,
   in a code block an episode is checked against: escaping it as

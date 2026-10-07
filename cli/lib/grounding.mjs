@@ -9,7 +9,9 @@
 // Pages are the Markdown files under `sources` (relative to the project root)
 // whose text contains `embed` with {id} replaced by the episode id. A command
 // must occur somewhere in the pages' text; an output or code line must equal
-// a page line, both with trailing whitespace trimmed.
+// a page line, both with trailing whitespace trimmed. Lines of a fenced block
+// also count without the block's common indentation, so a block nested in a
+// list item matches unindented output.
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 
@@ -63,11 +65,37 @@ export function groundingPages(root, grounding, id) {
     .filter((p) => re.test(p.text));
 }
 
+const FENCE = /^(\s*)(`{3,}|~{3,})/;
+
+// Every line of `text`, plus the lines of each fenced block with the block's
+// common indentation removed, all with trailing whitespace trimmed.
+export function pageLines(text) {
+  const all = text.split("\n").map((l) => l.trimEnd());
+  const lines = new Set(all);
+  let block = null;
+  const flush = () => {
+    const body = block.lines.filter((l) => l.trim());
+    const indent = Math.min(block.indent, ...body.map((l) => l.length - l.trimStart().length));
+    if (indent > 0) for (const l of block.lines) lines.add(l.slice(Math.min(indent, l.length - l.trimStart().length)));
+  };
+  for (const l of all) {
+    const m = FENCE.exec(l);
+    if (block) {
+      if (m && m[2][0] === block.fence[0] && m[2].length >= block.fence.length && !l.trim().slice(m[2].length)) {
+        flush();
+        block = null;
+      } else block.lines.push(l);
+    } else if (m) block = { fence: m[2], indent: m[1].length, lines: [] };
+  }
+  if (block) flush();
+  return lines;
+}
+
 // Warnings for shown content ({ cmd } | { out, code? } with `at` seconds)
 // that the pages do not contain. `when(t)` formats a time.
 export function ungrounded(shown, pages, when = (t) => `${t}s`) {
   const text = pages.map((p) => p.text).join("\n");
-  const lines = new Set(text.split("\n").map((l) => l.trimEnd()));
+  const lines = new Set(pages.flatMap((p) => [...pageLines(p.text)]));
   const out = [];
   for (const item of shown || []) {
     const at = typeof item.at === "number" ? `at ${when(item.at)}` : "";

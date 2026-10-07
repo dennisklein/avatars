@@ -971,8 +971,9 @@ and `library`, no tokens, no grounding, no checks, and `publish` into
   replaced by the episode id; whitespace in `embed` may vary, and may be
   absent where it does not separate two words. A command must occur in the
   pages' text; an output or code line must equal a page line, both trimmed
-  of trailing whitespace (leading whitespace counts). `check` reports a
-  missing page and every ungrounded line as warnings.
+  of trailing whitespace (leading whitespace counts, except a fenced code
+  block's common indentation, so a block nested in a list item matches).
+  `check` reports a missing page and every ungrounded line as warnings.
 - `checks` lists project modules whose default export `async (api) => {}`
   runs after the built-in checks, with `api = { id, dir, episode, project,
   warn(msg), error(msg) }` (`episode` is `window.__episode`). A check that
