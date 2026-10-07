@@ -18,7 +18,7 @@ export const fixture = (name) => path.join(FIXTURES, name);
 
 // Generated, local-only or bulky paths (the .gitignore entries and the
 // repository's own metadata) that copies and repository scans leave out.
-export const GENERATED = new Set(["node_modules", ".git", "vendor", "snapshots", "renders", ".hyperframes", "__pycache__", "publish"]);
+export const GENERATED = new Set(["node_modules", ".git", "vendor", "snapshots", "renders", ".hyperframes", "__pycache__", "publish", ".gallery-store"]);
 const GENERATED_PATHS = [`assets${path.sep}voice`, `gallery${path.sep}out`];
 export const isGenerated = (rel) => rel.split(path.sep).some((s) => GENERATED.has(s)) || GENERATED_PATHS.some((p) => rel === p || rel.endsWith(`${path.sep}${p}`));
 

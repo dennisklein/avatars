@@ -69,7 +69,7 @@ for failures and 2 for usage errors, and `npx avatars help` prints the usage.
 | `hash ID…` | prints `<id>-<hash>`, the render hash |
 | `ci ID… --store DIR [--used FILE]` | renders what the store lacks, then publishes from the store |
 | `validate` | checks every manifest of the package and the project against its schema |
-| `gallery --out DIR [--theme T]` | avatar sheets and demo contact sheets; replaces `DIR/avatars/` and `DIR/episodes/`, and refuses to when they hold files it did not write |
+| `gallery --out DIR [--theme T] [--videos [--store DIR]]` | avatar sheets, demo contact sheets and, with `--videos`, the demo videos ([gallery/README.md](../gallery/README.md)); replaces `DIR/avatars/` and `DIR/episodes/`, and refuses to when they hold files it did not write |
 | `sheet AVATAR [--look L] [--mode M] [--theme T] -o PNG` | one avatar sheet ([avatars.md](avatars.md)) |
 
 `voice`, `phonemes` and `fixture-voice` need only `script.json`; the others

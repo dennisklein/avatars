@@ -20,13 +20,16 @@
   h3 { font-size: 16px; margin: 0 0 2px; }
   h3 span, .ids, figcaption, .empty, header p { color: var(--muted); font-weight: normal; }
   .ids { margin: 0 0 10px; font-size: 13px; }
-  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(560px, 1fr)); gap: 16px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(560px, 100%), 1fr)); gap: 16px; }
   .card, .theme { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
   .card img { display: block; width: 100%; height: auto; border-radius: 6px; margin-top: 8px; }
-  .theme { margin-bottom: 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 12px; }
-  .theme h3 { grid-column: 1 / -1; }
+  .theme { margin-bottom: 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(380px, 100%), 1fr)); gap: 12px; }
+  .theme h3, .episode { grid-column: 1 / -1; }
+  .episode { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(380px, 100%), 1fr)); gap: 12px; }
   figure { margin: 0; }
-  figure img { display: block; width: 100%; height: auto; border-radius: 6px; }
+  figure img, figure video { display: block; width: 100%; height: auto; border-radius: 6px; }
+  figure video { background: #000; }
+  .unsupported { font-size: 13px; margin: 4px 0 0; }
   figcaption { font-size: 13px; margin-top: 4px; }
   footer { padding-bottom: 40px; font-size: 13px; color: var(--muted); }
 </style>
@@ -47,5 +50,13 @@
 <footer>
   {{notes}}
 </footer>
+<script>
+  // A browser that cannot decode the AV1 video gets a download link instead
+  // of a player that never starts.
+  document.querySelectorAll("figure.video").forEach(function (f) {
+    var source = f.querySelector("source");
+    if (!f.querySelector("video").canPlayType(source.type)) f.querySelector(".unsupported").hidden = false;
+  });
+</script>
 </body>
 </html>

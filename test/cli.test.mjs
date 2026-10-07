@@ -2,14 +2,16 @@
 // SPDX-License-Identifier: Apache-2.0
 // The command line (cli/avatars.mjs): exit codes and messages of usage
 // errors and failures, `avatars new` with the package's templates, what
-// render, publish and gallery refuse before they open a browser, and the
-// WebVTT captions of publish. Commands that load pages are covered by
+// render, publish and gallery refuse before they open a browser, the
+// gallery's output and store housekeeping, and the WebVTT captions of
+// publish. Commands that load pages are covered by
 // browser.test.mjs.
 import assert from "node:assert/strict";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { describe, test } from "node:test";
 import { fontFaceProblems } from "../cli/lib/check.mjs";
+import { clearOutput, pruneStore } from "../cli/lib/gallery.mjs";
 import { loadProject, resolveEpisode } from "../cli/lib/project.mjs";
 import { webVtt } from "../cli/lib/publish.mjs";
 import { titleOf } from "../cli/lib/templates.mjs";
@@ -29,6 +31,7 @@ describe("exit codes", () => {
       [["hash", "--project", DEMO], "avatars: name one or more episodes, or pass --all"],
       [["hash", "tour", "--all", "--project", DEMO], "avatars: pass episode ids or --all, not both"],
       [["ci", "--all", "--project", DEMO], "avatars: ci needs --store DIR"],
+      [["gallery", "--out", "x", "--store", "s"], "avatars: gallery --store needs --videos"],
       [["sheet", "sindy"], "avatars: sheet AVATAR [--look L] [--mode M] [--theme T] -o PNG"],
       [["sheet", "sindy", "--mode", "side", "-o", "x.png"], "avatars: --mode is one of expr, visemes, gaze, big"],
       [["new", "thing", "x"], "avatars: new project DIR, or new episode ID"],
@@ -167,6 +170,33 @@ describe("refusals before a browser starts", () => {
     assert.equal(r.status, 1, outputOf(r));
     assert.match(r.stderr, /^avatars: .*episodes holds files avatars gallery did not write \(episodes\/[^)]+\); choose an empty or gallery output directory\n$/);
     for (const f of ["episodes/tour/index.html", "episodes/wardrobe/script.json", "avatars.json"]) assert.ok(existsSync(path.join(root, f)), `${f} is kept`);
+  });
+});
+
+describe("gallery housekeeping", () => {
+  const touch = (root, rel) => {
+    mkdirSync(path.dirname(path.join(root, rel)), { recursive: true });
+    writeFileSync(path.join(root, rel), "x");
+  };
+
+  test("an earlier run's sheets, stills and videos are cleared; anything else is refused and kept", (t) => {
+    const root = tempDir(t);
+    const own = ["avatars/sindy-hoodie-expr.png", "episodes/midnight/tour/contact-sheet-1.jpg", "episodes/midnight/tour/tour.webm", "episodes/midnight/tour/tour.jpg", "episodes/midnight/tour/tour.vtt"];
+    for (const f of own) touch(root, f);
+    clearOutput(root);
+    assert.deepEqual(readdirSync(root), []);
+    for (const f of [...own, "episodes/midnight/tour/notes.txt"]) touch(root, f);
+    assert.throws(() => clearOutput(root), /episodes holds files avatars gallery did not write \(episodes\/midnight\/tour\/notes\.txt\)/);
+    for (const f of own) assert.ok(existsSync(path.join(root, f)), `${f} is kept`);
+  });
+
+  test("the store loses the gallery entries a run did not use, and nothing else", (t) => {
+    const store = tempDir(t);
+    for (const name of ["gallery-midnight-tour-0123456789abcdef", "gallery-midnight-tour-fedcba9876543210", "gallery-daylight-tour-0123456789abcdef.tmp", "tour-0123456789abcdef"]) {
+      mkdirSync(path.join(store, name));
+    }
+    pruneStore(store, new Set(["gallery-midnight-tour-fedcba9876543210"]));
+    assert.deepEqual(readdirSync(store).sort(), ["gallery-midnight-tour-fedcba9876543210", "tour-0123456789abcdef"]);
   });
 });
 

@@ -1033,7 +1033,7 @@ without one.
 | `hash ID…` | the render hash, printed as `<id>-<hash>` |
 | `ci ID… --store DIR [--used FILE]` | voice and publish into the store on a miss, then copy from it |
 | `validate` | JSON Schema validation of every manifest of the package (with `examples/demo`) and the project |
-| `gallery --out DIR [--theme T]` | avatar sheets and demo contact sheets |
+| `gallery --out DIR [--theme T] [--videos [--store DIR]]` | avatar sheets, demo contact sheets and, with `--videos`, demo videos |
 | `sheet AVATAR [--look L] [--mode expr\|visemes\|gaze\|big] [--theme T] -o PNG` | one avatar sheet |
 
 `--all` instead of ids selects every episode that has the file the command
@@ -1141,16 +1141,24 @@ and `validate: N files, M problems`.
 (`gallery/index.html` filled), `DIR/avatars/<avatar>-<look>-expr.png` and
 `-visemes.png` for every avatar and look of the package and the project
 library (a project avatar shadows a package avatar of the same id), and
-`DIR/episodes/<theme>/<episode>/contact-sheet-*.jpg` for every
-`examples/demo` episode in every theme, with an episode's own theme removed
-and fixture narration when it is not voiced. Each run first removes
+`DIR/episodes/<theme>/<episode>/contact-sheet-*.jpg` for every `examples/demo`
+episode in every theme, with an episode's own theme removed and fixture
+narration when it is not voiced. `--videos` adds the published files of every
+voiced demo episode in every theme
+(`DIR/episodes/<theme>/<episode>/<episode>.webm`, `.jpg` and `.vtt`, as
+`publish` writes them), shown in a player before its contact sheets; an
+episode that is not voiced gets a note instead. `--store DIR` keeps these
+videos in DIR, one entry `gallery-<theme>-<episode>-<hash>/` per render, where
+the hash covers the render hash of the themed episode and its narration files:
+a run publishes only what the store lacks, and a run that made every video
+removes the `gallery-*` entries it did not use. Each run first removes
 `DIR/avatars/` and `DIR/episodes/` of an earlier run; when either holds
 anything a run does not write, it fails and names that directory, without
-removing anything. Sheets must succeed; demo stills are best effort and
-reported. `avatars sheet` draws `gallery/sheet.html` next
-to a vendor bundle for a cast of that avatar and look, in the project's theme
-(else `midnight`, or `--theme`) with the project's brand marks (none without
-a project), and takes a full-page screenshot at 1300 px wide. Every cell uses
+removing anything. Sheets must succeed; demo stills and videos are best effort
+and reported. `avatars sheet` draws `gallery/sheet.html` next to a vendor
+bundle for a cast of that avatar and look, in the project's theme (else
+`midnight`, or `--theme`) with the project's brand marks (none without a
+project), and takes a full-page screenshot at 1300 px wide. Every cell uses
 seed 3. Modes: `expr` (`Avatars.performer.MOODS`, then the avatar's own
 moods), `visemes`, `gaze` (left, right, up, down right) and `big` (neutral,
 and talking happily with a wave where the base lists it, at 600 px).

@@ -8,6 +8,7 @@ committed; `gallery/out/` is git-ignored.
 npm run gallery                                   # gallery/out/index.html
 node cli/avatars.mjs gallery --out DIR            # anywhere
 node cli/avatars.mjs gallery --out DIR --project P   # with a project's library
+node cli/avatars.mjs gallery --out DIR --videos --store S   # with the demo videos
 ```
 
 The command writes:
@@ -18,6 +19,7 @@ The command writes:
 | `avatars/<avatar>-<look>-expr.png` | the avatar in every mood |
 | `avatars/<avatar>-<look>-visemes.png` | the avatar with every mouth shape |
 | `episodes/<theme>/<episode>/contact-sheet-*.jpg` | two stills per chapter of each demo episode |
+| `episodes/<theme>/<episode>/<episode>.webm`, `.jpg`, `.vtt` | with `--videos`: the published video of each voiced demo episode, its poster and captions |
 
 Avatar sheets cover every avatar and look of this package and, with a
 project, of its `library/`; a project avatar shadows a package avatar of the
@@ -30,6 +32,28 @@ rendered in every theme of the package, with fixture narration when it has
 not been voiced. They take a few seconds per episode and theme, need the
 HyperFrames browser, and are best effort: failures are listed at the bottom of
 the page and on the console without failing the command.
+
+## Videos
+
+`--videos` publishes each demo episode in every theme as `avatars publish`
+does (AV1 and Opus in WebM without burned-in captions, a poster and WebVTT
+captions) and
+shows it in a player before the episode's contact sheets. Videos need voiced
+narration, so voice the demo first; an episode that is not voiced gets a note
+instead of a video:
+
+```bash
+node cli/avatars.mjs voice-setup --project examples/demo
+node cli/avatars.mjs voice --all --project examples/demo
+node cli/avatars.mjs gallery --out gallery/out --videos --store .gallery-store
+```
+
+Each video takes minutes to render. `--store DIR` keeps them in a directory
+with one entry per theme, episode and render (`gallery-<theme>-<episode>-<hash>/`),
+whose hash covers the render hash of the themed episode and its narration:
+the next run publishes only the videos whose episode, narration, theme or
+library code changed. A run that made every video removes the `gallery-*`
+entries it did not use, so the store holds only the current videos.
 
 ## Avatar sheets
 

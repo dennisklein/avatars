@@ -42,7 +42,8 @@ const USAGE = `usage: avatars <command> [options] [--project DIR]
   hash ID...                           the render hash, as <id>-<hash>
   ci ID... --store DIR [--used FILE]   render on a cache miss, then publish
   validate                             schema validation of every manifest
-  gallery --out DIR [--theme T]        avatar sheets and demo contact sheets
+  gallery --out DIR [--theme T] [--videos [--store DIR]]
+                                       avatar sheets, demo contact sheets and videos
   sheet AVATAR [--look L] [--mode expr|visemes|gaze|big] [--theme T] -o PNG
                                        one avatar sheet
 
@@ -62,6 +63,7 @@ function parse(argv) {
         quick: { type: "boolean" },
         draft: { type: "boolean" },
         force: { type: "boolean" },
+        videos: { type: "boolean" },
         flagged: { type: "boolean" },
         static: { type: "string" },
         data: { type: "string" },
@@ -175,7 +177,8 @@ async function main(argv) {
     case "gallery": {
       const out = opt.out || opt.output;
       if (targets.length || !out) throw new UsageError("gallery --out DIR");
-      const { failures } = await buildGallery(projectOf(opt, false), out, { theme: opt.theme });
+      if (opt.store && !opt.videos) throw new UsageError("gallery --store needs --videos");
+      const { failures } = await buildGallery(projectOf(opt, false), out, { theme: opt.theme, videos: opt.videos, store: opt.store });
       return failures.length ? 1 : 0;
     }
   }
