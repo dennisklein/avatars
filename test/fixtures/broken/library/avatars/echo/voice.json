@@ -1,0 +1,1 @@
+{ "default": "loud", "presets": { "soft": { "engine": "kokoro", "voice": "af_bella" } } }

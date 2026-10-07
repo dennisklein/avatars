@@ -1,0 +1,9 @@
+{
+  "id": "box-200x200",
+  "title": "A box on a 200x200 canvas, for tests",
+  "canvas": [200, 200],
+  "anchors": { "face": { "center": [100, 70], "height": 80 }, "neck": [100, 120] },
+  "slots": ["body", "hair", "top", "headwear", "accessory"],
+  "clips": [],
+  "gestures": []
+}

@@ -1,0 +1,9 @@
+{
+  "_comment": "Fixture project of test/validate.test.mjs: every manifest here breaks a rule, and the test names the message each one gives.",
+  "cast": { "host": { "avatar": "echo" } },
+  "colour": "teal",
+  "brand": "brand/brand.json",
+  "lexicons": ["en-us/core", "./missing-lexicon.json"],
+  "checks": ["checks/missing.mjs"],
+  "grounding": { "sources": ["docs"] }
+}

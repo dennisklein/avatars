@@ -1,0 +1,7 @@
+{
+  "id": "bare",
+  "title": "Shirt and pin",
+  "wear": ["tops/box-shirt", "accessories/box-pin"],
+  "palette": { "pin.base": "#123456" },
+  "options": { "tops/box-shirt": { "pocket": false, "tuck": false } }
+}

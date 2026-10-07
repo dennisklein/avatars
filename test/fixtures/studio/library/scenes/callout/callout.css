@@ -1,0 +1,4 @@
+/* SPDX-FileCopyrightText: 2026 Dennis Klein <d.klein@gsi.de> */
+/* SPDX-License-Identifier: Apache-2.0 */
+/* Fixture scene callout: a box in the scene's own tokens. */
+.callout { position: absolute; left: 120px; top: 120px; padding: 24px; background: var(--av-callout-bg); border: 2px solid var(--av-callout-accent); }

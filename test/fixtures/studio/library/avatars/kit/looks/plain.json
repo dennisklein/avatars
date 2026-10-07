@@ -1,0 +1,8 @@
+{
+  "id": "plain",
+  "title": "Cap, shirt and two accessories",
+  "wear": ["hair/box-fringe", "kit/antenna", "tops/box-shirt", "headwear/box-cap", "accessories/box-pin", "accessories/box-tag"],
+  "colourways": { "headwear/box-cap": "duo" },
+  "palette": { "cap.d": "#444444", "cap.e": "#444444", "pin.base": "{color.ok}" },
+  "options": { "headwear/box-cap": { "brim": "back" } }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Studio",
+  "wordmark": "studio",
+  "tagline": "FIXTURE",
+  "role": "your test host",
+  "links": [["Docs", "example.org/docs"]],
+  "marks": { "emblem": "emblem.svg" },
+  "tokens": {
+    "color": {
+      "accent": { "$value": "#a00000" },
+      "info": { "$value": "#a00000" },
+      "ok": { "$value": "#a00000" }
+    }
+  }
+}

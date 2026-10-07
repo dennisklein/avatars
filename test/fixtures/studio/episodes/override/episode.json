@@ -1,0 +1,12 @@
+{
+  "cast": {
+    "host": {
+      "look": "bare",
+      "palette": { "pin.base": "{color.info}" },
+      "options": { "tops/box-shirt": { "tuck": true } },
+      "voice": "calm"
+    }
+  },
+  "theme": "daylight",
+  "tokens": { "color": { "ok": { "$value": "#0000c0" } } }
+}

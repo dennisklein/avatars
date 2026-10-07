@@ -1,0 +1,19 @@
+{
+  "id": "kit",
+  "name": "Kit",
+  "base": "box-200x200",
+  "rig": "svg",
+  "identity": ["body/box"],
+  "palette": {
+    "skin.base": "#f2d4c4",
+    "cap.c": "#333333",
+    "cap.d": "#333333",
+    "cap.e": "#333333"
+  },
+  "moods": { "neutral": { "smile": 0.2 }, "sleepy": { "eye": 0.3 } },
+  "temperament": { "sway": 1 },
+  "seed": 5,
+  "look": "plain",
+  "lexicon": "lexicon.json",
+  "disclosure": "Kit is a test fixture"
+}

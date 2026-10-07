@@ -37,7 +37,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test test/",
+    "test": "node --test \"test/*.test.mjs\"",
     "test:voice": "python3 -m unittest discover -s voice/tests -t .",
     "gallery": "node cli/avatars.mjs gallery --out gallery/out"
   },

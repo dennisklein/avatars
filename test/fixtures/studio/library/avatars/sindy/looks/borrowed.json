@@ -1,0 +1,6 @@
+{
+  "_comment": "A look of a package avatar in the project library; it wears a part only kit may wear.",
+  "id": "borrowed",
+  "title": "Kit's antenna",
+  "wear": ["hair/long-bangs", "kit/antenna"]
+}

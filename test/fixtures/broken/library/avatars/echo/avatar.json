@@ -1,0 +1,1 @@
+{ "id": "echo", "name": "Echo", "base": "anime-600x800", "identity": ["body/anime-slim"], "voice": "voice.json", "look": "odd" }

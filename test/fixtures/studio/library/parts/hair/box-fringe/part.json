@@ -1,0 +1,1 @@
+{ "id": "hair/box-fringe", "category": "hair", "title": "Fringe", "fits": ["box-200x200"], "slots": ["hair"], "roles": ["hair.base"], "defaults": { "hair.base": "#101010" } }

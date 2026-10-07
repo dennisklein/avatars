@@ -1,0 +1,1 @@
+{ "id": "accessories/box-pin", "category": "accessories", "title": "Pin", "fits": ["box-200x200"], "slots": ["accessory"], "roles": ["pin.base"] }

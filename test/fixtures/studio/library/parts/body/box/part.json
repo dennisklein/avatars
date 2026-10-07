@@ -1,0 +1,1 @@
+{ "id": "body/box", "category": "body", "title": "Box body", "fits": ["box-200x200"], "slots": ["body"], "roles": ["skin.base"] }

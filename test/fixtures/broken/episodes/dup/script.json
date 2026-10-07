@@ -1,0 +1,7 @@
+{
+  "lines": [
+    { "id": "intro", "text": "Hello." },
+    { "id": "intro", "text": "Hello again." },
+    { "id": "outro" }
+  ]
+}

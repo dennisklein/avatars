@@ -1,0 +1,6 @@
+{
+  "id": "dusk",
+  "title": "Dusk",
+  "fonts": [{ "family": "Nope", "weight": "400", "file": "nope-400.woff2", "src": "@fontsource/nope/files/nope-latin-400-normal.woff2" }],
+  "contrast": []
+}

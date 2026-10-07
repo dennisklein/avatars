@@ -1,0 +1,35 @@
+{
+  "_comment": "Shadows the package part tops/hoodie: project library ids resolve first.",
+  "id": "tops/hoodie",
+  "category": "tops",
+  "title": "Hoodie of the project library",
+  "fits": [
+    "anime-600x800"
+  ],
+  "slots": [
+    "top",
+    "sleeve"
+  ],
+  "roles": [
+    "top.base",
+    "top.light",
+    "top.dark",
+    "top.inner",
+    "top.seam",
+    "top.trim",
+    "top.trim-tip"
+  ],
+  "defaults": {
+    "top.base": "{color.slate.800}",
+    "top.light": "{color.slate.700}",
+    "top.dark": "{color.slate.900}",
+    "top.inner": "{color.slate.100}",
+    "top.seam": "{color.slate.600}",
+    "top.trim": "{color.accent}",
+    "top.trim-tip": "{color.info}"
+  },
+  "colourways": {},
+  "hides": [],
+  "marks": [],
+  "options": {}
+}

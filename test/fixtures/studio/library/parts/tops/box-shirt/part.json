@@ -1,0 +1,13 @@
+{
+  "id": "tops/box-shirt",
+  "category": "tops",
+  "title": "Shirt in the theme's surface colour",
+  "fits": ["box-200x200"],
+  "slots": ["top"],
+  "roles": ["top.base"],
+  "defaults": { "top.base": "{color.surface}" },
+  "options": {
+    "pocket": { "type": "boolean", "default": true },
+    "tuck": { "type": "boolean", "default": false }
+  }
+}

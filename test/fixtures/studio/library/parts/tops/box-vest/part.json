@@ -1,0 +1,1 @@
+{ "id": "tops/box-vest", "category": "tops", "title": "Vest", "fits": ["box-200x200"], "slots": ["top"], "roles": ["top.base"], "defaults": { "top.base": "#303030" } }

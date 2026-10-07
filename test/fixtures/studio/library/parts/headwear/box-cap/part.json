@@ -1,0 +1,18 @@
+{
+  "_comment": "Each role is set at a different palette level by kit's plain look: a by the defaults, b by the colourway, c by the avatar, d by the look, e by the cast entry.",
+  "id": "headwear/box-cap",
+  "category": "headwear",
+  "title": "Cap",
+  "fits": ["box-200x200"],
+  "slots": ["headwear"],
+  "roles": ["cap.a", "cap.b", "cap.c", "cap.d", "cap.e"],
+  "defaults": { "cap.a": "#111111", "cap.b": "#111111", "cap.c": "#111111", "cap.d": "#111111", "cap.e": "#111111" },
+  "colourways": {
+    "duo": { "cap.b": "#222222", "cap.c": "#222222", "cap.d": "#222222", "cap.e": "#222222" }
+  },
+  "hides": ["hair"],
+  "options": {
+    "brim": { "type": "string", "default": "front", "description": "front or back" },
+    "logo": { "type": "boolean", "default": true, "description": "draw the logo dot" }
+  }
+}
