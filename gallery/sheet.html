@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>{{title}}: avatar sheet</title>
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/avatars.js"></script>
+<link rel="stylesheet" href="vendor/avatars.css" />
+<style>
+  {{font-faces}}
+  /* The page grows with its cells, unlike a composition sized to its format. */
+  html, body { width: auto; height: auto; overflow: visible; }
+  body { margin: 0; background: var(--av-color-bg); font-family: var(--av-font-sans); color: var(--av-color-text-muted); }
+  #grid { display: grid; grid-template-columns: repeat(var(--cols, 4), var(--w, 300px)); gap: 12px; padding: 16px; }
+  .cell { background: linear-gradient(var(--av-color-surface), var(--av-color-bg)); border-radius: 12px; overflow: hidden; }
+  .cell .av { width: var(--w, 300px); height: var(--h, 400px); }
+  .cell p { margin: 0; padding: 6px 10px; font-size: 14px; }
+</style>
+</head>
+<body>
+<div id="grid"></div>
+<script>
+  // An avatar sheet: the host of Avatars.data.cast in every mood, mouth shape
+  // or gaze direction. `avatars sheet` puts this page next to a vendor/ bundle
+  // built for one avatar, look and theme, and screenshots it.
+  //   ?mode=expr (default) | visemes | gaze | big
+  (function () {
+    "use strict";
+    const A = window.Avatars;
+    const mode = new URLSearchParams(location.search).get("mode") || "expr";
+    const grid = document.getElementById("grid");
+    const root = document.documentElement.style;
+    const member = A.data.cast.host;
+    const base = A.data.bases[member.base];
+    // Cells keep the aspect ratio of the base canvas.
+    const size = (w) => {
+      root.setProperty("--w", `${w}px`);
+      root.setProperty("--h", `${Math.round((w * base.canvas[1]) / base.canvas[0])}px`);
+    };
+    let cells = 0;
+    function cell(label, tracks, t) {
+      const c = document.createElement("div");
+      c.className = "cell";
+      const av = document.createElement("div");
+      av.className = "av";
+      c.appendChild(av);
+      const p = document.createElement("p");
+      p.textContent = label;
+      c.appendChild(p);
+      grid.appendChild(c);
+      // One seed for every cell, so blinks and idle motion match across cells.
+      const presenter = A.createPresenter("host", av, Object.assign({ seed: 3 }, tracks));
+      presenter.render(t);
+      cells++;
+      return presenter;
+    }
+    size(300);
+    if (mode === "expr") {
+      // Every mood of the vocabulary, then the avatar's own.
+      const names = Object.keys(A.performer.MOODS);
+      for (const name of Object.keys(member.moods || {})) if (!names.includes(name)) names.push(name);
+      for (const name of names) cell(name, { expressions: [{ t: 0, name }] }, 0.3);
+    } else if (mode === "visemes") {
+      for (const v of Object.keys(A.performer.VISEMES)) cell(v, { speech: { offset: 0, visemes: [[0, 1, v]] } }, 0.5);
+    } else if (mode === "gaze") {
+      for (const [x, y] of [[-1, 0], [1, 0], [0, -1], [0.6, 0.6]]) cell(`gaze ${x},${y}`, { gaze: [{ t: 0, x, y }] }, 0.5);
+    } else if (mode === "big") {
+      root.setProperty("--cols", 2);
+      size(600);
+      cell("neutral", {}, 0.3);
+      // The wave only where the base animates it.
+      const waves = (base.gestures || []).includes("wave");
+      cell(waves ? "talking aa + happy + wave" : "talking aa + happy", {
+        expressions: [{ t: 0, name: "happy" }],
+        speech: { offset: 0, visemes: [[0, 1, "aa"]] },
+        gestures: waves ? [{ t: 0, name: "wave", dur: 2 }] : [],
+      }, 0.6);
+    } else {
+      throw new Error(`unknown sheet mode "${mode}": expr, visemes, gaze or big`);
+    }
+    // `avatars sheet` waits for this before it takes the screenshot.
+    window.__sheet = { mode, cells, avatar: member.avatar, look: member.look };
+  })();
+</script>
+</body>
+</html>

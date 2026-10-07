@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{{title}}</title>
+<!-- `avatars gallery --out DIR` fills the {{…}} placeholders of this page and
+     writes it as DIR/index.html next to the sheets and stills it links. -->
+<style>
+  :root { color-scheme: light dark; --bg: #f6f6f5; --fg: #1c1c1b; --muted: #62625e; --card: #ffffff; --line: #deded9; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #151514; --fg: #ececea; --muted: #a2a29d; --card: #1e1e1d; --line: #34342f; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header, main, footer { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
+  header { padding-top: 32px; }
+  h1 { font-size: 28px; margin: 0 0 4px; }
+  h2 { font-size: 20px; margin: 40px 0 12px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+  h3 { font-size: 16px; margin: 0 0 2px; }
+  h3 span, .ids, figcaption, .empty, header p { color: var(--muted); font-weight: normal; }
+  .ids { margin: 0 0 10px; font-size: 13px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(560px, 1fr)); gap: 16px; }
+  .card, .theme { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+  .card img { display: block; width: 100%; height: auto; border-radius: 6px; margin-top: 8px; }
+  .theme { margin-bottom: 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 12px; }
+  .theme h3 { grid-column: 1 / -1; }
+  figure { margin: 0; }
+  figure img { display: block; width: 100%; height: auto; border-radius: 6px; }
+  figcaption { font-size: 13px; margin-top: 4px; }
+  footer { padding-bottom: 40px; font-size: 13px; color: var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <h1>{{title}}</h1>
+  <p>{{summary}}</p>
+</header>
+<main>
+  <h2>Avatars</h2>
+  <div class="cards">
+    {{avatars}}
+  </div>
+  <h2>Demo episodes</h2>
+  {{episodes}}
+</main>
+<footer>
+  {{notes}}
+</footer>
+</body>
+</html>
