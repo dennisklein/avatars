@@ -10,7 +10,7 @@ by git tag and keep only their brand, lexicon, checks and episodes.
 
 ```bash
 npm ci                                   # Node 22+
-npm test                                 # node --test test/
+npm test                                 # node --test "test/*.test.mjs"; AVATARS_TEST_BROWSER=0 skips browser suites
 npm run test:voice                       # Python unit tests of the voice tool (no model needed)
 node cli/avatars.mjs <command> --project examples/demo   # the CLI against the demo project
 node cli/avatars.mjs validate --project examples/demo    # schema validation of every manifest
@@ -36,6 +36,8 @@ needs Python 3.10 to 3.13 with `voice/requirements.txt` and
   episode that uses them; say so in the commit body.
 - Every source file starts with the SPDX lines from `DESIGN.md`; `REUSE.toml`
   covers JSON, SVG, Markdown and images.
+- The skills in `skills/` (`avatars-design` for work on the library) are the
+  working guides; keep them in step with the CLI and `DESIGN.md`.
 
 ## Commits
 
