@@ -1,0 +1,134 @@
+# SPDX-FileCopyrightText: 2026 Dennis Klein <d.klein@gsi.de>
+# SPDX-License-Identifier: Apache-2.0
+
+# Tests every pull request and every push to main and to release tags: the
+# Node suites with the browser HyperFrames renders with, the voice tool's
+# Python tests (without the model), schema validation, REUSE compliance and
+# the demo project's episodes with fixture narration.
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  test:
+    name: Node tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      # The CLI renders and publishes with FFmpeg (libx264).
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends ffmpeg
+
+      # The Chrome Headless Shell build of the pinned HyperFrames version.
+      - name: Set up the browser
+        env:
+          HYPERFRAMES_NO_TELEMETRY: "1"
+        run: |
+          node_modules/.bin/hyperframes browser ensure
+          echo "HYPERFRAMES_BROWSER_PATH=$(node_modules/.bin/hyperframes browser path | tail -n 1)" >> "$GITHUB_ENV"
+
+      - name: Validate manifests
+        run: node cli/avatars.mjs validate
+
+      - name: Test
+        run: npm test
+
+  voice:
+    name: Voice tool tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+
+      # The tests need neither the model nor the packages in requirements.txt.
+      - name: Test
+        run: python -m unittest discover -s voice/tests -t .
+
+  reuse:
+    name: REUSE compliance
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Lint
+        run: |
+          pip install --quiet --disable-pip-version-check reuse==6.2.0
+          reuse lint
+
+  demo:
+    name: Demo episodes
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Set up the browser
+        env:
+          HYPERFRAMES_NO_TELEMETRY: "1"
+        run: |
+          node_modules/.bin/hyperframes browser ensure
+          echo "HYPERFRAMES_BROWSER_PATH=$(node_modules/.bin/hyperframes browser path | tail -n 1)" >> "$GITHUB_ENV"
+
+      # Fixture narration has the timings of speech without audio, so the
+      # check needs no voice model.
+      - name: Write fixture narration
+        run: node cli/avatars.mjs fixture-voice --all --project examples/demo
+
+      - name: Check
+        run: node cli/avatars.mjs check --all --quick --project examples/demo
