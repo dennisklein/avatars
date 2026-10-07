@@ -30,10 +30,15 @@
           "minProperties": 1,
           "additionalProperties": { "type": "number", "exclusiveMinimum": 0 }
         },
-        "voice": { "description": "One stock voice instead of a mix.", "type": "string", "minLength": 1 },
         "speed": { "type": "number", "exclusiveMinimum": 0 },
         "pitch": { "description": "Semitones, formants preserved.", "type": "number" },
         "lang": { "type": "string", "minLength": 1 }
+      },
+      "if": { "properties": { "engine": { "const": "kokoro" } } },
+      "then": {
+        "description": "A Kokoro preset (engine kokoro or none) blends stock voices and speaks at 0.5 to 2 times its speed.",
+        "required": ["mix"],
+        "properties": { "speed": { "minimum": 0.5, "maximum": 2 } }
       }
     }
   }
