@@ -1,0 +1,33 @@
+{
+  "_comment": "General English and software terms that espeak gets wrong, in espeak/Kokoro IPA. Keys are matched case-insensitively against whole words (surrounding punctuation stripped).",
+  "words": {
+    "a": "ɐ",
+    "cli": "sˌiːˌɛlˈaɪ",
+    "json": "dʒˈeɪsən",
+    "yaml": "jˈæməl",
+    "github": "ɡˈɪthʌb",
+    "kubectl": "kjˈuːb kəntɹˌoʊl",
+    "ci": "sˌiːˈaɪ",
+    "dns": "dˌiːˌɛnˈɛs",
+    "mcp": "ˌɛmsˌiːpˈiː",
+    "journalctl": "dʒˈɜːnəl kəntɹˈoʊl",
+    "init": "ɪnˈɪt",
+    "inotify": "ˈaɪ nˈoʊɾɪfˌaɪ",
+    "pid": "pˌiːˌaɪdˈiː",
+    "uid": "jˌuːˌaɪdˈiː",
+    "gid": "dʒˌiːˌaɪdˈiː",
+    "cpus": "sˌiːpˌiːjˈuːz",
+    "gpus": "dʒˌiːpˌiːjˈuːz",
+    "vms": "vˌiːˈɛmz",
+    "exec": "ˈɛɡzɛk",
+    "config": "kˈɑːnfɪɡ",
+    "configs": "kˈɑːnfɪɡz",
+    "containerd": "kəntˈeɪnɚ dˈiː",
+    "provenance": "pɹˈɑːvənəns",
+    "retry": "ɹiːtɹˈaɪ",
+    "retries": "ɹiːtɹˈaɪz",
+    "backend": "bˈækɛnd",
+    "backends": "bˈækɛndz",
+    "ids": "ˌaɪdˈiːz"
+  }
+}

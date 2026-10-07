@@ -1,0 +1,33 @@
+{
+  "_comment": "HPC terms in espeak/Kokoro IPA: Slurm daemons, commands and options, MUNGE, MPI and its runtimes. Slurm's s-commands are said \"ess\" plus the word (squeue: ess queue), daemons end in a spoken \"dee\" (slurmd). Keys are matched case-insensitively against whole words (surrounding punctuation stripped).",
+  "words": {
+    "slurm": "slˈɜːm",
+    "slurmctld": "slˈɜːm kəntɹˈoʊl dˈiː",
+    "slurmd": "slˈɜːm dˈiː",
+    "slurmdbd": "slˈɜːm dˌiːbˌiːdˈiː",
+    "slurmrestd": "slˈɜːm ɹˈɛst dˈiː",
+    "sinfo": "ˈɛs ˈɪnfoʊ",
+    "squeue": "ˈɛs kjˈuː",
+    "sbatch": "ˈɛs bˈætʃ",
+    "srun": "ˈɛs ɹˈʌn",
+    "scancel": "ˈɛs kˈænsəl",
+    "scontrol": "ˈɛs kəntɹˈoʊl",
+    "sacct": "ˈɛs ɐkˈaʊnt",
+    "salloc": "ˈɛs ˈælɑːk",
+    "sattach": "ˈɛs ɐtˈætʃ",
+    "munge": "mˈʌndʒ",
+    "hpc": "ˌeɪtʃpˌiːsˈiː",
+    "mpi": "ˌɛmpˌiːˈaɪ",
+    "pmix": "pˌiːˈɛm ˈɪks",
+    "ucx": "jˌuːsˌiːˈɛks",
+    "sacctmgr": "ˈɛs ɐkˈaʊnt mˈænɪdʒɚ",
+    "sackd": "sˈæk dˈiː",
+    "slurm.conf": "slˈɜːm dˈɑːt kˈɑːnf",
+    "slurmctldhost": "slˈɜːm kəntɹˈoʊl dˈiː hˈoʊst",
+    "tres": "tɹˈɛs",
+    "mpirun": "ˌɛmpˌiːˈaɪ ɹˈʌn",
+    "mpiexec": "ˌɛmpˌiːˈaɪ ɛɡzˈɛk",
+    "mpicc": "ˌɛmpˌiːˈaɪ sˌiːsˈiː",
+    "clientids": "klˈaɪənt ˌaɪdˈiːz"
+  }
+}
