@@ -237,18 +237,20 @@ export function resolveCast(project, castCfg, tokens, marks = {}) {
   const acc = { bases: {}, parts: {}, rigs: new Set(), baseFiles: new Map(), partFiles: new Map() };
   const cast = {};
   const avatars = {};
+  // Parts that draw a missing mark draw nothing; check reports it.
+  const warnings = [];
   for (const [role, entry] of Object.entries(castCfg)) {
     const r = resolveMember(project, role, entry, tokens, acc);
     cast[role] = r.member;
     avatars[role] = { avatar: r.avatar, dir: r.avatarDir };
     for (const m of r.marks) {
-      if (!marks[m] && !(m === "badge" && marks.emblem)) console.warn(`warning: ${r.avatar.id}/${r.member.look} draws brand mark "${m}", which the brand does not define`);
+      if (!marks[m] && !(m === "badge" && marks.emblem)) warnings.push(`${r.avatar.id}/${r.member.look} draws brand mark "${m}", which the brand does not define`);
     }
   }
   const files = [];
   for (const rig of acc.rigs) files.push(need(project, `rigs/${rig}/rig.js`, `rig ${rig}`));
   files.push(...acc.baseFiles.values(), ...acc.partFiles.values());
-  return { cast, avatars, acc, files };
+  return { cast, avatars, acc, files, warnings };
 }
 
 function lexiconFiles(project, cfg, avatarLexicon) {
@@ -330,7 +332,7 @@ export function resolveEpisode(project, id) {
   }
 
   // Cast.
-  const { cast, avatars, acc, files: castJs } = resolveCast(project, castCfg, tokens, marks);
+  const { cast, avatars, acc, files: castJs, warnings } = resolveCast(project, castCfg, tokens, marks);
 
   // Runtime files, in bundle order.
   const js = [...CORE_HEAD.map(pkgFile)];
@@ -375,6 +377,7 @@ export function resolveEpisode(project, id) {
     fonts,
     gsap: require.resolve("gsap/dist/gsap.min.js"),
     voice: { voices: voiceFile, preset: castCfg.host.voice || null, lexicons: lexiconFiles(project, cfg, avatarLexicon) },
+    warnings,
   };
 }
 

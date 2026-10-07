@@ -188,6 +188,7 @@ export async function checkEpisode(project, id, opts = {}) {
   const fontProblems = fontFaceProblems(readFileSync(path.join(dir, "index.html"), "utf8"), r.fonts, r.config.theme);
   errors.push(...fontProblems);
   if (fontProblems.length) notes.push(`  the page head declares the theme's fonts with:\n  <style>\n${fontFaceCss(r.fonts, "    ")}\n  </style>`);
+  warnings.push(...r.warnings);
   warnings.push(...contrastProblems(r.theme, r.tokens));
 
   // The composition, loaded as a browser would.
