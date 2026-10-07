@@ -23,7 +23,11 @@ import { contrast } from "./tokens.mjs";
 import { validateItems } from "./validate.mjs";
 import { refreshVendor } from "./vendor.mjs";
 
-export const clock = (t) => `${Math.floor(t / 60)}:${(t % 60).toFixed(1).padStart(4, "0")}`;
+// m:ss.s, rounded first so that 59.96 s prints as 1:00.0, not 0:60.0.
+export const clock = (t) => {
+  const d = Math.round(t * 10) / 10;
+  return `${Math.floor(d / 60)}:${(d % 60).toFixed(1).padStart(4, "0")}`;
+};
 // Longest pause between two lines before it counts as dead air (s).
 const DEAD_AIR = 2.5;
 
@@ -158,7 +162,8 @@ export async function checkEpisode(project, id, opts = {}) {
     warnings.forEach((w) => console.log(`  warning: ${w}`));
     errors.forEach((e) => console.error(`  error: ${e}`));
     notes.forEach((n) => console.error(n));
-    console.log(`${id}: ${errors.length} errors, ${warnings.length} warnings`);
+    const n = (k, word) => `${k} ${word}${k === 1 ? "" : "s"}`;
+    console.log(`${id}: ${n(errors.length, "error")}, ${n(warnings.length, "warning")}`);
     return errors.length === 0;
   };
 
