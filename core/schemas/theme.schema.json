@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dennisklein/avatars/core/schemas/theme.schema.json",
+  "title": "theme.json",
+  "description": "A theme's fonts and the contrast pairs its semantic tokens must meet (DESIGN.md, \"Themes, formats, icons, brands\").",
+  "type": "object",
+  "required": ["id", "fonts"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "description": "The directory name under themes/.", "$ref": "defs.schema.json#/$defs/id" },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "fonts": {
+      "description": "Font files copied to vendor/fonts/ and declared with @font-face in every episode page.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["family", "weight", "file", "src"],
+        "properties": {
+          "family": { "type": "string", "minLength": 1 },
+          "weight": {
+            "description": "The CSS font-weight of the rule: one weight or a range such as \"700 800\".",
+            "type": ["string", "integer"],
+            "pattern": "^([1-9]00|normal|bold)( ([1-9]00|normal|bold))?$",
+            "minimum": 100,
+            "maximum": 900
+          },
+          "file": { "description": "The name under vendor/fonts/.", "type": "string", "pattern": "^[A-Za-z0-9._-]+\\.woff2$" },
+          "src": { "description": "A module path resolved from this package.", "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "contrast": {
+      "description": "[foreground token, background token, minimum ratio] pairs.",
+      "type": "array",
+      "items": {
+        "type": "array",
+        "prefixItems": [{ "type": "string" }, { "type": "string" }, { "type": "number", "minimum": 1 }],
+        "minItems": 3,
+        "maxItems": 3
+      }
+    }
+  },
+  "patternProperties": { "^_": {} },
+  "additionalProperties": false
+}

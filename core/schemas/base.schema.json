@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dennisklein/avatars/core/schemas/base.schema.json",
+  "title": "base.json",
+  "description": "A body type of a rig: canvas, anchors, slot layers, clip paths and gestures (DESIGN.md, \"Rigs, bases, slots\").",
+  "type": "object",
+  "required": ["id", "canvas", "anchors", "slots"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "description": "The directory name under rigs/<rig>/bases/.", "$ref": "defs.schema.json#/$defs/id" },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "canvas": {
+      "description": "[width, height] in base units.",
+      "type": "array",
+      "prefixItems": [{ "type": "number", "exclusiveMinimum": 0 }, { "type": "number", "exclusiveMinimum": 0 }],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "anchors": {
+      "description": "Named points; face locates the face for framing.",
+      "type": "object",
+      "required": ["face"],
+      "properties": {
+        "face": {
+          "type": "object",
+          "required": ["center", "height"],
+          "properties": {
+            "center": { "$ref": "defs.schema.json#/$defs/point" },
+            "height": { "type": "number", "exclusiveMinimum": 0 }
+          },
+          "additionalProperties": false
+        },
+        "neck": { "$ref": "defs.schema.json#/$defs/point" }
+      },
+      "additionalProperties": { "type": ["array", "object"] }
+    },
+    "slots": {
+      "description": "The layers, bottom to top.",
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/slot" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "clips": {
+      "description": "Clip paths the layers use; a part defines each.",
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/id" },
+      "uniqueItems": true
+    },
+    "gestures": {
+      "description": "Gestures the base animates.",
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/id" },
+      "uniqueItems": true
+    },
+    "framing": {
+      "description": "How shots scale and offset this base so faces sit alike across bases.",
+      "type": "object",
+      "properties": {
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "offset": { "$ref": "defs.schema.json#/$defs/point" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "patternProperties": { "^_": {} },
+  "additionalProperties": false
+}

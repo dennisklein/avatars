@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dennisklein/avatars/core/schemas/defs.schema.json",
+  "title": "Shared definitions",
+  "description": "Definitions the manifest schemas share: ids, part ids, palette roles, colours, cast members.",
+  "$defs": {
+    "id": {
+      "description": "A library id: lowercase letters, digits, dots, dashes and underscores.",
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*$"
+    },
+    "partId": {
+      "description": "<category>/<name> for a library part, <avatar>/<name> for a part only that avatar wears.",
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*/[a-z0-9][a-z0-9._-]*$"
+    },
+    "role": {
+      "description": "A palette role such as skin.base or top.trim-tip.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*(\\.[a-z0-9][a-z0-9-]*)*$"
+    },
+    "roleName": {
+      "description": "A cast role such as host.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "slot": {
+      "description": "A slot of a base, such as hair-front.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "colour": {
+      "description": "A colour (#rgb, #rgba, #rrggbb, #rrggbbaa, rgb(), rgba(), black, white, transparent, none) or a token reference such as {color.accent}.",
+      "type": "string",
+      "pattern": "^(#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})|rgba?\\([^()]*\\)|\\{[^{}]+\\}|none|black|white|transparent)$"
+    },
+    "palette": {
+      "description": "Palette role -> colour or token reference.",
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/role" },
+      "additionalProperties": { "$ref": "#/$defs/colour" }
+    },
+    "point": {
+      "description": "[x, y] in base units.",
+      "type": "array",
+      "prefixItems": [{ "type": "number" }, { "type": "number" }],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "file": {
+      "description": "A file name relative to the manifest.",
+      "type": "string",
+      "minLength": 1
+    },
+    "castMember": {
+      "description": "A presenter of an episode: the avatar, its look, and palette and part option overrides.",
+      "type": "object",
+      "properties": {
+        "avatar": { "$ref": "#/$defs/id" },
+        "look": { "$ref": "#/$defs/id" },
+        "palette": { "$ref": "#/$defs/palette" },
+        "options": {
+          "description": "Part id -> options passed to that part, over the look's.",
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/partId" },
+          "additionalProperties": { "type": "object" }
+        },
+        "voice": {
+          "description": "The voice preset of the avatar's voice.json; default: the script's voice, else the preset named default.",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

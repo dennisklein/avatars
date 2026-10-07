@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dennisklein/avatars/core/schemas/script.schema.json",
+  "title": "script.json",
+  "description": "An episode's narration: one line per id, spoken by the host (DESIGN.md, \"Voice\").",
+  "type": "object",
+  "required": ["lines"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "voice": { "description": "The host's preset; default: the preset named default in its voice.json.", "type": "string", "minLength": 1 },
+    "lines": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "text"],
+        "properties": {
+          "id": {
+            "description": "A file name: the line's files are named after it.",
+            "type": "string",
+            "pattern": "^(?!\\.\\.?$)[^/\\\\]+$"
+          },
+          "text": { "type": "string" },
+          "lead": { "description": "Seconds of silence before the speech.", "type": "number", "minimum": 0 }
+        },
+        "patternProperties": { "^_": {} },
+        "additionalProperties": false
+      }
+    }
+  },
+  "patternProperties": { "^_": {} },
+  "additionalProperties": false
+}

@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dennisklein/avatars/core/schemas/avatar.schema.json",
+  "title": "avatar.json",
+  "description": "An instructor: identity parts, palette, mood strengths, temperament, voice and lexicon (DESIGN.md, \"Avatars and looks\").",
+  "type": "object",
+  "required": ["id", "name", "base", "identity"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "description": "The directory name under avatars/.", "$ref": "defs.schema.json#/$defs/id" },
+    "name": { "description": "The name the presenter goes by.", "type": "string", "minLength": 1 },
+    "pronunciation": { "description": "The name in the phoneme alphabet of the voice engine.", "type": "string" },
+    "base": { "$ref": "defs.schema.json#/$defs/id" },
+    "rig": { "description": "Default: svg.", "$ref": "defs.schema.json#/$defs/id" },
+    "identity": {
+      "description": "Identity parts (body, face, eyes, brows, mouth, nose), worn before the look's parts.",
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/partId" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "palette": { "$ref": "defs.schema.json#/$defs/palette" },
+    "moods": {
+      "description": "Mood name -> expression parameters, merged over the performer's MOODS per parameter; new names add moods.",
+      "type": "object",
+      "propertyNames": { "$ref": "defs.schema.json#/$defs/id" },
+      "additionalProperties": { "$ref": "#/$defs/expression" }
+    },
+    "temperament": { "$ref": "#/$defs/temperament" },
+    "seed": { "description": "Seed of blinks and idle motion.", "type": "integer" },
+    "look": { "description": "The default look (looks/<look>.json).", "$ref": "defs.schema.json#/$defs/id" },
+    "voice": { "description": "The voice presets, relative to avatar.json.", "$ref": "defs.schema.json#/$defs/file" },
+    "lexicon": { "description": "The avatar's lexicon, relative to avatar.json.", "$ref": "defs.schema.json#/$defs/file" },
+    "disclosure": { "description": "Shown and published with every episode the avatar presents.", "type": "string" }
+  },
+  "patternProperties": { "^_": {} },
+  "additionalProperties": false,
+  "$defs": {
+    "expression": {
+      "description": "Expression parameters (the performer's EXPR_KEYS).",
+      "type": "object",
+      "properties": {
+        "brow": { "type": "number" },
+        "browTilt": { "type": "number" },
+        "eye": { "type": "number" },
+        "squint": { "type": "number" },
+        "happyEyes": { "type": "number" },
+        "smile": { "type": "number" },
+        "mouthOpen": { "type": "number" },
+        "blush": { "type": "number" },
+        "pupil": { "type": "number" },
+        "winkL": { "type": "number" },
+        "winkR": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "range": {
+      "type": "array",
+      "prefixItems": [{ "type": "number" }, { "type": "number" }],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "temperament": {
+      "description": "Motion constants merged over the performer's TEMPERAMENT (DESIGN.md, \"Performer and pose\").",
+      "type": "object",
+      "properties": {
+        "lipKernel": { "type": "number", "minimum": 0 },
+        "lipGain": { "type": "number" },
+        "blinkFirst": { "$ref": "#/$defs/range" },
+        "blinkEvery": { "$ref": "#/$defs/range" },
+        "blinkDouble": { "type": "number", "minimum": 0, "maximum": 1 },
+        "blinkDoubleGap": { "type": "number", "minimum": 0 },
+        "sway": { "type": "number" },
+        "swayGaze": { "type": "number" },
+        "nod": { "type": "number" },
+        "nodRate": { "type": "number" },
+        "talkNod": { "type": "number" },
+        "talkNodRate": { "type": "number" },
+        "shift": { "type": "number" },
+        "shiftGaze": { "type": "number" },
+        "yawGaze": { "type": "number" },
+        "yawNoise": { "type": "number" },
+        "yawNoiseRate": { "type": "number" },
+        "gazeBlend": { "type": "number", "minimum": 0 },
+        "saccadeStep": { "type": "number", "exclusiveMinimum": 0 },
+        "saccadeX": { "type": "number" },
+        "saccadeY": { "type": "number" },
+        "breathPeriod": { "type": "number", "exclusiveMinimum": 0 },
+        "lag": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": false
+    }
+  }
+}

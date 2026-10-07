@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dennisklein/avatars/core/schemas/part.schema.json",
+  "title": "part.json",
+  "description": "A drawable piece filling one or more slots of a base, painted with palette roles (DESIGN.md, \"Parts\").",
+  "type": "object",
+  "required": ["id", "category", "fits", "slots"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": {
+      "description": "<category>/<name> under parts/, <avatar>/<name> under avatars/<avatar>/parts/.",
+      "$ref": "defs.schema.json#/$defs/partId"
+    },
+    "category": {
+      "enum": ["body", "face", "eyes", "brows", "mouth", "nose", "hair", "tops", "eyewear", "headwear", "accessories"]
+    },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "fits": {
+      "description": "The bases whose slots and geometry the part was drawn for.",
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/id" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "slots": {
+      "description": "The slots the part draws into.",
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/slot" },
+      "uniqueItems": true
+    },
+    "roles": {
+      "description": "Every palette role the part paints with.",
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/role" },
+      "uniqueItems": true
+    },
+    "defaults": {
+      "description": "Values for roles that neither the avatar nor the look sets.",
+      "$ref": "defs.schema.json#/$defs/palette"
+    },
+    "colourways": {
+      "description": "Named role sets a look can pick.",
+      "type": "object",
+      "propertyNames": { "$ref": "defs.schema.json#/$defs/id" },
+      "additionalProperties": { "$ref": "defs.schema.json#/$defs/palette" }
+    },
+    "hides": {
+      "description": "Slots the part covers; the rig hides them.",
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/slot" },
+      "uniqueItems": true
+    },
+    "marks": {
+      "description": "Brand marks the part draws (emblem, badge).",
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/id" },
+      "uniqueItems": true
+    },
+    "options": {
+      "description": "Options a look may pass: name -> { type, default, description }.",
+      "type": "object",
+      "propertyNames": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*$" },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "type": { "enum": ["string", "number", "integer", "boolean", "array", "object"] },
+          "default": {},
+          "enum": { "type": "array" },
+          "description": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "patternProperties": { "^_": {} },
+  "additionalProperties": false
+}

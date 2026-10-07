@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dennisklein/avatars/core/schemas/lexicon.schema.json",
+  "title": "Lexicon",
+  "description": "Pronunciation overrides: whole words (matched case-insensitively) -> phonemes of the voice engine (DESIGN.md, \"Voice\").",
+  "type": "object",
+  "required": ["words"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "words": {
+      "type": "object",
+      "propertyNames": { "description": "One word without whitespace.", "type": "string", "pattern": "^\\S+$" },
+      "additionalProperties": { "type": "string" }
+    }
+  },
+  "patternProperties": { "^_": {} },
+  "additionalProperties": false
+}

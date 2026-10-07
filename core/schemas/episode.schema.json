@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dennisklein/avatars/core/schemas/episode.schema.json",
+  "title": "episode.json",
+  "description": "Optional per-episode overrides of the project's cast, theme, format and tokens (DESIGN.md, \"Projects\").",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "cast": {
+      "description": "Cast entries merged over the project's, per role.",
+      "type": "object",
+      "propertyNames": { "$ref": "defs.schema.json#/$defs/roleName" },
+      "additionalProperties": { "$ref": "defs.schema.json#/$defs/castMember" }
+    },
+    "theme": { "$ref": "defs.schema.json#/$defs/id" },
+    "format": { "$ref": "defs.schema.json#/$defs/id" },
+    "tokens": { "$ref": "tokens.schema.json" }
+  },
+  "patternProperties": { "^_": {} },
+  "additionalProperties": false
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dennisklein/avatars/core/schemas/voice.schema.json",
+  "title": "voice.json",
+  "description": "An avatar's voice presets (DESIGN.md, \"Voice\").",
+  "type": "object",
+  "required": ["presets"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "default": { "description": "The preset used when the script names none; one of presets.", "type": "string", "minLength": 1 },
+    "sample": { "description": "The audition text of `samples`.", "type": "string" },
+    "presets": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "$ref": "defs.schema.json#/$defs/id" },
+      "additionalProperties": { "$ref": "#/$defs/preset" }
+    }
+  },
+  "patternProperties": { "^_": {} },
+  "additionalProperties": false,
+  "$defs": {
+    "preset": {
+      "description": "Engine settings; engines may define further keys.",
+      "type": "object",
+      "properties": {
+        "engine": { "description": "Default: kokoro.", "$ref": "defs.schema.json#/$defs/id" },
+        "mix": {
+          "description": "Stock voice -> weight of the blend.",
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "type": "number", "exclusiveMinimum": 0 }
+        },
+        "voice": { "description": "One stock voice instead of a mix.", "type": "string", "minLength": 1 },
+        "speed": { "type": "number", "exclusiveMinimum": 0 },
+        "pitch": { "description": "Semitones, formants preserved.", "type": "number" },
+        "lang": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

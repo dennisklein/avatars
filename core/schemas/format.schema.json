@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dennisklein/avatars/core/schemas/format.schema.json",
+  "title": "format.json",
+  "description": "A canvas, its presenter shots and the geometry scenes lay out in (DESIGN.md, \"Themes, formats, icons, brands\").",
+  "type": "object",
+  "required": ["id", "width", "height", "shots"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "description": "The directory name under formats/.", "$ref": "defs.schema.json#/$defs/id" },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "width": { "type": "integer", "minimum": 1 },
+    "height": { "type": "integer", "minimum": 1 },
+    "shots": {
+      "description": "Presenter shot presets by name.",
+      "type": "object",
+      "required": ["hidden", "hero", "full", "left", "cornerR", "cornerL", "mini"],
+      "propertyNames": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9-]*$" },
+      "additionalProperties": { "$ref": "#/$defs/shot" }
+    },
+    "scenes": {
+      "description": "Geometry by scene id: content areas, node and panel metrics.",
+      "type": "object",
+      "propertyNames": { "$ref": "defs.schema.json#/$defs/id" },
+      "additionalProperties": { "type": "object" }
+    }
+  },
+  "patternProperties": { "^_": {} },
+  "additionalProperties": false,
+  "$defs": {
+    "shot": {
+      "type": "object",
+      "required": ["frame", "stage"],
+      "properties": {
+        "frame": {
+          "description": "The presenter frame on the canvas, in px.",
+          "type": "object",
+          "required": ["left", "top", "width", "height"],
+          "properties": {
+            "left": { "type": "number" },
+            "top": { "type": "number" },
+            "width": { "type": "number", "minimum": 0 },
+            "height": { "type": "number", "minimum": 0 },
+            "borderRadius": { "type": "number", "minimum": 0 }
+          },
+          "additionalProperties": false
+        },
+        "stage": {
+          "description": "The avatar inside the frame, in px; its height follows the base canvas.",
+          "type": "object",
+          "required": ["width", "left", "top"],
+          "properties": {
+            "width": { "type": "number", "minimum": 0 },
+            "left": { "type": "number" },
+            "top": { "type": "number" }
+          },
+          "additionalProperties": false
+        },
+        "ring": { "description": "Opacity of the frame's ring, 0..1.", "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dennisklein/avatars/core/schemas/look.schema.json",
+  "title": "Look",
+  "description": "One dressing of an avatar, avatars/<id>/looks/<name>.json: wardrobe parts plus palette overrides (DESIGN.md, \"Avatars and looks\").",
+  "type": "object",
+  "required": ["id", "wear"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "description": "The file name without .json.", "$ref": "defs.schema.json#/$defs/id" },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "wear": {
+      "description": "Wardrobe parts (hair, tops, eyewear, headwear, accessories), worn after the avatar's identity parts.",
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/partId" },
+      "uniqueItems": true
+    },
+    "colourways": {
+      "description": "Part id -> the name of one of that part's colourways.",
+      "type": "object",
+      "propertyNames": { "$ref": "defs.schema.json#/$defs/partId" },
+      "additionalProperties": { "$ref": "defs.schema.json#/$defs/id" }
+    },
+    "palette": { "$ref": "defs.schema.json#/$defs/palette" },
+    "options": {
+      "description": "Part id -> options for that part (see the part's options).",
+      "type": "object",
+      "propertyNames": { "$ref": "defs.schema.json#/$defs/partId" },
+      "additionalProperties": { "type": "object" }
+    }
+  },
+  "patternProperties": { "^_": {} },
+  "additionalProperties": false
+}

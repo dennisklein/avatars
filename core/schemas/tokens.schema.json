@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dennisklein/avatars/core/schemas/tokens.schema.json",
+  "title": "Design tokens",
+  "description": "A token tree in the design-token JSON format (DESIGN.md, \"Design tokens\"): a token is an object with $value; any other object is a group.",
+  "$ref": "#/$defs/group",
+  "$defs": {
+    "group": {
+      "type": "object",
+      "properties": {
+        "$description": { "type": "string" },
+        "$type": { "type": "string" }
+      },
+      "patternProperties": {
+        "^\\$": {}
+      },
+      "additionalProperties": { "$ref": "#/$defs/node" }
+    },
+    "node": {
+      "if": { "type": "object", "required": ["$value"] },
+      "then": { "$ref": "#/$defs/token" },
+      "else": { "$ref": "#/$defs/group" }
+    },
+    "token": {
+      "type": "object",
+      "required": ["$value"],
+      "properties": {
+        "$value": {
+          "description": "A CSS string, a number (seconds, unitless factors), or exactly \"{group.token}\" for an alias.",
+          "type": ["string", "number"]
+        },
+        "$type": { "type": "string" },
+        "$description": { "type": "string" },
+        "$extensions": {
+          "type": "object",
+          "properties": {
+            "avatars": {
+              "type": "object",
+              "properties": {
+                "alpha": {
+                  "description": "The resolved colour becomes rgba(r, g, b, alpha).",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dennisklein/avatars/core/schemas/project.schema.json",
+  "title": "avatars.json",
+  "description": "A project's configuration, at its root (DESIGN.md, \"Projects\").",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "cast": {
+      "description": "The presenters by role; every episode has a host.",
+      "type": "object",
+      "required": ["host"],
+      "propertyNames": { "$ref": "defs.schema.json#/$defs/roleName" },
+      "additionalProperties": {
+        "allOf": [{ "$ref": "defs.schema.json#/$defs/castMember" }, { "required": ["avatar"] }]
+      }
+    },
+    "theme": { "$ref": "defs.schema.json#/$defs/id" },
+    "format": { "$ref": "defs.schema.json#/$defs/id" },
+    "brand": {
+      "description": "The brand.json file, relative to the project root; null for none.",
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "lexicons": {
+      "description": "Library packs (<lang>/<pack>) and project files (./file.json), merged in order; the avatar's lexicon goes right after the library packs.",
+      "type": "array",
+      "items": {
+        "description": "A library pack such as en-us/core, or a project file such as ./lexicon.json.",
+        "type": "string",
+        "pattern": "^(\\.{1,2}/.+|/.+|[a-z0-9][a-z0-9._-]*/[a-z0-9][a-z0-9._-]*)$"
+      }
+    },
+    "icons": {
+      "description": "Icon packs; later packs override earlier ones.",
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/id" },
+      "uniqueItems": true
+    },
+    "scenes": {
+      "description": "Project scenes from library/scenes/<id>/, after the library's.",
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/id" },
+      "uniqueItems": true
+    },
+    "episodes": { "description": "The episodes directory.", "type": "string", "minLength": 1 },
+    "renders": { "description": "The renders directory.", "type": "string", "minLength": 1 },
+    "library": { "description": "The project library directory, searched before this package.", "type": "string", "minLength": 1 },
+    "tokens": { "$ref": "tokens.schema.json" },
+    "grounding": {
+      "description": "Terminal and code content must appear on a page that embeds the episode.",
+      "type": ["object", "null"],
+      "properties": {
+        "sources": {
+          "description": "Directories or files with the Markdown pages, relative to the project root.",
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1
+        },
+        "embed": {
+          "description": "The embedding snippet, with {id} for the episode id.",
+          "type": "string",
+          "pattern": "\\{id\\}"
+        }
+      },
+      "required": ["sources", "embed"],
+      "additionalProperties": false
+    },
+    "checks": {
+      "description": "Project check modules, relative to the project root; each default-exports async (api) => {}.",
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "publish": {
+      "description": "Output directories of publish and ci, relative to the project root.",
+      "type": "object",
+      "properties": {
+        "static": { "type": "string", "minLength": 1 },
+        "data": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "patternProperties": { "^_": {} },
+  "additionalProperties": false
+}

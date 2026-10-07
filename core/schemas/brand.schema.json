@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dennisklein/avatars/core/schemas/brand.schema.json",
+  "title": "brand.json",
+  "description": "A project's identity (DESIGN.md, \"Themes, formats, icons, brands\").",
+  "type": "object",
+  "required": ["name"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "name": { "description": "The product name.", "type": "string", "minLength": 1 },
+    "wordmark": { "description": "The name as the logo writes it.", "type": "string" },
+    "tagline": { "type": "string" },
+    "role": { "description": "The presenter's role, shown on the name tag.", "type": "string" },
+    "links": {
+      "description": "[label, text] pairs, such as [\"Docs\", \"example.org/docs\"].",
+      "type": "array",
+      "items": {
+        "type": "array",
+        "prefixItems": [{ "type": "string" }, { "type": "string" }],
+        "minItems": 2,
+        "maxItems": 2
+      }
+    },
+    "marks": {
+      "description": "Mark name (emblem, badge) -> SVG file relative to brand.json.",
+      "type": "object",
+      "propertyNames": { "$ref": "defs.schema.json#/$defs/id" },
+      "additionalProperties": { "description": "An SVG file relative to brand.json.", "type": "string", "pattern": "\\.svg$" }
+    },
+    "tokens": { "$ref": "tokens.schema.json" }
+  },
+  "patternProperties": { "^_": {} },
+  "additionalProperties": false
+}
