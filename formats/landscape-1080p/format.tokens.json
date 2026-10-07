@@ -1,0 +1,7 @@
+{
+  "$description": "Canvas size of the landscape 1080p format, for CSS.",
+  "format": {
+    "width": { "$value": "1920px", "$type": "dimension" },
+    "height": { "$value": "1080px", "$type": "dimension" }
+  }
+}

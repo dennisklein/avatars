@@ -1,0 +1,44 @@
+{
+  "id": "landscape-1080p",
+  "title": "Landscape 1920×1080",
+  "width": 1920,
+  "height": 1080,
+  "shots": {
+    "hidden": { "frame": { "left": 1080, "top": 1180, "width": 780, "height": 960, "borderRadius": 0 }, "stage": { "width": 780, "left": 0, "top": 40 }, "ring": 0 },
+    "hero": { "frame": { "left": 1080, "top": 120, "width": 780, "height": 960, "borderRadius": 0 }, "stage": { "width": 780, "left": 0, "top": 40 }, "ring": 0 },
+    "full": { "frame": { "left": 60, "top": 0, "width": 900, "height": 1080, "borderRadius": 0 }, "stage": { "width": 900, "left": 0, "top": 36 }, "ring": 0 },
+    "left": { "frame": { "left": 120, "top": 120, "width": 780, "height": 960, "borderRadius": 0 }, "stage": { "width": 780, "left": 0, "top": 40 }, "ring": 0 },
+    "cornerR": { "frame": { "left": 1500, "top": 640, "width": 360, "height": 360, "borderRadius": 180 }, "stage": { "width": 450, "left": -45, "top": -14 }, "ring": 1 },
+    "cornerL": { "frame": { "left": 60, "top": 640, "width": 360, "height": 360, "borderRadius": 180 }, "stage": { "width": 450, "left": -45, "top": -14 }, "ring": 1 },
+    "mini": { "frame": { "left": 1700, "top": 860, "width": 180, "height": 180, "borderRadius": 90 }, "stage": { "width": 225, "left": -22, "top": -7 }, "ring": 1 }
+  },
+  "scenes": {
+    "diagram": {
+      "areas": {
+        "cornerR": { "x": 120, "y": 290, "w": 1340, "h": 620 },
+        "cornerL": { "x": 460, "y": 290, "w": 1340, "h": 620 },
+        "wide": { "x": 120, "y": 290, "w": 1680, "h": 570 }
+      },
+      "node": { "width": 260, "height": 84, "tall": 112, "pad": 22, "label": 34 },
+      "groupLabel": [22, 12],
+      "edgeGap": [10, 12],
+      "slack": [30, 10]
+    },
+    "code": {
+      "areas": {
+        "cornerR": { "x": 120, "y": 280, "w": 1340, "h": 630 },
+        "wide": { "x": 120, "y": 280, "w": 1680, "h": 580 }
+      },
+      "untitledTop": 150,
+      "line": 1.45,
+      "max": 32,
+      "min": 18,
+      "gap": 24,
+      "noteGap": 14
+    },
+    "terminal": {
+      "normal": { "left": 100, "top": 150, "width": 1340, "height": 700, "max": 34, "min": 22 },
+      "wide": { "left": 60, "top": 120, "width": 1800, "height": 800, "max": 30, "min": 18 }
+    }
+  }
+}
