@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/dennisklein/avatars/core/schemas/tokens.schema.json",
   "title": "Design tokens",
-  "description": "A token tree in the design-token JSON format (DESIGN.md, \"Design tokens\"): a token is an object with $value; any other object is a group.",
+  "description": "A token tree in the design-token JSON format (DESIGN.md, \"Design tokens\"): a token is an object with $value; any other object is a group. Keys starting with _ are comments.",
   "$ref": "#/$defs/group",
   "$defs": {
     "group": {
@@ -12,7 +12,8 @@
         "$type": { "type": "string" }
       },
       "patternProperties": {
-        "^\\$": {}
+        "^\\$": {},
+        "^_": {}
       },
       "additionalProperties": { "$ref": "#/$defs/node" }
     },
@@ -49,6 +50,7 @@
           }
         }
       },
+      "patternProperties": { "^_": {} },
       "additionalProperties": false
     }
   }

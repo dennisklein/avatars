@@ -10,10 +10,11 @@
 const ALIAS = /^\{([^{}]+)\}$/;
 
 // Walk a token tree into name -> token entries. Keys starting with "$" in a
-// group are group metadata; an object with "$value" is a token.
+// group are group metadata, keys starting with "_" comments; an object with
+// "$value" is a token.
 export function flatten(tree, source, prefix = [], out = new Map()) {
   for (const [key, node] of Object.entries(tree || {})) {
-    if (key.startsWith("$")) continue;
+    if (key.startsWith("$") || key.startsWith("_")) continue;
     if (node === null || typeof node !== "object" || Array.isArray(node)) {
       throw new Error(`${source}: ${[...prefix, key].join(".")} is not a token or group`);
     }
