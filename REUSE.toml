@@ -12,6 +12,7 @@ path = [
   "**/*.txt",
   ".gitignore",
   "**/.gitignore",
+  "templates/**/gitignore",
   "NOTICE",
 ]
 precedence = "aggregate"

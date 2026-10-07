@@ -10,3 +10,5 @@ __pycache__/
 renders/
 **/renders/
 gallery/out/
+# The demo's default publish directory.
+examples/demo/publish/
