@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Dennis Klein <d.klein@gsi.de>
 // SPDX-License-Identifier: Apache-2.0
-// Intro scene: the brand sting (emblem, wordmark, tagline from the project's
-// brand), the episode's kicker and title, and the presenter's disclosure.
+// Intro scene: the brand sting (logo or emblem, wordmark, tagline from the
+// project's brand), the episode's kicker and title, and the presenter's
+// disclosure.
 // The presenter rises in on the right and waves on the first line.
 (function (global) {
   "use strict";
@@ -13,8 +14,10 @@
     const T = ctx.tokens;
     const { el } = ctx.begin("intro", o, {});
 
-    // The emblem as inline SVG, so its pieces can pop in one by one.
-    const mark = brand.marks && brand.marks.emblem;
+    // The brand's logo mark (else its emblem) as inline SVG, so its pieces can
+    // pop in one by one. A brand whose sting differs from the emblem that
+    // wardrobe parts wear supplies a separate logo.
+    const mark = brand.marks && (brand.marks.logo || brand.marks.emblem);
     let emblem = null;
     if (mark) {
       emblem = ctx.svg("svg", { class: "emblem", viewBox: mark.viewBox.join(" "), "aria-hidden": "true" });

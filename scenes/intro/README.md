@@ -31,9 +31,11 @@ Episode.create({ tl, id: "first-steps", title: "First steps: a guided tour", ser
 Everything above the title comes from the project's brand
 (`Avatars.data.brand`); elements the brand leaves out are left out:
 
-- `marks.emblem`: drawn as inline SVG, 250 px wide at its viewBox's aspect
-  ratio. Its top-level elements pop in one by one from the centre outwards,
-  each about its own centre, up to the opacity it is drawn with.
+- `marks.logo`, else `marks.emblem`: drawn as inline SVG, 250 px wide at its
+  viewBox's aspect ratio. Its top-level elements pop in one by one from the
+  centre outwards, each about its own centre, up to the opacity it is drawn
+  with. A brand supplies `logo` when its sting should differ from the emblem
+  that wardrobe parts wear (for example fully opaque cells).
 - `wordmark` and `tagline`: rise in beside the emblem.
 - The disclosure line is the host's `disclosure` from the cast
   (`avatar.json`), bottom left.
