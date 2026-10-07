@@ -22,7 +22,7 @@
       }
     },
     "marks": {
-      "description": "Mark name (emblem, badge) -> SVG file relative to brand.json.",
+      "description": "Mark name (emblem, badge, logo) -> SVG file relative to brand.json.",
       "type": "object",
       "propertyNames": { "$ref": "defs.schema.json#/$defs/id" },
       "additionalProperties": { "description": "An SVG file relative to brand.json.", "type": "string", "pattern": "\\.svg$" }
