@@ -144,7 +144,7 @@ the rules to paste when they differ.
    ```
 
    The gallery renders every demo episode in every theme of the package;
-   look at the contact sheets under `gallery/out/episodes/<id>/`. In a
+   look at the contact sheets under `gallery/out/episodes/<id>/<episode>/`. In a
    project, set `"theme": "<id>"` in one episode's `episode.json` and run
    `npx avatars check <episode>`.
 
