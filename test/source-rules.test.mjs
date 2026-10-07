@@ -100,8 +100,10 @@ describe("colours come from tokens", () => {
 
 describe("files", () => {
   test("every source file starts with the SPDX lines of DESIGN.md (after a shebang)", () => {
+    // REUSE-IgnoreStart: these are strings, not this file's tags.
     const COPYRIGHT = "SPDX-FileCopyrightText: 2026 Dennis Klein <d.klein@gsi.de>";
     const LICENSE = "SPDX-License-Identifier: Apache-2.0";
+    // REUSE-IgnoreEnd
     const sources = FILES.filter((f) => SOURCE.has(ext(f)));
     assert.ok(sources.length > 50, `${sources.length} source files`);
     const bad = [];
