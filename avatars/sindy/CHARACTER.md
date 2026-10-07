@@ -39,12 +39,14 @@ Looks:
 | Look | Wears | Palette |
 | --- | --- | --- |
 | `hoodie` (default) | `hair/long-bangs`, `sindy/ahoge`, `tops/hoodie`, `accessories/emblem-patch`, `accessories/emblem-clip` | slate hoodie from the theme: `top.base` `{color.slate.800}`, `top.light` `{color.slate.700}`, `top.dark` `{color.slate.900}`, seams `top.seam` `{color.slate.600}`, inner shirt `top.inner` `#e6f6f8`, drawstrings `top.trim` `{color.accent}` with tips `top.trim-tip` `{color.info}` |
+| `blazer-glasses` | `hair/long-bangs`, `sindy/ahoge`, `tops/blazer`, `eyewear/round-glasses`, `accessories/emblem-clip` | navy blazer (colourway `navy` of `tops/blazer`) over a crew-neck top `top.inner` `#f4fbfb` with rib and shadows `top.inner-shade` `#b9d3d6`, pocket square `top.trim` `{color.accent}`; gold round glasses (colourway `gold` of `eyewear/round-glasses`) |
 
 The emblem parts show the project's brand mark: the patch on the chest draws
 the brand's `emblem`, the hair clip its `badge` (the outlined variant for
 small sizes) or the `emblem` when the brand has no badge. Without brand marks
-both draw nothing. The drawstrings follow the theme's accents, so the hoodie
-matches the brand while her identity stays the same in every theme.
+both draw nothing. The drawstrings and the blazer's pocket square follow the
+theme's accents, so her clothes match the brand while her identity stays the
+same in every theme.
 
 ## Expressions
 
@@ -62,7 +64,7 @@ matches the brand while her identity stays the same in every theme.
 ## Gestures and gaze
 
 - Gesture `wave`, for the intro and the outro: the arm rises, waves and
-  lowers (1.8 s unless the scene gives a duration).
+  lowers (2.2 s by default, 2.4 s in the outro).
 - Gaze: she looks at content when it appears (`x < 0` when it is on the left
   of the screen), then back to the camera.
 - Idle motion is seeded (seed 11): blinks with an occasional double blink,
