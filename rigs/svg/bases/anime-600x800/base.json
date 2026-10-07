@@ -1,0 +1,28 @@
+{
+  "id": "anime-600x800",
+  "canvas": [600, 800],
+  "anchors": { "face": { "center": [300, 283], "height": 382 }, "neck": [300, 500] },
+  "slots": [
+    "hair-back",
+    "neck",
+    "top",
+    "chest",
+    "face",
+    "face-shadow",
+    "blush",
+    "nose",
+    "eyes",
+    "mouth",
+    "eyewear",
+    "hair-front",
+    "hair-side",
+    "hair-top",
+    "headwear",
+    "hair-accessory",
+    "brows",
+    "sleeve",
+    "hand"
+  ],
+  "clips": ["face"],
+  "gestures": ["wave"]
+}
