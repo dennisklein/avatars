@@ -4,7 +4,10 @@
 # Weekly version updates. A release must be a week old before an update
 # proposes it (security updates do not wait). Updates of HyperFrames, GSAP,
 # the fonts or the voice tool's packages can change pixels or sound and
-# re-render every episode, so they come grouped per ecosystem.
+# re-render every episode, so they come grouped per ecosystem. Requirements
+# change only when they exclude the new version: exact pins move, while
+# ranges keep their floors, which set the oldest supported versions (numpy's
+# also the oldest Python), and npm updates only its lockfile for them.
 version: 2
 updates:
   # The SHA pins of the workflows and of the render action; one pull request
@@ -23,6 +26,7 @@ updates:
 
   - package-ecosystem: npm
     directory: /
+    versioning-strategy: increase-if-necessary
     schedule:
       interval: weekly
     cooldown:
@@ -35,6 +39,7 @@ updates:
 
   - package-ecosystem: pip
     directory: /voice
+    versioning-strategy: increase-if-necessary
     schedule:
       interval: weekly
     cooldown:
