@@ -1,0 +1,18 @@
+{
+  "$description": "Motion timings in seconds and entrance offsets in px.",
+  "motion": {
+    "transition": {
+      "default": { "$value": 0.7, "$type": "duration", "$description": "a registered transition without its own token" },
+      "push": { "$value": 0.7, "$type": "duration" },
+      "iris": { "$value": 0.8, "$type": "duration" },
+      "blur": { "$value": 0.9, "$type": "duration" }
+    },
+    "shot": { "$value": 0.9, "$type": "duration", "$description": "the presenter moving to the next scene's shot" },
+    "enter": {
+      "offset": { "$value": 30, "$type": "number", "$description": "Scenes.enter: how far elements rise (px)" },
+      "duration": { "$value": 0.5, "$type": "duration" }
+    },
+    "fade-out": { "$value": 0.8, "$type": "duration", "$description": "the fade to black at the end" },
+    "tail": { "$value": 1.8, "$type": "duration", "$description": "time after the last line, including the fade" }
+  }
+}

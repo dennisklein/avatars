@@ -1,0 +1,31 @@
+{
+  "$description": "Font families, weights and the type scale (px for a 1080-pixel-high canvas).",
+  "font": {
+    "family": {
+      "inter": { "$value": "\"Inter\", sans-serif", "$type": "fontFamily" },
+      "jetbrains-mono": { "$value": "\"JetBrains Mono\", monospace", "$type": "fontFamily" }
+    },
+    "weight": {
+      "regular": { "$value": 400, "$type": "fontWeight" },
+      "semibold": { "$value": 600, "$type": "fontWeight" },
+      "bold": { "$value": 700, "$type": "fontWeight" },
+      "extrabold": { "$value": 800, "$type": "fontWeight" }
+    },
+    "size": {
+      "3xs": { "$value": "20px", "$type": "dimension" },
+      "2xs": { "$value": "22px", "$type": "dimension" },
+      "xs": { "$value": "24px", "$type": "dimension" },
+      "sm": { "$value": "26px", "$type": "dimension" },
+      "md": { "$value": "28px", "$type": "dimension" },
+      "lg": { "$value": "30px", "$type": "dimension" },
+      "xl": { "$value": "36px", "$type": "dimension" },
+      "2xl": { "$value": "38px", "$type": "dimension" },
+      "3xl": { "$value": "40px", "$type": "dimension" },
+      "4xl": { "$value": "44px", "$type": "dimension" },
+      "5xl": { "$value": "76px", "$type": "dimension" },
+      "6xl": { "$value": "84px", "$type": "dimension" },
+      "7xl": { "$value": "92px", "$type": "dimension" },
+      "8xl": { "$value": "190px", "$type": "dimension" }
+    }
+  }
+}

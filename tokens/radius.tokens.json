@@ -1,0 +1,17 @@
+{
+  "$description": "Corner radii.",
+  "radius": {
+    "2xs": { "$value": "3px", "$type": "dimension" },
+    "xs": { "$value": "6px", "$type": "dimension" },
+    "sm": { "$value": "10px", "$type": "dimension" },
+    "md": { "$value": "12px", "$type": "dimension" },
+    "lg": { "$value": "14px", "$type": "dimension" },
+    "xl": { "$value": "16px", "$type": "dimension" },
+    "2xl": { "$value": "18px", "$type": "dimension" },
+    "3xl": { "$value": "20px", "$type": "dimension" },
+    "4xl": { "$value": "22px", "$type": "dimension" },
+    "5xl": { "$value": "24px", "$type": "dimension" },
+    "pill": { "$value": "999px", "$type": "dimension" },
+    "circle": { "$value": "50%", "$type": "dimension" }
+  }
+}

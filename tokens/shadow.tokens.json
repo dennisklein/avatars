@@ -1,0 +1,8 @@
+{
+  "$description": "Drop shadows. `none` is a transparent shadow that GSAP can tween from or to.",
+  "shadow": {
+    "none": { "$value": "0 0 0 0 rgba(0, 0, 0, 0)", "$type": "shadow" },
+    "md": { "$value": "0 14px 34px rgba(0, 0, 0, 0.35)", "$type": "shadow" },
+    "lg": { "$value": "0 30px 80px rgba(0, 0, 0, 0.45)", "$type": "shadow" }
+  }
+}
