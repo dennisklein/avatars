@@ -6,7 +6,7 @@
 // carries the SPDX lines, every JSON file parses, the library names no
 // consuming project, and the plugin's version follows the package's.
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, test } from "node:test";
 import { REPO, walkFiles } from "./helpers.mjs";
@@ -155,11 +155,15 @@ describe("files", () => {
 describe("package", () => {
   const pkg = JSON.parse(text("package.json"));
 
-  test("the Claude Code plugin has the package's version", () => {
-    const plugin = JSON.parse(text(".claude-plugin/plugin.json"));
-    assert.equal(plugin.version, pkg.version);
+  test("the Claude Code plugin has the package's version and ships only the skills", () => {
     const market = JSON.parse(text(".claude-plugin/marketplace.json"));
-    assert.ok(market.plugins.some((p) => p.name === plugin.name), "the marketplace lists the plugin");
+    const plugin = market.plugins.find((p) => p.name === "avatars");
+    assert.ok(plugin, "the marketplace lists the plugin");
+    assert.equal(plugin.version, pkg.version);
+    // A plugin root with package.json and a lockfile gets an npm install.
+    assert.equal(plugin.source, "./skills");
+    assert.deepEqual(plugin.skills, ["."]);
+    assert.ok(!existsSync(path.join(REPO, "skills", "package.json")), "no package.json in the plugin root");
   });
 
   test("every path the package ships exists, and the command has a shebang", () => {

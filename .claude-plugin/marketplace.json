@@ -8,8 +8,18 @@
   "plugins": [
     {
       "name": "avatars",
-      "source": "./",
+      "source": "./skills",
+      "skills": ["."],
+      "version": "0.1.0",
       "description": "Skills for writing, voicing, checking and rendering tutorial video episodes with the avatars library, and for its design system",
+      "author": {
+        "name": "Dennis Klein",
+        "email": "d.klein@gsi.de"
+      },
+      "homepage": "https://github.com/dennisklein/avatars",
+      "repository": "https://github.com/dennisklein/avatars",
+      "license": "Apache-2.0",
+      "keywords": ["video", "tutorial", "avatar", "narration", "text-to-speech", "hyperframes", "design-system"],
       "category": "documentation"
     }
   ]

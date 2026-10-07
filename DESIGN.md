@@ -70,7 +70,7 @@ examples/demo/           a neutral project with two episodes; CI and the gallery
 gallery/                 index.html and sheet.html, the pages avatars gallery and avatars sheet fill
 integrations/            hugo/ (shortcode, stylesheet), github/render/ (composite action), claude-code/ (plugin setup)
 skills/                  Claude Code skills: avatars-episode, avatars-voice, avatars-design
-.claude-plugin/          marketplace.json and plugin.json: the plugin that ships skills/
+.claude-plugin/          marketplace.json: the marketplace and the plugin that ships skills/
 .claude/skills           a link to skills/, so the skills also load when working in this repository
 .github/workflows/       ci.yml (tests, validation, REUSE, demo check), gallery.yml (gallery on GitHub Pages)
 docs/                    guides; images/ holds generated pictures
@@ -1160,8 +1160,10 @@ and talking happily with a wave where the base lists it, at 600 px).
   prunes store entries outside the used list after a successful run, and
   saves the store as `<prefix>-run-<run id>-<attempt>` when it changed.
 - `.claude-plugin/`: the marketplace `avatars` lists the plugin `avatars`
-  with source `./`, so its id is `avatars@avatars` and its skills are
-  `/avatars:<skill>`. Projects enable it in `.claude/settings.json`: they
+  with source `./skills` and the plugin manifest inline (no `plugin.json`),
+  so the plugin is the skills alone: installing it copies `skills/` and
+  installs no npm dependencies. Its id is `avatars@avatars` and its skills
+  are `/avatars:<skill>`. Projects enable it in `.claude/settings.json`: they
   set `extraKnownMarketplaces.avatars.source` to
   `{ "source": "github", "repo": "dennisklein/avatars", "ref": "<tag>" }`
   and `enabledPlugins["avatars@avatars"]` to `true`
@@ -1175,9 +1177,9 @@ lockfile pins the commit. A
 change to the vocabulary, a registry or context signature, a schema or a slot
 is breaking. Changes that alter pixels or sound of existing episodes are
 listed in the release notes, because they re-render every episode they
-touch. A release sets the same `version` in `package.json` and
-`.claude-plugin/plugin.json`; Claude Code replaces a cached plugin only when
-that version changes.
+touch. A release sets the same `version` in `package.json` and in the plugin
+entry of `.claude-plugin/marketplace.json`; Claude Code replaces a cached
+plugin only when that version changes.
 
 ## Licence
 

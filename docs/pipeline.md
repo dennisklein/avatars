@@ -301,8 +301,9 @@ tag as its `package.json`:
 ```
 
 The skills appear as `/avatars:avatars-episode` and so on. A release sets the
-same version in `package.json` and `.claude-plugin/plugin.json`, and Claude
-Code replaces its cached plugin only when that version changes. In this
+same version in `package.json` and in the plugin entry of
+`.claude-plugin/marketplace.json`, and Claude Code replaces its cached plugin
+only when that version changes. In this
 repository `.claude/skills` links to `skills/`, so the skills also load while
 working on the library.
 [integrations/claude-code/README.md](../integrations/claude-code/README.md)

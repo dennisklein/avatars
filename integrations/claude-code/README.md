@@ -1,12 +1,13 @@
 # Claude Code plugin
 
 This repository is a Claude Code plugin marketplace named `avatars`
-(`.claude-plugin/marketplace.json`) with one plugin, also named `avatars`
-(`.claude-plugin/plugin.json`). The plugin ships the skills in `skills/`
-(`avatars-episode`, `avatars-voice` and `avatars-design`), which teach Claude
-how to write, voice, check and render episodes and how to work with the
-design system. Its id is `avatars@avatars`, and its skills are namespaced
-under the plugin, for example `/avatars:avatars-episode`.
+(`.claude-plugin/marketplace.json`) with one plugin, also named `avatars`,
+whose manifest is its entry in that file. The plugin's root is `skills/`, so
+installing it copies the skills alone and installs no npm dependencies. It
+ships the skills (`avatars-episode`, `avatars-voice` and `avatars-design`),
+which teach Claude how to write, voice, check and render episodes and how to
+work with the design system. Its id is `avatars@avatars`, and its skills are
+namespaced under the plugin, for example `/avatars:avatars-episode`.
 
 ## Enable it for everyone in a project
 
@@ -70,7 +71,7 @@ commit. After the next session start, Claude Code notices that the
 marketplace's source changed, fetches it again and asks to run
 `/reload-plugins`.
 
-The plugin's `version` in `plugin.json` is the package version, and Claude Code
+The plugin's `version` in `marketplace.json` is the package version, and Claude Code
 replaces its cached copy of the plugin only when that version changes. A
 project that follows the default branch therefore receives new skills with
 each release, when the marketplace is updated (`/plugin marketplace update
@@ -80,8 +81,8 @@ avatars`, or in the background with `"autoUpdate": true` next to `source`).
 
 The settings above follow these pages of the Claude Code documentation:
 
-- [Plugin manifest reference][manifest]: `plugin.json` fields, the standard
-  `skills/` layout, versions
+- [Plugin manifest reference][manifest]: manifest fields, `skills` paths,
+  versions, and marketplace entries that act as the manifest
 - [Create a marketplace][create] and the [marketplace reference][market]:
   `marketplace.json`, relative-path sources, `github` sources with `ref`
 - [Settings reference][settings]: `extraKnownMarketplaces`, `enabledPlugins`
