@@ -104,9 +104,9 @@ Every scene takes these options:
 | `label` | the on-screen chapter text, if it should differ |
 | `say` | the narration (below) |
 | `mood` | the default mood of the scene's lines, where the scene has one |
-| `lead` | seconds before the narration starts (0.6, the outro 0.7) |
+| `lead` | seconds before the narration starts (0.6, the outro 0.7; the intro uses `start`) |
 | `transition`, `transitionDur` | `push`, `iris` or `blur`, and its length (default: the `motion.transition.<kind>` token) |
-| `shot` | `hidden`, `hero`, `full`, `left`, `cornerR`, `cornerL` or `mini` |
+| `shot` | `hidden`, `hero`, `full`, `left`, `cornerR`, `cornerL` or `mini`; it moves only the presenter, so `cornerL` covers code panels and terminals, which lay out for `cornerR` (they log a warning) |
 
 ### intro
 
@@ -116,7 +116,8 @@ tagline rise in beside it, and the host's disclosure stands bottom left.
 `kicker` is a small line above the `title` (default: `series`). `chapter`
 defaults to "Intro" and starts at 0. The narration starts at `start` (1.5 s)
 in `joy`, switching to `happy` after the first sentence, and she waves on the
-first line unless `wave: false`.
+first line unless `wave: false`. The intro ignores `lead`, `transition` and
+`shot`: the presenter always rises in from `hidden` to `hero`.
 
 ### talk
 
@@ -132,7 +133,8 @@ from 0.9 s into the scene until `hold` seconds (`talk.tag-hold`, 5.2);
 
 A `title` and `bullets: [{ icon, title, text, at }]`, up to four; `text` is
 an optional second line, and unknown icon names show `check`. Four bullets
-start higher, so the last one clears the captions.
+start higher, so the last one clears the captions; a fifth runs under them
+and logs a warning.
 
 `slide`, `diagram` and `code` share the slide frame: chapter label, title,
 the presenter in the corner and items that appear 0.15 s before their cue
@@ -265,11 +267,11 @@ say: [
   after the last one the scene's own (0.2 s in most scenes).
 
 The moods are `neutral`, `happy`, `joy`, `surprised`, `thinking`,
-`concerned`, `smug` and `wink`, and the avatar's `CHARACTER.md` says when to
-use which. As a rule: `neutral` while explaining, `happy` when something
-works, `joy` for big moments, `thinking` for a choice or caveat, `concerned`
-for warnings, `smug` for a neat trick; `wink` belongs to the sign-off, which
-the outro does.
+`concerned`, `smug` and `wink` (an unknown name shows as `neutral` and logs a
+warning), and the avatar's `CHARACTER.md` says when to use which. As a rule:
+`neutral` while explaining, `happy` when something works, `joy` for big
+moments, `thinking` for a choice or caveat, `concerned` for warnings, `smug`
+for a neat trick; `wink` belongs to the sign-off, which the outro does.
 
 Scenes act on their own: slides, diagrams and code panels make her glance at
 items with a cue, terminals at typed commands, the intro and outro wave. The

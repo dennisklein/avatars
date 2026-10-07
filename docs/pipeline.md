@@ -55,26 +55,29 @@ for failures and 2 for usage errors, and `npx avatars help` prints the usage.
 
 | Command | Does |
 | --- | --- |
-| `new project DIR [--title T]` | a project from `templates/project` in `DIR`, which must be absent or empty; `DIR`'s name becomes the project id |
+| `new project DIR [--title T]` | a project from `templates/project` in `DIR`, which must be absent or empty; `DIR`'s name becomes the project id (`name` in `package.json`); the brand's `wordmark` is the placeholder `brand` |
 | `new episode ID [--title T]` | `episodes/<ID>/` from `templates/episode`, with the project theme's `@font-face` rules in its head |
 | `vendor ID…` | writes `episodes/<id>/vendor/` |
 | `voice ID… [--force]` | voices `script.json` into `assets/voice/`, cached per line |
 | `voice-setup` | downloads and prepares the voice model of every engine the cast's presets use |
 | `phonemes ID… [--flagged]` | each word's phonemes, their source and flags; `--flagged` only risky words |
-| `fixture-voice ID…` | timing files with made-up timings and no audio |
+| `fixture-voice ID…` | timing files with made-up timings and no audio, for `check` and layout work |
 | `lint ID…` | `hyperframes lint` in the episode |
 | `check ID… [--quick]` | everything below under "Checks"; `--quick` skips lint and contact sheets |
-| `render ID… [--draft]` | `renders/<id>.mp4` at standard quality (or draft), with burned-in captions |
+| `render ID… [--draft]` | `renders/<id>.mp4` at standard quality (or draft), with burned-in captions; needs voiced narration |
 | `publish ID… [--static DIR] [--data DIR]` | the files a docs site serves, below under "Publishing" |
 | `hash ID…` | prints `<id>-<hash>`, the render hash |
 | `ci ID… --store DIR [--used FILE]` | renders what the store lacks, then publishes from the store |
 | `validate` | checks every manifest of the package and the project against its schema |
-| `gallery --out DIR [--theme T]` | avatar sheets and demo contact sheets |
+| `gallery --out DIR [--theme T]` | avatar sheets and demo contact sheets; replaces `DIR/avatars/` and `DIR/episodes/`, and refuses to when they hold files it did not write |
 | `sheet AVATAR [--look L] [--mode M] [--theme T] -o PNG` | one avatar sheet ([avatars.md](avatars.md)) |
 
 `voice`, `phonemes` and `fixture-voice` need only `script.json`; the others
 need `index.html`. `validate`, `voice-setup`, `sheet` and `gallery` also work
-outside a project, on the package alone.
+outside a project, on the package alone. `new` fills `--title` and the
+project directory's name into JSON, HTML and script strings as they are, so
+neither may contain `"`, `\`, `<`, `>` or control characters. `render` and
+`publish` refuse fixture narration, which has no audio.
 
 The environment:
 
@@ -106,10 +109,10 @@ network at render time: GSAP and the fonts come from npm, the narration from
 `avatars hash <id>` prints `<id>-<hash>`: the first 16 hex characters of a
 SHA-256 over the tag `avatars-render/1`, the episode's own files (not
 `vendor/`, `renders/`, `snapshots/`, `.hyperframes/`, `node_modules/` or
-`assets/voice/`), the vendor files, the voice cache keys of its lines, the
-HyperFrames version and the publish code. It does not depend on where the
-project or the package are checked out, so it matches between machines and
-CI. A docs-only change keeps every hash; a library upgrade changes the hashes
+`assets/voice/`; a symbolic link counts as the file or directory it points
+to), the vendor files, the voice cache keys of its lines, the HyperFrames
+version and the publish code. It does not depend on where the project or
+the package are checked out, so it matches between machines and CI. A docs-only change keeps every hash; a library upgrade changes the hashes
 of exactly the episodes whose bundle or narration it changes:
 
 ```bash
@@ -130,14 +133,19 @@ line) and reports:
   resolve; no narration; `@font-face` rules that differ from the theme's (it
   prints the right ones); page errors, missing files and network requests;
   no `window.__episode` or no `script.json`; a script line changed since it
-  was voiced; a failing project check, lint or snapshot.
+  was voiced; a voiced line that is stale because its preset, the lexicon
+  entries its words use or its `lead` changed (this compares the line's
+  cache key with the voice tool's, so it needs Python when any line is
+  voiced); a failing project check, lint or snapshot.
 - **Warnings**: console warnings (cues that match several words, terminal or
   code lines that do not fit, diagram overlaps); text cut off in a diagram
-  node; gestures the avatar's base cannot animate; brand marks the cast draws
-  but the brand lacks; theme contrast pairs below their minimum with this
-  episode's tokens; fixture narration; lines never said; more than 2.5 s
-  without narration; an episode id that differs from the directory; no page
-  that embeds the episode; ungrounded terminal and code lines.
+  node; a brand wordmark in the intro that runs under the presenter (about
+  five characters fit at the default size); gestures the avatar's base
+  cannot animate; brand marks the cast draws but the brand lacks; theme
+  contrast pairs below their minimum with this episode's tokens; fixture
+  narration; lines never said; more than 2.5 s without narration; an
+  episode id that differs from the directory; no page that embeds the
+  episode; ungrounded terminal and code lines.
 
 Without `--quick` it also runs `hyperframes lint` and writes two stills per
 chapter, in the middle and just before the next chapter, as contact sheets
@@ -194,13 +202,13 @@ off) and writes:
 | --- | --- |
 | `<static>/<id>.mp4` | H.264 at CRF 28 with `-tune animation`, AAC 96 kbit/s mono, `+faststart`; about 4 MB per minute |
 | `<static>/<id>.jpg` | the poster: the frame at 2.6 s (or half a second before the end of a shorter episode), 1280 px wide |
-| `<static>/<id>.vtt` | WebVTT captions from the narration's word timings |
+| `<static>/<id>.vtt` | WebVTT captions from the narration's word timings, with `&`, `<` and `>` escaped |
 | `<data>/<id>.json` | the manifest: `title`, `duration`, `length`, `bytes`, `presenter` (`name`, `disclosure`) and `chapters` (`title`, `start`, `time`) |
 
 `<static>` and `<data>` are `--static` and `--data`, else `publish` in
-`avatars.json`, else `publish/`. `publish` needs voiced narration; it does
-not voice. The files are build output: list their directories in the site's
-`.gitignore`.
+`avatars.json`, else `publish/`. `publish` needs voiced narration, not
+fixture narration; it does not voice. The files are build output: list
+their directories in the site's `.gitignore`.
 
 ## CI
 

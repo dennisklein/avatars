@@ -205,6 +205,13 @@ The intro shows the wordmark, tagline and mark, the talk scene's name tag the
 episode of the project; an accent of the brand reaches every scene and the
 looks whose palette follows `{color.accent}`.
 
+The intro leaves `intro.wordmark-gap` (0.125 em of the wordmark size, about
+24 px) between the wordmark's line box and the tagline, so that descenders
+such as g, p and y clear the tagline. A brand puts the tagline right under
+the line box with `"tokens": { "intro": { "wordmark-gap": { "$value": 0 } } }`,
+for example a wordmark without descenders whose rendered episodes should
+keep their intro pixels.
+
 Marks are SVG files next to `brand.json`, under three names:
 
 | Mark | Drawn by |

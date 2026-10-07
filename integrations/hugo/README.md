@@ -51,8 +51,9 @@ npx avatars ci --all --store .avatars-store            # the same for what chang
 a site build voices and renders only the episodes whose sources, narration or
 library changed. In GitHub Actions, the composite action in
 [`integrations/github/render`](../github/render/README.md) runs `ci` with the
-store kept in the Actions cache. The published files are build output: list
-the two directories in the site's `.gitignore`.
+store kept in the Actions cache. The published files and the store are build
+output: list the two directories and the store in the site's `.gitignore` (a
+project made from the template already leaves `.avatars-store/` out).
 
 ## Use it: copy the files
 

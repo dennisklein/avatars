@@ -78,9 +78,12 @@ test/                    Node test suites (*.test.mjs) and their fixtures/
 ```
 
 `templates/project` holds `avatars.json`, `package.json`, `gitignore`
-(copied as `.gitignore`), `README.md`, `lexicon.json`, `brand/` (`brand.json`,
-`emblem.svg`, `emblem-badge.svg`) and `episodes/hello/`; it uses the hoodie
-look on midnight, without grounding. `templates/episode` holds `script.json`,
+(copied as `.gitignore`; it leaves out what the CLI and HyperFrames write,
+and `.avatars-store/`, the render store of `ci`), `README.md`, `lexicon.json`,
+`brand/` (`brand.json`, `emblem.svg`, `emblem-badge.svg`) and
+`episodes/hello/`; it uses the hoodie look on midnight, without grounding.
+The brand's `wordmark` is the placeholder `brand`, short enough for the
+intro beside the presenter. `templates/episode` holds `script.json`,
 `index.html` and `hyperframes.json`. `examples/demo` is a project with the
 brand "Demo" and links on example.org, and two episodes: `tour` (every library
 scene, a scene registered by the page, terminal sessions of the `avatars`
@@ -258,7 +261,9 @@ The vocabulary is the contract between scenes, the performer and every rig:
 - **Visemes**: `sil mbp aa ah ee ih oh ou fv th cdg sz ch l r w`, each
   `{ open, wide, round, teeth }` in 0..1. Unknown visemes count as `sil`.
 - **Moods**: `neutral happy joy surprised thinking concerned smug wink`. Every
-  avatar renders all of them; an avatar may add more.
+  avatar renders all of them; an avatar may add more. An unknown mood shows
+  as `neutral`, and the performer logs a console warning once per name,
+  which `avatars check` reports.
 - **Expression parameters** (`EXPR_KEYS`): `brow` (-1 frown .. 1 raised),
   `browTilt` (+ worried), `eye` (openness), `squint`, `happyEyes` (^^ arcs),
   `smile` (-1..1), `mouthOpen`, `blush`, `pupil` (scale), `winkL`, `winkR`.
@@ -549,7 +554,8 @@ gazeAt, tracks }`. `tracks` are performer options; `tracks.moods` and
 Token files use the design-token JSON format: a token is an object with
 `$value` and optional `$type`, `$description` and `$extensions`; any other
 object is a group, and keys starting with `$` in a group are its metadata.
-Values are CSS strings (`"#0f172a"`, `"26px"`,
+Keys starting with `_` are comments, in groups and in tokens; the compiler
+skips them. Values are CSS strings (`"#0f172a"`, `"26px"`,
 `"0 30px 80px rgba(0, 0, 0, 0.45)"`, `"\"Inter\", sans-serif"`) or numbers
 (seconds, unitless factors). A value that is exactly `"{group.token}"` is an
 alias. A colour token may set `"$extensions": { "avatars": { "alpha": 0.28 } }`:
@@ -705,9 +711,11 @@ unknown names show `check`). Packs: `core` (`check`, `gear`, `globe`, `key`,
 ```
 
 Only `name` is required. `role` is the presenter's role on the talk scene's
-name tag; `links` are the outro's. Marks are SVG files relative to
-`brand.json`; the CLI keeps their `viewBox` and inner markup (comments and
-`<title>` removed). Their names:
+name tag; `links` are the outro's. The intro sets the tagline
+`intro.wordmark-gap` (0.125 em) below the wordmark's line box, room for
+descenders; a brand sets the token to 0 for no gap. Marks are SVG files
+relative to `brand.json`; the CLI keeps their `viewBox` and inner markup
+(comments and `<title>` removed). Their names:
 
 - `emblem`: the brand mark. The intro draws `logo` if the brand has one,
   else `emblem`, as inline SVG (`svg.emblem`, 250 px wide at its viewBox's
@@ -775,15 +783,26 @@ The scene context:
 previous scene (`o.transition`, else `defaults.transition`), moves the
 presenter to `o.shot`, else `defaults.shot`, over `motion.shot` seconds when
 it differs from the current one, and starts a chapter when `o.chapter` is
-set. The first scene shows at 0 without a transition. A transition lasts
-`o.transitionDur`, else the token `motion.transition.<kind>`, else
-`motion.transition.default`; an iris opens at 70 % 45 %.
+set. The first scene shows at 0 without a transition, and its shot is set
+without a move. A transition lasts `o.transitionDur`, else the token
+`motion.transition.<kind>`, else `motion.transition.default`; an iris opens
+at 70 % 45 %.
 `slideFrame(kind, o)` begins with `{ transition: "push", shot: "cornerR" }`
 and adds the background, chapter label and title; `narrate()` waits
 `o.lead` (0.6 s) and says `o.say` in `o.mood` (`neutral`); `cue(item, i)` is
 0.15 s before `item.at`, or 0.9 s plus 0.5 s per item into the scene without
 one. `custom(kind, o)` begins a scene without content, with a push and the
-current shot.
+current shot. The intro ignores `o.shot` and `o.transition`: the presenter
+always rises in from `hidden` to `hero`.
+
+`setShot(name, at, dur, ease)` moves the frame, the stage and the ring to the
+shot over `dur` seconds (`ease` default `power3.inOut`), or sets them at once
+without `dur`. A move to `hidden` cuts the frame, which is then off screen,
+while the stage and ring still move. A move never starts before the previous
+one has ended; it starts at that end instead. A GSAP `to` tween starts from
+what is on screen when it first renders, so overlapping moves on one target
+would depend on the frame a render worker's seek starts from; scenes follow
+the same rule for their own moves (the code scene's scrolls of a panel).
 
 `done({ tail })` ends the episode `tail` seconds after the last line (default
 `motion.tail`) with a fade to black (`motion.fade-out`), creates the host
@@ -813,14 +832,16 @@ one JSON file per line and a `lines.js` for the page.
 ```
 
 `voice` (optional) names a preset; `lead` (optional) is seconds of silence
-before the line. Line ids are unique file names. `script SCRIPT -o DIR`
-writes `<id>.wav` (mono, 16-bit, the engine's sample rate), `<id>.json` (the
-line JSON with its cache key as `hash`), then `index.json`
-(`[{ id, duration, text }]`) and `lines.js`
-(`window.AVATAR_LINES = { id: line JSON without phonemes }`). Lines whose
-key and WAV are unchanged are not voiced again; `--force` voices every line.
-The audio is normalised to a -1 dBFS peak and ends with 0.15 s of silence.
-Every engine produces the same line JSON:
+before the line. Line ids are unique file names that are not `.` or `..`
+and contain no `/`, `\`, `?`, `#` or `%`, because the page loads
+`assets/voice/<id>.wav` by URL; `validate`, the voice tool and
+`fixture-voice` reject others. `script SCRIPT -o DIR` writes `<id>.wav`
+(mono, 16-bit, the engine's sample rate), `<id>.json` (the line JSON with its
+cache key as `hash`), then `index.json` (`[{ id, duration, text }]`) and
+`lines.js` (`window.AVATAR_LINES = { id: line JSON without phonemes }`).
+Lines whose key and WAV are unchanged are not voiced again; `--force` voices
+every line. The audio is normalised to a -1 dBFS peak and ends with 0.15 s of
+silence. Every engine produces the same line JSON:
 
 ```json
 {
@@ -850,10 +871,11 @@ Every engine produces the same line JSON:
 ```
 
 A preset names its `engine` (default `kokoro`). Kokoro presets blend stock
-voices by weight in `mix` and set `speed` (default 1.0) and `lang` (default
-`en-us`). Any preset may set `pitch` in semitones; the tool applies it with
-FFmpeg's `rubberband` filter, keeping formants and length. `-v` also accepts
-an engine's stock voice names (`af_heart`), which work without `--voices`.
+voices by weight in `mix` (required) and set `speed` (0.5 to 2, default 1.0)
+and `lang` (default `en-us`). Any preset may set `pitch` in semitones; the
+tool applies it with FFmpeg's `rubberband` filter, keeping formants and
+length. `-v` also accepts an engine's stock voice names (`af_heart`), which
+work without `--voices`.
 The preset is `-v`, else the script's `voice`, else voice.json's `default`;
 the CLI passes a cast entry's `voice` as `-v`. Sindy's presets are `sindy`
 (the default), `sindy-anime`, `sindy-bright` and `sindy-soft`.
@@ -873,8 +895,11 @@ exposed as an output) and `voices-v1.0.bin` at the top of
 `AVATARS_VOICE_CACHE` (default `~/.cache/avatars-voice`).
 
 A lexicon file is `{ "_comment": "…", "words": { word: phonemes } }`. Keys
-are lowercase whole words, matched case-insensitively with surrounding
-punctuation stripped. Values are espeak IPA with spaces between spoken parts
+are lowercase whole words. A word uses an entry when both are equal after
+lowercasing and stripping surrounding punctuation (every Unicode punctuation
+character, plus `` ` `` and `*`; a word of punctuation alone keeps it), so
+“kubectl”, `` `kubectl` `` and `*kubectl*` use `kubectl`; inner punctuation
+stays (`nginx.conf`). Values are espeak IPA with spaces between spoken parts
 (`"kubectl": "kjˈuːb kəntɹˌoʊl"`). Library packs: `en-us/core` (general
 English and software terms) and `en-us/hpc` (HPC daemons, commands and
 libraries). Lexicons merge in this order, later wins: the project's
@@ -1003,7 +1028,7 @@ without one.
 | `fixture-voice ID…` | synthetic narration with plausible timings and no audio, for tests and layout work |
 | `lint ID…` | HyperFrames lint |
 | `check ID… [--quick]` | manifests, fonts, contrast, timeline, warnings, narration, grounding, project checks; without `--quick` also lint and contact sheets |
-| `render ID… [--draft]` | `renders/<id>.mp4` with burned-in captions |
+| `render ID… [--draft]` | `renders/<id>.mp4` with burned-in captions; needs voiced narration |
 | `publish ID… [--static DIR] [--data DIR]` | web MP4, poster, WebVTT captions and a manifest |
 | `hash ID…` | the render hash, printed as `<id>-<hash>` |
 | `ci ID… --store DIR [--used FILE]` | voice and publish into the store on a miss, then copy from it |
@@ -1025,16 +1050,20 @@ HyperFrames from its own dependency with `HYPERFRAMES_NO_TELEMETRY=1`.
 the episode id), `{{title}}` (`--title`, else the id in words:
 `first-steps` → "First steps") and `{{font-faces}}` (the theme's
 `@font-face` rules; on a line of its own each rule gets that line's indent)
-in every text file. A template stores `.gitignore` as `gitignore`, because
-npm leaves `.gitignore` files out of packages. Episode ids are lowercase
-letters, digits, dots, dashes and underscores.
+in every text file. `--title` and the project directory's name are filled in
+unescaped, so they must not contain `"`, `\`, `<`, `>` or control characters
+(a bad `--title` is a usage error). A template stores `.gitignore` as
+`gitignore`, because npm leaves `.gitignore` files out of packages. Episode
+ids are lowercase letters, digits, dots, dashes and underscores.
 
 **Render hash.** The first 16 hex characters of a SHA-256 over: the tag
-`avatars-render/1`; the episode's own files in sorted relative paths
-(skipping `vendor`, `renders`, `snapshots`, `.hyperframes` and
-`node_modules` anywhere, and `assets/voice`); the vendor files in bundle
-order; the JSON of the voice tool's `keys` for the episode (`{}` without
-lines); the HyperFrames version; and the source of `cli/lib/publish.mjs`.
+`avatars-render/1`; the episode's own files in sorted relative paths (a
+symbolic link counts as the file or directory it points to; dangling links
+and links back to a directory above are left out; skipping `vendor`,
+`renders`, `snapshots`, `.hyperframes` and `node_modules` anywhere, and
+`assets/voice`); the vendor files in bundle order; the JSON of the voice
+tool's `keys` for the episode (`{}` without lines); the HyperFrames version;
+and the source of `cli/lib/publish.mjs`.
 Nothing in it depends on where the project or the package are checked out,
 so a library change re-renders exactly the episodes whose bundle or voice it
 changes.
@@ -1049,10 +1078,16 @@ the presenters it creates by wrapping `Avatars.createPresenter`, and reports:
 
 - errors: page errors, missing files (except the WAVs of fixture narration),
   network requests, no `window.__episode`, no `script.json`, a script line
-  whose text changed since it was voiced, failing project checks, and
-  without `--quick` a failing lint or snapshot;
+  whose text changed since it was voiced, a voiced line whose cache key
+  (`hash` in lines.js) differs from the voice tool's `keys` because its
+  preset, lexicon entries or `lead` changed (only computed when a line is
+  voiced, so fixture narration needs no Python; a voice tool that cannot run
+  is an error), failing project checks, and without `--quick` a failing lint
+  or snapshot;
 - warnings: console warnings and errors, gestures the presenter's base does
-  not list, text cut off in diagram nodes, fixture narration (one warning),
+  not list, text cut off in diagram nodes, a brand wordmark in the intro
+  whose text ends right of the hero shot's presenter frame
+  (`shots.hero.frame.left`), fixture narration (one warning),
   script lines never said, more than 2.5 s without narration between two
   lines, a `window.__episode.id` that differs from the directory, no page
   that embeds the episode, ungrounded terminal and code lines, and the
@@ -1067,10 +1102,11 @@ middle and 0.35 s before the next chapter) as contact sheets into
 master at standard quality without burned-in captions, and writes
 `<id>.mp4` (H.264 CRF 28, `-tune animation`, AAC 96 kbit/s mono,
 `+faststart`), `<id>.jpg` (the frame at min(2.6 s, duration − 0.5 s), 1280 px
-wide) and `<id>.vtt` (the caption cues) to the static directory and `<id>.json`
-to the data directory: `--static` and `--data`, else `publish` in
-`avatars.json`. It needs voiced narration and does not voice. Files are named
-after the episode directory.
+wide) and `<id>.vtt` (the caption cues, with `&`, `<` and `>` escaped) to the
+static directory and `<id>.json` to the data directory: `--static` and
+`--data`, else `publish` in `avatars.json`. It needs voiced narration (it
+refuses fixture narration, as `render` does) and does not voice. Files are
+named after the episode directory.
 
 ```json
 {
@@ -1107,8 +1143,11 @@ and `validate: N files, M problems`.
 library (a project avatar shadows a package avatar of the same id), and
 `DIR/episodes/<theme>/<episode>/contact-sheet-*.jpg` for every
 `examples/demo` episode in every theme, with an episode's own theme removed
-and fixture narration when it is not voiced. Sheets must succeed; demo stills
-are best effort and reported. `avatars sheet` draws `gallery/sheet.html` next
+and fixture narration when it is not voiced. Each run first removes
+`DIR/avatars/` and `DIR/episodes/` of an earlier run; when either holds
+anything a run does not write, it fails and names that directory, without
+removing anything. Sheets must succeed; demo stills are best effort and
+reported. `avatars sheet` draws `gallery/sheet.html` next
 to a vendor bundle for a cast of that avatar and look, in the project's theme
 (else `midnight`, or `--theme`) with the project's brand marks (none without
 a project), and takes a full-page screenshot at 1300 px wide. Every cell uses

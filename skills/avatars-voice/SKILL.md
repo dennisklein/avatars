@@ -42,7 +42,8 @@ the script, then the avatar's `default`.
 `script.json` is `{ "lines": [{ "id": "intro", "text": "…" }] }`; a line may
 add `"lead"`, seconds of silence before it. One line is one beat of the
 episode: the unit that scenes say, captions break on and cues refer to. Line
-ids name files, so they are unique and contain no slashes.
+ids name files that the page loads by URL, so they are unique, are not `.`
+or `..`, and contain no `/`, `\`, `?`, `#` or `%`.
 
 - **One or two short sentences per line**, about 25 words at most. The
   model reads at most 510 phonemes (about 50 words) at once and cuts longer
@@ -106,7 +107,8 @@ Reading espeak IPA: `ˈ` marks primary stress before the stressed syllable,
 
 A lexicon is `{ "_comment": "…", "words": { "word": "phonemes" } }`. Keys
 are lowercase whole words, matched case-insensitively with surrounding
-punctuation stripped (`config.yaml` and `worker-0` are words); values are
+punctuation stripped (`config.yaml` and `worker-0` are words; “kubectl”,
+`` `kubectl` ``, `[kubectl]` and `*kubectl*` all match `kubectl`); values are
 espeak IPA with spaces between spoken parts. Three layers merge in this
 order, later wins:
 
@@ -145,7 +147,9 @@ lexicon entries its words use, the voice tool's and engine's versions and its
 
 A line that is voiced again changes the episode's render hash, so the
 episode re-renders where the project builds it (`avatars ci`). Give lexicon
-changes their own commit all the same.
+changes their own commit all the same. `npx avatars check <id>` reports a
+voiced line whose key changed as stale (`line "x" is stale …`); `npx avatars
+voice <id>` fixes it.
 
 The key does not cover the espeak-ng version (it phonemizes words that no
 lexicon has) or FFmpeg's rubberband filter (pitch presets): after upgrading
@@ -210,13 +214,14 @@ for review, list for the listener:
 
 `voice.json` is `{ "default", "sample", "presets": { name: preset } }`. A
 preset names its `engine` (default `kokoro`); Kokoro presets blend stock
-voices by weight in `mix` and set `speed` (default 1.0) and `lang` (default
-`en-us`). Any preset may set `pitch` in semitones, which the tool applies
-with FFmpeg's `rubberband` filter, keeping formants and length so the
-timings hold; check for it with `ffmpeg -hide_banner -filters | grep
-rubberband`. `-v` also accepts the engine's stock voice names (`af_heart`),
-which work without `--voices`. An audition pack of every preset, then the
-stock voices, with `voice.json`'s `sample` text unless `--text` is given:
+voices by weight in `mix` (required) and set `speed` (0.5 to 2, default
+1.0) and `lang` (default `en-us`). Any preset may set `pitch` in semitones,
+which the tool applies with FFmpeg's `rubberband` filter, keeping formants
+and length so the timings hold; check for it with `ffmpeg -hide_banner
+-filters | grep rubberband`. `-v` also accepts the engine's stock voice
+names (`af_heart`), which work without `--voices`. An audition pack of every
+preset, then the stock voices, with `voice.json`'s `sample` text unless
+`--text` is given:
 
 ```bash
 python3 "$AV/voice/avatar_voice.py" samples -o renders/voice-samples --voices "$AV/avatars/<avatar>/voice.json"

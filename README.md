@@ -37,8 +37,9 @@ npx avatars voice-setup                 # the speech model, about 350 MB
 npx hyperframes browser ensure          # the browser HyperFrames renders with
 ```
 
-The project has an example episode, `episodes/hello/`. Make your first one,
-then voice, check, render and publish it:
+The project has an example episode, `episodes/hello/`, and a placeholder
+brand in `brand/`: replace its marks and its short `wordmark` with your own.
+Make your first episode, then voice, check, render and publish it:
 
 ```bash
 npx avatars new episode first-steps     # episodes/first-steps/: script.json, index.html
@@ -51,9 +52,10 @@ npx avatars publish first-steps         # web MP4, poster, WebVTT captions and a
 
 `npx avatars fixture-voice first-steps` gives an episode made-up timings
 without the speech model, which is enough for `check` while you lay out
-scenes. [docs/authoring.md](docs/authoring.md) explains how to write an
-episode and [docs/pipeline.md](docs/pipeline.md) how to publish it on a docs
-site and render it in CI.
+scenes; `render` and `publish` need the real voice.
+[docs/authoring.md](docs/authoring.md) explains how to write an episode and
+[docs/pipeline.md](docs/pipeline.md) how to publish it on a docs site and
+render it in CI.
 
 ## Concepts
 

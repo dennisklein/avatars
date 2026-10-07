@@ -233,6 +233,11 @@ scenes in that order, then the project's) and to the library scenes in
   chapter) and `slideFrame(kind, o)` gives slide layouts the chapter label,
   title, corner shot, narration and cue timing. Ask for shots, moods,
   glances and gestures by name, never for a particular avatar.
+- Presenter moves (`setShot`) never start before the previous move ends,
+  and the frame cuts to `hidden`. Give your own `to` tweens on one target
+  the same rule (start no earlier than the previous one's end): a `to`
+  tween starts from whatever is on screen when it first renders, so an
+  overlap depends on where a render worker's chunk starts.
 - Push terminal and code content to `ctx.shown` (`{ cmd, at }` or `{ out,
   at, code }`) so the grounding check covers it; per-frame content is a
   function of `t` in `ctx.renderers`.

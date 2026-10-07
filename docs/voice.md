@@ -38,7 +38,9 @@ The CLI passes the tool the host avatar's `voice.json`, the preset of the
 cast entry and the merged lexicons. `voice` prints every line's duration and
 writes `<line>.wav`, `<line>.json` (words, visemes, loudness envelope and the
 cache key), `index.json` and `lines.js`, which the page loads. Lines whose
-cache key is unchanged and whose WAV exists are skipped.
+cache key is unchanged and whose WAV exists are skipped. A line's id names
+its files, which the page loads by URL, so ids are unique, are not `.` or
+`..`, and contain no `/`, `\`, `?`, `#` or `%`.
 
 `npx avatars fixture-voice <id>` writes the same timing files from made-up
 timings and no audio: enough for `check`, the gallery and tests, not for a
@@ -59,11 +61,11 @@ An avatar's `voice.json` holds its presets and the `default`:
 }
 ```
 
-A Kokoro preset blends stock voices by weight (`mix`) and sets `speed` and
-`lang`. `pitch` shifts the voice by semitones with FFmpeg's `rubberband`
-filter, keeping formants and length so the timings hold. Sindy's presets are
-`sindy` (the default), `sindy-anime` and `sindy-bright` (higher) and
-`sindy-soft` (calmer).
+A Kokoro preset blends stock voices by weight (`mix`, required) and sets
+`speed` (0.5 to 2, default 1) and `lang`. `pitch` shifts the voice by
+semitones with FFmpeg's `rubberband` filter, keeping formants and length so
+the timings hold. Sindy's presets are `sindy` (the default), `sindy-anime`
+and `sindy-bright` (higher) and `sindy-soft` (calmer).
 
 A project picks another preset without changing the avatar:
 `"voice": "sindy-soft"` in a cast entry (`avatars.json` or `episode.json`)
@@ -82,7 +84,11 @@ words it gets wrong. A lexicon is
 `{ "_comment": "…", "words": { word: phonemes } }`: lowercase whole words,
 matched case-insensitively with surrounding punctuation stripped, mapped to
 espeak IPA with spaces between spoken parts
-(`"kubectl": "kjˈuːb kəntɹˌoʊl"`). Three layers merge, later wins:
+(`"kubectl": "kjˈuːb kəntɹˌoʊl"`). Punctuation is any Unicode punctuation
+plus `` ` `` and `*`, stripped from the words and the keys alike, so
+“kubectl”, `` `kubectl` ``, `[kubectl]` and `*kubectl*` all use the entry
+`kubectl`; inner punctuation stays (`nginx.conf`, `worker-0`). Three layers
+merge, later wins:
 
 1. **Library packs**, listed in `avatars.json` `lexicons` without `./`:
    `en-us/core` (general English and software terms) and `en-us/hpc` (HPC
@@ -118,10 +124,12 @@ and its `lead`. So:
 - entries no line uses change nothing.
 
 The keys are part of the render hash, so a line voiced anew also re-renders
-its episode in CI. The key does not cover the espeak-ng version (for words no
-lexicon has) or FFmpeg's `rubberband` (pitched presets): after upgrading
-either, voice with `--force`. `keys` prints the keys without the model or
-numpy, which is why `avatars hash` needs Python but not the model.
+its episode in CI. `avatars check` compares the key of every voiced line
+with the tool's and reports a line whose key changed as stale, with the
+`voice` command that fixes it. The key does not cover the espeak-ng version
+(for words no lexicon has) or FFmpeg's `rubberband` (pitched presets): after
+upgrading either, voice with `--force`. `keys` prints the keys without the
+model or numpy, which is why `avatars hash` needs Python but not the model.
 
 ## Writing speakable lines
 

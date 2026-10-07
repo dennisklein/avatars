@@ -111,7 +111,7 @@ Pick scenes by what the viewer needs to see:
 | --- | --- | --- |
 | `intro` | always first: brand lockup, kicker, title, AI disclosure | kicker and title as the project's conventions say |
 | `talk` | framing right after the intro: what you'll build, why it matters | once per episode; up to 3 chips of about 40 characters together, or they wrap; `nameTag: {}` shows the host's name and the brand's role |
-| `slide` | a concept or a list of steps | at most 4 bullets, each landing on a cue word said in the narration |
+| `slide` | a concept or a list of steps | at most 4 bullets (a fifth logs a warning), each landing on a cue word said in the narration |
 | `diagram` | how parts relate: components, networks, what talks to what | up to about 8 nodes on a grid; build it up on cue words, nodes before the edges between them; `shot: "mini"` for more room |
 | `code` | a config or source file, built up or highlighted on cue | copy the file verbatim (`check` compares it like output); up to about 14 lines per panel stay readable, `wide: true` for long lines |
 | `terminal` | commands and their output | lines up to about 62 columns keep the full-size font; `running: true` on a server's step leaves out the next prompt |
@@ -142,10 +142,11 @@ npx avatars new episode <id> --title "<Title>"   # episodes/<id>/: script.json, 
 ```
 
 Write `script.json` (`{ "lines": [{ "id": "intro", "text": "…" }] }`, an
-optional `"lead"` per line in seconds of silence) following the
-`avatars-voice` skill: one line per beat, short spoken sentences, commands
-said the way a person says them, and cue words that occur once in their
-line. Check the pronunciation, then voice:
+optional `"lead"` per line in seconds of silence; ids name files, so no `/`,
+`\`, `?`, `#` or `%`) following the `avatars-voice` skill: one line per
+beat, short spoken sentences, commands said the way a person says them, and
+cue words that occur once in their line. Check the pronunciation, then
+voice:
 
 ```bash
 npx avatars phonemes <id> --flagged    # words worth a closer look
@@ -192,7 +193,9 @@ Builder reference (each scene's README has its own options):
   `label` (on-screen text if it should differ), `transition` (`push`, `iris`,
   `blur`), `transitionDur`, `shot` (`hidden`, `hero`, `full`, `left`,
   `cornerR`, `cornerL`, `mini`) and `lead` (seconds before the narration
-  starts).
+  starts). The intro ignores `shot`, `transition` and `lead` (it uses
+  `start`). `shot` moves only the presenter: code and terminal lay out for
+  `cornerR`, so `cornerL` covers them and logs a warning.
 - `say` is a line id, `{ id, mood, cues, look, gap }`, or a list of those.
 - Times are `"line:word"` (the first word in that line that starts with
   `word`, case and punctuation ignored, in the line's latest occurrence),
@@ -212,7 +215,8 @@ Acting is part of the job, not decoration:
 
 - `mood` per line and `cues: { word: mood }` at the payoff word. Every avatar
   renders `neutral happy joy surprised thinking concerned smug wink`, and its
-  `CHARACTER.md` says when to use which (an avatar may add moods of its own).
+  `CHARACTER.md` says when to use which (an avatar may add moods of its own;
+  an unknown name shows as `neutral` and `avatars check` warns).
   As a rule: neutral while explaining, happy when a command succeeds, joy for
   big wins, thinking for a choice or caveat, concerned for warnings, smug for
   a neat trick; `wink` belongs to the sign-off, which the outro does.
@@ -288,6 +292,7 @@ below. Fix all of them, and resolve every warning or say why it stays:
 | `console: cue "line:word" matches N words …` | the cue picked the first match; write `line:word#0` if that is right, or a longer prefix |
 | `console: diagram …: nodes … overlap`, `… reaches outside the diagram area`, `groups … overlap` | change `grid`, `pos` or `width`; with many columns, `shot: "mini"` gives the diagram the full width |
 | `text cut off in a diagram node: …` | widen the node (`width`) or shorten the title; 260 px fit about 11 characters |
+| `wordmark "…" runs under the presenter …` | the brand's `wordmark` is too long for the intro (about five characters fit at the default size): shorten it in `brand.json`, or set a smaller `intro.wordmark-size` in the brand's `tokens` |
 | `command not on the episode's pages …`, `output line not on …`, `line of <file> not on …` | copy it from the page: the episode is wrong, not the page. If the page is wrong, fix the page in the same change |
 | `no page under … embeds …` | embed the episode on its page (step 6) |
 | `N s without narration before …` | dead air: shorten the wait or add a line |
@@ -484,6 +489,9 @@ skill).
 | `no narration, run: avatars voice <id> …` | voice it, or `fixture-voice` for layout work |
 | `page error: voice line "x" missing; …` | a `say` names a line that is not in `script.json` or not voiced yet: add it, then `voice` |
 | `line "x" changed since it was voiced …` | run `npx avatars voice <id>` |
+| `line "x" is stale (its voice, lexicon entries or lead changed) …` | the preset, a lexicon entry the line uses or its `lead` changed since it was voiced: run `npx avatars voice <id>` |
+| `cannot compare the narration with its voice keys: …` | the voice tool did not run; voiced narration needs Python (`AVATARS_PYTHON`) for `check` too |
+| `fixture narration has no audio, run: avatars voice <id>` | `render` and `publish` need voiced narration; voice the episode first |
 | `page error: line "x" has not been said yet …` | time references can only point at lines said in this or an earlier scene |
 | `page error: word "x" not found in: …` | the cue must be the start of a word in that line (case and punctuation ignored); `x#1` for the second match |
 | `page error: bad time reference "…"` | write `"line:word"`, `"line:word#n"`, `"line:word+0.5"` or seconds |
