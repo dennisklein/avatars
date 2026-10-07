@@ -1,0 +1,54 @@
+{
+  "id": "tops/blazer",
+  "category": "tops",
+  "title": "Tailored blazer over a crew-neck top",
+  "description": "A notched-lapel blazer with a stand collar behind the neck, shoulder and armhole seams, a button at the break point and one below, a breast welt pocket on the viewer's right (an emblem patch sits just under it) with an optional pocket square, hip pocket flaps, and a sleeve with the top's cuff on the waving arm.",
+  "fits": ["anime-600x800"],
+  "slots": ["top", "sleeve"],
+  "roles": ["top.base", "top.light", "top.dark", "top.seam", "top.button", "top.inner", "top.inner-shade", "top.trim"],
+  "defaults": {
+    "top.base": "{color.slate.700}",
+    "top.light": "{color.slate.600}",
+    "top.dark": "{color.slate.900}",
+    "top.seam": "{color.slate.500}",
+    "top.button": "{color.slate.800}",
+    "top.inner": "{color.slate.50}",
+    "top.inner-shade": "{color.slate.300}",
+    "top.trim": "{color.accent}"
+  },
+  "colourways": {
+    "charcoal": {
+      "top.base": "{color.gray.700}",
+      "top.light": "{color.gray.600}",
+      "top.dark": "{color.gray.900}",
+      "top.seam": "{color.gray.500}",
+      "top.button": "{color.gray.800}"
+    },
+    "navy": {
+      "top.base": "#1c2b57",
+      "top.light": "#2a3d72",
+      "top.dark": "#111a38",
+      "top.seam": "#41558f",
+      "top.button": "#0d142b"
+    },
+    "camel": {
+      "top.base": "#b88a5b",
+      "top.light": "#cda274",
+      "top.dark": "#7d5631",
+      "top.seam": "#dcb98d",
+      "top.button": "#5a3a1d"
+    },
+    "ivory": {
+      "top.base": "#e9e1d0",
+      "top.light": "#f6f0e3",
+      "top.dark": "#b3a68b",
+      "top.seam": "#c9bea6",
+      "top.button": "#8a7a5c"
+    }
+  },
+  "hides": [],
+  "marks": [],
+  "options": {
+    "pocketSquare": { "type": "boolean", "default": true, "description": "a pocket square in top.trim peeking from the breast pocket" }
+  }
+}

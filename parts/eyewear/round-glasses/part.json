@@ -1,0 +1,36 @@
+{
+  "id": "eyewear/round-glasses",
+  "category": "eyewear",
+  "title": "Round glasses",
+  "description": "Thin round rims centred on the eyes, a keyhole bridge, end pieces and short temples that run under the side hair, a faint lens tint and a glint that slides as the head turns.",
+  "fits": ["anime-600x800"],
+  "slots": ["eyewear"],
+  "roles": ["eyewear.frame", "eyewear.frame-light", "eyewear.lens", "eyewear.glint"],
+  "defaults": {
+    "eyewear.frame": "{color.slate.900}",
+    "eyewear.frame-light": "{color.slate.500}",
+    "eyewear.lens": "{color.sky.200}",
+    "eyewear.glint": "{color.white}"
+  },
+  "colourways": {
+    "black": {
+      "eyewear.frame": "#16181d",
+      "eyewear.frame-light": "{color.gray.500}"
+    },
+    "tortoise": {
+      "eyewear.frame": "#5b3416",
+      "eyewear.frame-light": "#c98a3e"
+    },
+    "gold": {
+      "eyewear.frame": "#a87a2a",
+      "eyewear.frame-light": "#f2d58a"
+    },
+    "silver": {
+      "eyewear.frame": "{color.slate.500}",
+      "eyewear.frame-light": "{color.slate.200}"
+    }
+  },
+  "hides": [],
+  "marks": [],
+  "options": {}
+}
