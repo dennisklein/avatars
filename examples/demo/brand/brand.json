@@ -1,0 +1,9 @@
+{
+  "name": "Demo",
+  "wordmark": "demo",
+  "tagline": "SHOW · AND · TELL",
+  "role": "your demo guide",
+  "links": [["Docs", "example.org/docs"], ["Code", "example.org/code"]],
+  "marks": { "emblem": "emblem.svg", "badge": "emblem-badge.svg" },
+  "tokens": {}
+}

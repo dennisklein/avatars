@@ -1,0 +1,24 @@
+{
+  "lines": [
+    { "id": "intro", "text": "Hi, I'm Sindy! Let's see how this video was made." },
+    { "id": "welcome", "text": "Videos go stale when the docs change. With plain text files, you fix a line and render again." },
+    { "id": "agents", "text": "Coding agents can write them too. Checks tell them what they can't see." },
+    { "id": "pipe1", "text": "It all starts with the script, one line per beat. The voice tool speaks each line and times every word." },
+    { "id": "pipe2", "text": "The composition times every scene to them. Then HyperFrames renders it, with captions burned in." },
+    { "id": "pipe3", "text": "Publish adds a poster and web captions, ready for your docs. And in CI, only changed episodes render again." },
+    { "id": "keep", "text": "A project keeps only what's its own: its brand and lexicon, its episodes and checks." },
+    { "id": "keep2", "text": "Everything else, from my looks to the scenes, comes from the library." },
+    { "id": "cfg1", "text": "All of it comes together in avatars.json. It casts me as the host, in my hoodie, and picks a theme, a format and the brand." },
+    { "id": "cfg2", "text": "Grounding is the part I like best. What you see on screen must also be on the page around the video." },
+    { "id": "new1", "text": "Let's make one. Run avatars new episode with a name, and out comes a working episode." },
+    { "id": "new2", "text": "It holds three files: the script, the scenes in index.html, and a little HyperFrames config." },
+    { "id": "new3", "text": "Then fixture voice fakes the timings, so you can lay out scenes now." },
+    { "id": "cmp1", "text": "Fixture voice needs no speech model, and it's instant. It's made for layout work and tests." },
+    { "id": "cmp2", "text": "The real voice runs a speech model on your CPU. Each line is cached, so only changed lines are voiced again." },
+    { "id": "chk1", "text": "Now for the real voice. It takes a few seconds per line, so let's skip ahead." },
+    { "id": "chk2", "text": "Then check loads the episode, and prints the chapters and lines." },
+    { "id": "chk3", "text": "Zero errors, zero warnings. It's ready to render!" },
+    { "id": "take", "text": "To recap: an episode is two files you write, check guards what's on screen, and CI renders only what changed." },
+    { "id": "outro", "text": "That's the whole tour! In the next one, I'll try on a new look. See you there!" }
+  ]
+}

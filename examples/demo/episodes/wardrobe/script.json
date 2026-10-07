@@ -1,0 +1,13 @@
+{
+  "lines": [
+    { "id": "intro", "text": "Hi again! Notice anything different?" },
+    { "id": "outfit", "text": "Today I'm in a blazer and glasses. And the whole video is brighter." },
+    { "id": "look", "text": "A look is an outfit of parts: hair and top, glasses and a clip." },
+    { "id": "look2", "text": "Its colours can follow the theme, while my face stays the same." },
+    { "id": "theme", "text": "A theme gives every scene its colours: backgrounds and surfaces, text and accents, and its fonts." },
+    { "id": "theme2", "text": "Scenes only use its tokens, so every scene works in every theme." },
+    { "id": "file", "text": "This episode sets both in one file. The other videos keep the project's defaults." },
+    { "id": "file2", "text": "Looks and themes of your own go in the project's library folder." },
+    { "id": "outro", "text": "That's looks and themes! The gallery shows them all, side by side. Mix and match them in your project!" }
+  ]
+}
