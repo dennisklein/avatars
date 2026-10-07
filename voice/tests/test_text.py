@@ -47,6 +47,15 @@ class TokenizeTest(unittest.TestCase):
         # Lexicon words never reach the phonemizer; the case of other words is kept.
         self.assertEqual(asked, ["Run", "and"])
 
+    def test_lexicon_words_match_inside_any_punctuation(self):
+        lexicon = {"kubectl": "kjˈuːb kəntɹˌoʊl", "e.g": "fˈɔːɹ ɪɡzˈæmpəl"}
+        text = "“kubectl” `kubectl` [kubectl] *kubectl* ‘kubectl’ «kubectl» (kubectl) KUBECTL, e.g."
+        items = av.tokenize(text, lexicon, fake_phonemize)
+        self.assertEqual([it["ph"] for it in items if "text" in it], ["kjˈuːb kəntɹˌoʊl"] * 8 + ["fˈɔːɹ ɪɡzˈæmpəl"])
+        # Words, display words and pauses stay as split() makes them.
+        self.assertEqual([{k: v for k, v in it.items() if k != "ph"} for it in items], av.split(text))
+        self.assertEqual([it["display"] for it in items if "text" in it], text.split())
+
     def test_join_glues_pauses_to_the_word_before(self):
         items = av.tokenize("Hi, there — you!", {}, fake_phonemize)
         self.assertEqual(av.join_phonemes(items), "ˈhi, ˈthere— ˈyou!")
@@ -56,6 +65,33 @@ class TokenizeTest(unittest.TestCase):
 
     def test_join_of_nothing(self):
         self.assertEqual(av.join_phonemes([]), "")
+
+
+class LexkeyTest(unittest.TestCase):
+    def test_lowercase_without_surrounding_punctuation(self):
+        cases = [
+            ("Kubectl", "kubectl"),
+            ("“kubectl”", "kubectl"),
+            ("`nginx`", "nginx"),
+            ("*bold*", "bold"),
+            ("(nginx)", "nginx"),
+            ("e.g.", "e.g"),
+            ("--count", "count"),
+            ("nginx.conf", "nginx.conf"),
+            ("worker-0", "worker-0"),
+            ("it's", "it's"),
+            ("¿qué?", "qué"),
+            ("--", "--"),
+            ("…", "…"),
+        ]
+        for word, key in cases:
+            with self.subTest(word=word):
+                self.assertEqual(av.lexkey(word), key)
+
+    def test_used_entries_follow_the_lookup(self):
+        lexicon = {"kubectl": "kjˈuːb kəntɹˌoʊl", "nginx": "ˈɛndʒɪn ˈɛks"}
+        self.assertEqual(av.used_entries("Run “kubectl” or `nginx`.", lexicon), [["kubectl", "kjˈuːb kəntɹˌoʊl"], ["nginx", "ˈɛndʒɪn ˈɛks"]])
+        self.assertEqual(av.used_entries("Run it.", lexicon), [])
 
 
 class FlagsTest(unittest.TestCase):

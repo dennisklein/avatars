@@ -30,6 +30,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import unicodedata
 import wave
 from pathlib import Path
 
@@ -62,6 +63,8 @@ VOWELS = {"aa", "ah", "ee", "ih", "oh", "ou"}
 TOKEN = re.compile(r'^([("\']*)(.*?)([.,!?;:)"\'…—]*)$')
 # Trailing punctuation that the model pauses on.
 PAUSE_MARKS = ".,!?;:…—"
+# Characters a line id must not contain: path separators, and what a URL would cut or decode.
+NOT_IN_IDS = "/\\?#%"
 
 
 def die(msg):
@@ -130,7 +133,7 @@ def voice_name(args, voices, spec=None):
 
 
 def load_lexicons(files):
-    """Merge lexicon files in order, later wins. Keys are lowercase whole words."""
+    """Merge lexicon files in order, later wins. Keys become lexkey(word)."""
     lexicon = {}
     for f in files or []:
         data = read_json(f, "lexicon")
@@ -138,7 +141,7 @@ def load_lexicons(files):
         if not isinstance(words, dict) or not all(isinstance(v, str) for v in words.values()):
             die(f'lexicon {f}: expected {{"words": {{word: phonemes, ...}}}}')
         for k, v in words.items():
-            lexicon[k.lower()] = v
+            lexicon[lexkey(k)] = v
     return lexicon
 
 
@@ -153,9 +156,9 @@ def read_script(path):
         if not isinstance(line, dict) or not isinstance(line.get("text"), str) or not isinstance(line.get("id"), str):
             die(f"script {path}: line {i + 1} needs a string id and text")
         lid = line["id"]
-        # Ids name the line's files.
-        if not lid or "/" in lid or "\\" in lid or lid in (".", ".."):
-            die(f'script {path}: line id "{lid}" is not a file name')
+        # Ids name the line's files, which the page loads by URL.
+        if not lid or any(c in lid for c in NOT_IN_IDS) or lid in (".", ".."):
+            die(f'script {path}: line id "{lid}" must be a file name without / \\ ? # %')
         if lid in seen:
             die(f'script {path}: line id "{lid}" appears twice')
         seen.add(lid)
@@ -166,6 +169,25 @@ def read_script(path):
 
 
 # ---------------------------------------------------------------- core --
+def is_punct(c):
+    return c in "`*" or unicodedata.category(c).startswith("P")
+
+
+def lexkey(word):
+    """A word as a lexicon key: lowercase, without surrounding punctuation.
+
+    Punctuation is every Unicode punctuation character plus ` and *, so a word
+    in typographic quotes, backticks, brackets or asterisks finds its entry. A
+    word of punctuation alone keeps it."""
+    key = word.lower()
+    i, j = 0, len(key)
+    while i < j and is_punct(key[i]):
+        i += 1
+    while j > i and is_punct(key[j - 1]):
+        j -= 1
+    return key[i:j] or key
+
+
 def split(text):
     """Split text into words ({"text", "display"}) and punctuation pauses ({"pause"})."""
     items = []
@@ -184,7 +206,7 @@ def tokenize(text, lexicon, phonemize):
     items = split(text)
     for it in items:
         if "text" in it:
-            key = it["text"].lower()
+            key = lexkey(it["text"])
             it["ph"] = lexicon[key] if key in lexicon else phonemize(it["text"])
     return items
 
@@ -204,7 +226,7 @@ def join_phonemes(items):
 
 def used_entries(text, lexicon):
     """The lexicon entries a text's words use, sorted: [[word, phonemes], ...]."""
-    words = {it["text"].lower() for it in split(text) if "text" in it}
+    words = {lexkey(it["text"]) for it in split(text) if "text" in it}
     return sorted([w, lexicon[w]] for w in words if w in lexicon)
 
 
@@ -523,7 +545,7 @@ def cmd_phonemes(args):
         if not word or word.lower() in seen:
             continue
         seen.add(word.lower())
-        from_lexicon = word.lower() in v.lexicon
+        from_lexicon = lexkey(word) in v.lexicon
         source = "lexicon" if from_lexicon else v.engine.PHONEMIZER
         flags = flags_of(word, it["ph"], from_lexicon)
         if args.flagged and not flags:

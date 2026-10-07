@@ -39,6 +39,10 @@ class LexiconTest(unittest.TestCase):
         self.assertEqual(av.load_lexicons([core, avatar, project]), {"a": "ɐ", "word": "three", "name": "nˈeɪm"})
         self.assertEqual(av.load_lexicons([project, avatar, core])["word"], "one")
 
+    def test_keys_lose_surrounding_punctuation(self):
+        lex = self.lex("lex.json", {"(nginx)": "ˈɛndʒɪn ˈɛks", "e.g.": "fˈɔːɹ ɪɡzˈæmpəl", "--": "dˈæʃ"})
+        self.assertEqual(av.load_lexicons([lex]), {"nginx": "ˈɛndʒɪn ˈɛks", "e.g": "fˈɔːɹ ɪɡzˈæmpəl", "--": "dˈæʃ"})
+
     def test_no_files(self):
         self.assertEqual(av.load_lexicons([]), {})
         self.assertEqual(av.load_lexicons(None), {})
@@ -109,6 +113,11 @@ class ScriptFileTest(unittest.TestCase):
             {"lines": [{"id": "a", "text": "x"}, {"id": "a", "text": "y"}]},
             {"lines": [{"id": "../a", "text": "x"}]},
             {"lines": [{"id": "", "text": "x"}]},
+            {"lines": [{"id": "..", "text": "x"}]},
+            {"lines": [{"id": "a\\b", "text": "x"}]},
+            {"lines": [{"id": "why?", "text": "x"}]},
+            {"lines": [{"id": "a#b", "text": "x"}]},
+            {"lines": [{"id": "100%", "text": "x"}]},
             {"lines": [{"id": "a", "text": "x", "lead": -1}]},
             {"lines": [{"id": "a", "text": "x", "lead": "1"}]},
         ]:
