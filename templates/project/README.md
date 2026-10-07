@@ -58,13 +58,17 @@ episodes/<id>/     script.json, index.html, hyperframes.json, episode.json (opti
 ```
 
 The CLI writes `vendor/`, `assets/voice/` and `snapshots/` into episodes and
-`renders/` and `publish/` into the project; `.gitignore` leaves them out.
+`renders/` and `publish/` into the project, and `avatars ci` keeps its render
+store in `.avatars-store/`; `.gitignore` leaves them out.
 
 `brand/brand.json` names the project and holds the presenter's role (on the
 name tag), the links of the closing card and the marks: the intro shows
 `emblem.svg`, the presenter's hoodie shows it as a patch and her hair clip
 shows `emblem-badge.svg`, an outlined variant for small sizes. Replace the
-placeholder marks with your own self-contained SVG files.
+placeholder marks with your own self-contained SVG files, and the
+placeholder `wordmark`, the large word of the intro, with a short name: about
+five characters fit beside the presenter, and `avatars check` warns when the
+wordmark runs under her.
 
 An episode's `episode.json` overrides the project's `cast`, `theme`, `format`
 or `tokens` for that episode alone. `avatars.json` can also turn on grounding,

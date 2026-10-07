@@ -1,6 +1,6 @@
 {
   "name": "{{title}}",
-  "wordmark": "{{id}}",
+  "wordmark": "brand",
   "tagline": "VIDEO · GUIDES",
   "role": "your guide",
   "links": [["Docs", "example.org/docs"], ["Code", "example.org/code"]],

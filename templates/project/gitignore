@@ -7,3 +7,4 @@ node_modules/
 **/snapshots/
 renders/
 publish/
+.avatars-store/
