@@ -12,7 +12,9 @@
   A.scenes.register("intro", function intro(ctx, o) {
     const { tl, h, brand } = ctx;
     const T = ctx.tokens;
-    const { el } = ctx.begin("intro", o, {});
+    // The presenter always rises in from "hidden" to "hero" (below), so the
+    // intro ignores `shot`.
+    const { el } = ctx.begin("intro", Object.assign({}, o, { shot: undefined }), {});
 
     // The brand's logo mark (else its emblem) as inline SVG, so its pieces can
     // pop in one by one. A brand whose sting differs from the emblem that

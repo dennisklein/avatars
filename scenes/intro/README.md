@@ -24,7 +24,7 @@ Episode.create({ tl, id: "first-steps", title: "First steps: a guided tour", ser
 | `say` | none | narration: a line id, `{ id, mood, cues, look, gap }` or a list; default mood `joy`, switching to `happy` after the first sentence |
 | `start` | `1.5` | seconds before the first line |
 | `wave` | `true` | `false` leaves out the wave on the first line |
-| `transition`, `shot` | | ignored as the first scene; `shot` sets the presenter's shot before the rise-in |
+| `transition`, `shot`, `lead` | | ignored: the intro shows at 0, the presenter always rises in from `hidden` to `hero`, and the narration starts at `start` |
 
 ## Brand
 
@@ -36,14 +36,21 @@ Everything above the title comes from the project's brand
   centre outwards, each about its own centre, up to the opacity it is drawn
   with. A brand supplies `logo` when its sting should differ from the emblem
   that wardrobe parts wear (for example fully opaque cells).
-- `wordmark` and `tagline`: rise in beside the emblem.
+- `wordmark` and `tagline`: rise in beside the emblem, the tagline
+  `intro.wordmark-gap` (0.125 em of the wordmark size) below the wordmark's
+  line box, so that descenders (g, j, p, q, y) clear it. A brand sets the
+  token to `0` in its `tokens` to set the tagline right under the line box.
+  The wordmark has a fixed size and is not fitted: about five characters fit
+  between the lockup and the hero presenter at the default
+  `intro.wordmark-size`, and `avatars check` warns when it runs under the
+  presenter.
 - The disclosure line is the host's `disclosure` from the cast
   (`avatar.json`), bottom left.
 
 ## Tokens
 
 `intro.wordmark-color`, `intro.wordmark-size`, `intro.wordmark-weight`,
-`intro.tagline-color`, `intro.tagline-size`, `intro.tagline-weight`,
-`intro.kicker-size`, `intro.headline-size`, `intro.disclosure-color`,
-`intro.disclosure-size`, `intro.wordmark-offset`, `intro.tagline-offset`;
-shared: `kicker.*`, `headline.*`, `glow.*`, `grid.*`.
+`intro.wordmark-gap`, `intro.tagline-color`, `intro.tagline-size`,
+`intro.tagline-weight`, `intro.kicker-size`, `intro.headline-size`,
+`intro.disclosure-color`, `intro.disclosure-size`, `intro.wordmark-offset`,
+`intro.tagline-offset`; shared: `kicker.*`, `headline.*`, `glow.*`, `grid.*`.

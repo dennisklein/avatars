@@ -13,7 +13,8 @@
 /* The emblem keeps its viewBox's aspect ratio; overflow stays visible so its
    pieces can overshoot while they pop in. */
 .scene-intro .emblem { flex: none; display: block; width: 250px; height: auto; overflow: visible; }
-.scene-intro .wordmark { font-size: var(--av-intro-wordmark-size); line-height: 1; }
+/* The gap under the wordmark's 1-line box leaves room for its descenders. */
+.scene-intro .wordmark { font-size: var(--av-intro-wordmark-size); line-height: 1; padding-bottom: var(--av-intro-wordmark-gap); }
 .scene-intro .ep { display: flex; flex-direction: column; gap: 14px; margin-top: 30px; }
 .scene-intro .ep .kicker { font-size: var(--av-intro-kicker-size); }
 .scene-intro .ep .headline { font-size: var(--av-intro-headline-size); max-width: 880px; }
