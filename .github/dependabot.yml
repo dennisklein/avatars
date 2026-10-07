@@ -1,0 +1,46 @@
+# SPDX-FileCopyrightText: 2026 Dennis Klein <d.klein@gsi.de>
+# SPDX-License-Identifier: Apache-2.0
+
+# Weekly version updates. A release must be a week old before an update
+# proposes it (security updates do not wait). Updates of HyperFrames, GSAP,
+# the fonts or the voice tool's packages can change pixels or sound and
+# re-render every episode, so they come grouped per ecosystem.
+version: 2
+updates:
+  # The SHA pins of the workflows and of the render action; one pull request
+  # per action updates it in both places.
+  - package-ecosystem: github-actions
+    directories: ["/", "/integrations/github/render"]
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: ci
+    groups:
+      actions:
+        group-by: dependency-name
+
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: build
+    groups:
+      npm:
+        patterns: ["*"]
+
+  - package-ecosystem: pip
+    directory: /voice
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: build(voice)
+    groups:
+      voice:
+        patterns: ["*"]

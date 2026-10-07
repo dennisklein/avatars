@@ -73,6 +73,7 @@ skills/                  Claude Code skills: avatars-episode, avatars-voice, ava
 .claude-plugin/          marketplace.json: the marketplace and the plugin that ships skills/
 .claude/skills           a link to skills/, so the skills also load when working in this repository
 .github/workflows/       ci.yml (tests, validation, REUSE, demo check), gallery.yml (gallery on GitHub Pages)
+.github/dependabot.yml   weekly updates of the actions, the npm packages and the voice tool's packages
 docs/                    guides; images/ holds generated pictures
 test/                    Node test suites (*.test.mjs) and their fixtures/
 ```

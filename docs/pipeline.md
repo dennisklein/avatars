@@ -251,7 +251,10 @@ has a complete workflow that builds and deploys a Hugo site to GitHub Pages.
 The library's own workflows are `.github/workflows/ci.yml` (Node and Python
 tests, schema validation, REUSE, and a quick check of the demo episodes with
 fixture narration) and `gallery.yml` (the gallery with the demo videos,
-voiced and rendered in CI, on GitHub Pages).
+voiced and rendered in CI, on GitHub Pages). `.github/dependabot.yml` proposes
+weekly updates of the actions' SHA pins, the npm packages and the voice
+tool's packages, each a week after its release; updates of HyperFrames, GSAP,
+the fonts or the voice packages re-render every episode.
 
 ## The Hugo shortcode
 
