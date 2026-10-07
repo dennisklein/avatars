@@ -17,7 +17,8 @@ brand, pronunciations, episodes and checks.
 ## Quick start
 
 You need Node.js 22 or later, Python 3.10 to 3.13 for the voice, FFmpeg with
-libx264 and a Chrome that HyperFrames can drive. Create a project from the
+libx264 (renders), libsvtav1 and libopus (published videos) and a Chrome that
+HyperFrames can drive. Create a project from the
 template; its `package.json` depends on the library by tag,
 `"@dennisklein/avatars": "github:dennisklein/avatars#semver:^0.1"`:
 
@@ -47,7 +48,7 @@ npx avatars phonemes first-steps --flagged   # words the voice may get wrong
 npx avatars voice first-steps           # narration, cached line by line
 npx avatars check first-steps           # timeline, warnings, contact sheets in snapshots/
 npx avatars render first-steps --draft  # renders/first-steps.mp4
-npx avatars publish first-steps         # web MP4, poster, WebVTT captions and a manifest
+npx avatars publish first-steps         # web video (AV1, Opus), poster, WebVTT captions and a manifest
 ```
 
 `npx avatars fixture-voice first-steps` gives an episode made-up timings
@@ -84,7 +85,7 @@ SVG rig.
 | `voice ID`, `phonemes ID`, `fixture-voice ID`, `voice-setup` | narration and pronunciation |
 | `check ID [--quick]` | timeline, warnings, stale narration, grounding, lint and contact sheets |
 | `render ID [--draft]` | an MP4 with burned-in captions |
-| `publish ID` | web MP4, poster, WebVTT captions and a manifest for a docs site |
+| `publish ID` | web video (AV1 and Opus in WebM), poster, WebVTT captions and a manifest for a docs site |
 | `hash ID`, `ci ID --store DIR` | the render hash; render only what changed |
 | `vendor ID`, `lint ID`, `validate` | the vendored bundle, HyperFrames lint, schema validation |
 | `sheet AVATAR -o PNG`, `gallery --out DIR` | avatar sheets and the catalogue of the library |

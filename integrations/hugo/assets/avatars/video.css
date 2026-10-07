@@ -39,6 +39,13 @@
   padding: 0.75rem 1rem 0.9rem;
 }
 
+/* Shown instead of playing where the browser cannot decode AV1. */
+.av-video-unsupported {
+  margin: 0;
+  padding: 0.75rem 1rem 0;
+  font-size: 0.9rem;
+}
+
 .av-video-title {
   display: flex;
   flex-wrap: wrap;

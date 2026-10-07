@@ -16,10 +16,10 @@ node cli/avatars.mjs <command> --project examples/demo   # the CLI against the d
 node cli/avatars.mjs validate --project examples/demo    # schema validation of every manifest
 ```
 
-Rendering needs FFmpeg with libx264 and a Chrome that HyperFrames can drive
-(`npx hyperframes browser ensure`, or `HYPERFRAMES_BROWSER_PATH`). Voicing
-needs Python 3.10 to 3.13 with `voice/requirements.txt` and
-`python3 voice/avatar_voice.py setup` once.
+Rendering needs FFmpeg with libx264 (libsvtav1 and libopus to publish) and a
+Chrome that HyperFrames can drive (`npx hyperframes browser ensure`, or
+`HYPERFRAMES_BROWSER_PATH`). Voicing needs Python 3.10 to 3.13 with
+`voice/requirements.txt` and `python3 voice/avatar_voice.py setup` once.
 
 ## Rules
 

@@ -38,7 +38,7 @@ const USAGE = `usage: avatars <command> [options] [--project DIR]
                                        project checks, lint, contact sheets
   render ID... [--draft]               renders/<id>.mp4 with burned-in captions
   publish ID... [--static DIR] [--data DIR]
-                                       web MP4, poster, WebVTT captions, manifest
+                                       web video (AV1, Opus), poster, WebVTT, manifest
   hash ID...                           the render hash, as <id>-<hash>
   ci ID... --store DIR [--used FILE]   render on a cache miss, then publish
   validate                             schema validation of every manifest

@@ -11,11 +11,12 @@ Roadblocks met while building and porting this pipeline, and their fixes.
   668, for example on Ubuntu 24.04): use a virtual environment and activate
   it in every new shell before `voice`, `phonemes`, `hash` or `ci`, which run
   `python3`, or set `AVATARS_PYTHON=.venv/bin/python`.
-- **FFmpeg without libx264**: HyperFrames and the web encode need it; check
-  with `ffmpeg -hide_banner -encoders | grep libx264`. Fedora's default
-  `ffmpeg-free` lacks it (enable RPM Fusion, then
+- **FFmpeg without libx264, libsvtav1 or libopus**: HyperFrames renders with
+  libx264, `publish` encodes with libsvtav1 and libopus; check with
+  `ffmpeg -hide_banner -encoders | grep -E 'libx264|libsvtav1|libopus'`.
+  Fedora's default `ffmpeg-free` lacks libx264 (enable RPM Fusion, then
   `sudo dnf swap ffmpeg-free ffmpeg --allowerasing`), and mise's `ffmpeg`
-  comes from conda and may lack it too. Pitched voice presets also need the
+  comes from conda and may lack them too. Pitched voice presets also need the
   `rubberband` filter (`ffmpeg -hide_banner -filters | grep rubberband`).
 - **`hyperframes doctor` shows ✗** for whisper-cpp, TTS (Kokoro) and
   MusicGen: optional HyperFrames features this library does not use. The
@@ -44,9 +45,8 @@ Roadblocks met while building and porting this pipeline, and their fixes.
 - `npx hyperframes browser ensure` may work there; otherwise point
   `HYPERFRAMES_BROWSER_PATH` at a preinstalled headless Chrome, such as
   `/opt/pw-browsers/chromium_headless_shell-*/chrome-linux/headless_shell`.
-- Playwright's open-source Chromium cannot decode H.264, so a docs page
-  tested there shows a spinner instead of playing the video. Chrome,
-  Firefox, Safari and Edge play it.
+- Playwright's open-source Chromium plays the published AV1 video but cannot
+  decode the H.264 renders in `renders/`; open those with a desktop player.
 - The agent cannot listen: voice, pronunciation and pacing need a human ear.
 
 ## Authoring episodes

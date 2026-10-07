@@ -1029,7 +1029,7 @@ without one.
 | `lint ID…` | HyperFrames lint |
 | `check ID… [--quick]` | manifests, fonts, contrast, timeline, warnings, narration, grounding, project checks; without `--quick` also lint and contact sheets |
 | `render ID… [--draft]` | `renders/<id>.mp4` with burned-in captions; needs voiced narration |
-| `publish ID… [--static DIR] [--data DIR]` | web MP4, poster, WebVTT captions and a manifest |
+| `publish ID… [--static DIR] [--data DIR]` | web video (AV1 and Opus in WebM), poster, WebVTT captions and a manifest |
 | `hash ID…` | the render hash, printed as `<id>-<hash>` |
 | `ci ID… --store DIR [--used FILE]` | voice and publish into the store on a miss, then copy from it |
 | `validate` | JSON Schema validation of every manifest of the package (with `examples/demo`) and the project |
@@ -1099,9 +1099,9 @@ middle and 0.35 s before the next chapter) as contact sheets into
 `episodes/<id>/snapshots/`. Errors fail the command; warnings do not.
 
 **publish.** `publish` reads `window.__episode` in the browser, renders a
-master at standard quality without burned-in captions, and writes
-`<id>.mp4` (H.264 CRF 28, `-tune animation`, AAC 96 kbit/s mono,
-`+faststart`), `<id>.jpg` (the frame at min(2.6 s, duration − 0.5 s), 1280 px
+master at standard quality without burned-in captions, and writes `<id>.webm`
+(AV1 by SVT-AV1 at preset 10, CRF 40 and `tune=0`, Opus 64 kbit/s mono, cues
+at the front), `<id>.jpg` (the frame at min(2.6 s, duration − 0.5 s), 1280 px
 wide) and `<id>.vtt` (the caption cues, with `&`, `<` and `>` escaped) to the
 static directory and `<id>.json` to the data directory: `--static` and
 `--data`, else `publish` in `avatars.json`. It needs voiced narration (it
@@ -1122,7 +1122,7 @@ neither exists.
 
 **ci.** `ci` computes `<id>-<hash>` and treats `<store>/<id>-<hash>/` with
 its `<id>.json` as a hit. On a miss it voices the episode, publishes it into
-`<id>-<hash>.tmp` and renames that into place. Then it copies the MP4, poster
+`<id>-<hash>.tmp` and renames that into place. Then it copies the video, poster
 and captions into the static directory and the manifest into the data
 directory (`--static`, `--data` or `publish`), and appends the key to
 `--used`, so a workflow can prune the entries no episode uses.
@@ -1176,11 +1176,13 @@ and talking happily with a wave where the base lists it, at 600 px).
   `assets/avatars/video.css`, copied into a site or mounted from a Hugo
   module import of `github.com/dennisklein/avatars`. `{{< video "<id>" >}}`
   reads the manifest from site data (`params.avatars.data`, default
-  `videos`) and the MP4, poster and WebVTT captions from
+  `videos`) and the WebM, poster and WebVTT captions from
   `params.avatars.static` (default `videos`) under `params.avatars.staticDir`
-  (default `static`). It renders nothing unless the manifest and the MP4
+  (default `static`). It renders nothing unless the manifest and the WebM
   exist. The first video of a page links the stylesheet (unless
-  `params.avatars.stylesheet = false`) and a script for the chapter buttons.
+  `params.avatars.stylesheet = false`) and a script for the chapter buttons
+  that also reveals a download link under every video whose AV1 the browser
+  cannot decode.
   Captions use `params.avatars.captions.lang` and `.label` (default `en`,
   `English`). Markup: `figure.av-video#video-<id>`, `.av-video-title`,
   `ol.av-video-chapters > li > button[data-t]`. Colours come from

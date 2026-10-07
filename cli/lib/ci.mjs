@@ -10,7 +10,7 @@ import { appendFileSync, cpSync, existsSync, mkdirSync, renameSync, rmSync } fro
 import path from "node:path";
 import { renderHash } from "./hash.mjs";
 import { resolveEpisode } from "./project.mjs";
-import { publishEpisode } from "./publish.mjs";
+import { MEDIA, publishEpisode } from "./publish.mjs";
 import { refreshVendor } from "./vendor.mjs";
 import { voiceEpisode } from "./voice.mjs";
 
@@ -35,7 +35,7 @@ export async function ciEpisode(project, id, { store, used, out }) {
   }
   mkdirSync(out.static, { recursive: true });
   mkdirSync(out.data, { recursive: true });
-  for (const ext of ["mp4", "jpg", "vtt"]) cpSync(path.join(entry, `${id}.${ext}`), path.join(out.static, `${id}.${ext}`));
+  for (const ext of MEDIA) cpSync(path.join(entry, `${id}.${ext}`), path.join(out.static, `${id}.${ext}`));
   cpSync(path.join(entry, `${id}.json`), path.join(out.data, `${id}.json`));
   if (used) appendFileSync(used, key + "\n");
   return key;

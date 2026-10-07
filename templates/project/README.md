@@ -8,7 +8,8 @@ and render again whenever their sources change.
 ## Setup
 
 You need Node.js 22 or later, Python 3.10 to 3.13 for the voice, FFmpeg with
-libx264, and a Chrome that HyperFrames can drive. Once per machine:
+libx264 (renders), libsvtav1 and libopus (published videos), and a Chrome
+that HyperFrames can drive. Once per machine:
 
 ```bash
 npm install
@@ -16,7 +17,7 @@ python3 -m venv .venv
 . .venv/bin/activate          # in every new shell
 pip install -r node_modules/@dennisklein/avatars/voice/requirements.txt
 npx avatars voice-setup       # downloads the speech model, about 350 MB
-ffmpeg -hide_banner -encoders | grep libx264
+ffmpeg -hide_banner -encoders | grep -E 'libx264|libsvtav1|libopus'   # all three
 npx hyperframes browser ensure
 ```
 
@@ -38,7 +39,7 @@ npx avatars fixture-voice first-steps   # made-up timings, for layout work witho
 npx avatars voice first-steps           # the narration, cached line by line
 npx avatars check first-steps           # timeline, warnings, lint and contact sheets
 npx avatars render first-steps --draft  # renders/first-steps.mp4
-npx avatars publish first-steps         # web MP4, poster, WebVTT captions and manifest
+npx avatars publish first-steps         # web video (AV1, Opus), poster, WebVTT captions and manifest
 ```
 
 `check` writes two stills per chapter into the episode's `snapshots/`; look

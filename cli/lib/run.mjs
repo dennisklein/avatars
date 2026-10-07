@@ -96,5 +96,5 @@ export function voiceToolOutput(args) {
 
 // --------------------------------------------------------------- FFmpeg --
 export function ffmpeg(args) {
-  run("ffmpeg", ["-hide_banner", "-loglevel", "error", "-y", ...args], { what: "ffmpeg", hint: "install FFmpeg with libx264" });
+  run("ffmpeg", ["-hide_banner", "-loglevel", "error", "-y", ...args], { what: "ffmpeg", hint: "install FFmpeg with libx264, libsvtav1 and libopus" });
 }

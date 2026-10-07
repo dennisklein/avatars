@@ -200,10 +200,16 @@ off) and writes:
 
 | File | Contents |
 | --- | --- |
-| `<static>/<id>.mp4` | H.264 at CRF 28 with `-tune animation`, AAC 96 kbit/s mono, `+faststart`; about 4 MB per minute |
+| `<static>/<id>.webm` | AV1 (SVT-AV1, preset 10, CRF 40, visual tuning) and Opus 64 kbit/s mono in WebM, cues at the front for seeking; about 3 MB per minute |
 | `<static>/<id>.jpg` | the poster: the frame at 2.6 s (or half a second before the end of a shorter episode), 1280 px wide |
 | `<static>/<id>.vtt` | WebVTT captions from the narration's word timings, with `&`, `<` and `>` escaped |
 | `<data>/<id>.json` | the manifest: `title`, `duration`, `length`, `bytes`, `presenter` (`name`, `disclosure`) and `chapters` (`title`, `start`, `time`) |
+
+AV1 and Opus are free codecs that Chrome, Edge and Firefox decode without
+extra packages, also on distributions without an H.264 decoder such as
+Fedora; Safari plays AV1 only with an AV1 hardware decoder, and the Hugo
+shortcode shows a download link where the browser cannot play it. Renders in
+`renders/` stay H.264, which HyperFrames writes.
 
 `<static>` and `<data>` are `--static` and `--data`, else `publish` in
 `avatars.json`, else `publish/`. `publish` needs voiced narration, not
@@ -254,9 +260,9 @@ fixture narration) and `gallery.yml` (the gallery on GitHub Pages).
 {{< video "first-steps" >}}
 ```
 
-It plays the published MP4 with its poster and captions and lists the
+It plays the published WebM with its poster and captions and lists the
 chapters as buttons that seek the video. It renders nothing until the
-manifest and the MP4 exist, so pages can embed an episode before it is
+manifest and the WebM exist, so pages can embed an episode before it is
 rendered, and a local build without renders works. It needs Hugo 0.128 or
 later. Copy `layouts/shortcodes/video.html` and `assets/avatars/video.css`
 into the site, or import the repository as a Hugo module with two mounts

@@ -1,7 +1,8 @@
 # Hugo shortcode
 
-A `video` shortcode that plays a published episode on a Hugo site: the MP4
-with its poster, WebVTT captions and chapter buttons that seek the video.
+A `video` shortcode that plays a published episode on a Hugo site: the video
+(AV1 and Opus in WebM) with its poster, WebVTT captions and chapter buttons
+that seek the video.
 
 ```markdown
 {{< video "quickstart" >}}
@@ -20,11 +21,16 @@ works. It needs Hugo 0.128 or later (tested with 0.128.0, 0.145.0 and
 | File | Used for |
 | --- | --- |
 | `data/videos/<id>.json` | the manifest: `title`, `length`, `presenter.name`, `presenter.disclosure` and `chapters` (`title`, `start`, `time`) |
-| `static/videos/<id>.mp4` | the video |
+| `static/videos/<id>.webm` | the video: AV1 with Opus audio |
 | `static/videos/<id>.jpg` | the poster; its size gives the player its aspect ratio (16:9 without it) |
 | `static/videos/<id>.vtt` | the captions track |
 
-The shortcode renders the player when both the manifest and the MP4 exist.
+The shortcode renders the player when both the manifest and the video exist.
+AV1 and Opus are free codecs that Chrome, Edge and Firefox decode without
+extra packages, also on distributions without an H.264 decoder such as
+Fedora. Safari plays AV1 only on Apple devices with an AV1 hardware decoder;
+where the browser cannot decode the video, a note with a download link shows
+under the player.
 The line under the title shows the length and the presenter's disclosure,
 or the presenter's name when the avatar has no disclosure.
 
@@ -120,15 +126,17 @@ settings carry over from the root.
 The first video on a page adds a `<link rel="stylesheet">` for
 `assets/avatars/video.css` (minified and fingerprinted by Hugo Pipes) and a
 small script; later videos on the same page reuse them. The script handles
-clicks on chapter buttons for every video on the page: it seeks the button's
-video to the chapter and plays it.
+clicks on chapter buttons for every video on the page (it seeks the button's
+video to the chapter and plays it) and shows the download note of every video
+the browser cannot decode.
 
 ```html
 <figure class="av-video" id="video-quickstart">
   <video controls preload="none" playsinline poster="…/quickstart.jpg" width="1280" height="720" aria-label="Quickstart">
-    <source src="…/quickstart.mp4" type="video/mp4">
+    <source src="…/quickstart.webm" type='video/webm; codecs="av01.0.08M.08, opus"'>
     <track kind="captions" src="…/quickstart.vtt" srclang="en" label="English" default>
   </video>
+  <p class="av-video-unsupported" hidden>This browser cannot play AV1 video, … <a href="…/quickstart.webm" download>Download the video</a> …</p>
   <figcaption>
     <div class="av-video-title"><strong>Quickstart</strong><span>1:04 · …</span></div>
     <ol class="av-video-chapters">

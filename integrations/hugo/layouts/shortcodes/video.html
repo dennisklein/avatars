@@ -2,9 +2,13 @@
   Play a published avatars episode: {{< video "quickstart" >}}
 
   `avatars publish` and `avatars ci` write the episode's manifest to
-  data/videos/<id>.json and its MP4, poster and WebVTT captions to
-  static/videos/<id>.{mp4,jpg,vtt}. Until the manifest and the MP4 both
-  exist, as in a local build without renders, the shortcode renders nothing.
+  data/videos/<id>.json and its video, poster and WebVTT captions to
+  static/videos/<id>.{webm,jpg,vtt}. The video is AV1 with Opus audio in
+  WebM, free codecs that browsers decode without extra packages; a browser
+  that cannot decode AV1 (Safari without an AV1 hardware decoder) gets a note
+  with a download link instead of a player that never starts. Until the
+  manifest and the video both exist, as in a local build without renders,
+  the shortcode renders nothing.
 
   Site params, all optional (defaults shown; README.md explains them):
 
@@ -28,7 +32,7 @@
 {{- $meta := index ($data | default dict) $id -}}
 {{- $static := strings.Trim ($p.static | default "videos") "/" -}}
 {{- $dir := path.Join ($p.staticDir | default "static") $static -}}
-{{- if and $meta (fileExists (path.Join $dir (printf "%s.mp4" $id))) -}}
+{{- if and $meta (fileExists (path.Join $dir (printf "%s.webm" $id))) -}}
 {{- $base := path.Join $static $id -}}
 {{- $poster := path.Join $dir (printf "%s.jpg" $id) -}}
 {{- $size := false -}}
@@ -36,7 +40,8 @@
 {{- $presenter := $meta.presenter | default dict -}}
 {{- $by := $presenter.disclosure | default $presenter.name -}}
 
-{{- /* The stylesheet and the chapter buttons' script, before the first video of a page. */ -}}
+{{- /* The stylesheet and the script (chapter buttons, the note where AV1
+       cannot play), before the first video of a page. */ -}}
 {{- if not (.Page.Store.Get "avatarsVideo") }}
 {{- .Page.Store.Set "avatarsVideo" true }}
 {{- if or (not (isset $p "stylesheet")) $p.stylesheet }}
@@ -56,13 +61,20 @@
     var played = v.play();
     if (played) played.catch(function () {});
   });
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".av-video").forEach(function (f) {
+      var source = f.querySelector("source");
+      if (!f.querySelector("video").canPlayType(source.type)) f.querySelector(".av-video-unsupported").hidden = false;
+    });
+  });
 </script>
 {{- end }}
 <figure class="av-video" id="video-{{ $id }}">
   <video controls preload="none" playsinline{{ with $size }} poster="{{ printf "%s.jpg" $base | relURL }}" width="{{ .Width }}" height="{{ .Height }}"{{ end }} aria-label="{{ $meta.title }}">
-    <source src="{{ printf "%s.mp4" $base | relURL }}" type="video/mp4">
+    <source src="{{ printf "%s.webm" $base | relURL }}" type='video/webm; codecs="av01.0.08M.08, opus"'>
     <track kind="captions" src="{{ printf "%s.vtt" $base | relURL }}" srclang="{{ $captions.lang | default "en" }}" label="{{ $captions.label | default "English" }}" default>
   </video>
+  <p class="av-video-unsupported" hidden>This browser cannot play AV1 video, which Chrome, Edge and Firefox can. <a href="{{ printf "%s.webm" $base | relURL }}" download>Download the video</a> to watch it in another player.</p>
   <figcaption>
     <div class="av-video-title"><strong>{{ $meta.title }}</strong><span>{{ $meta.length }}{{ with $by }} · {{ . }}{{ end }}</span></div>
     {{- with $meta.chapters }}

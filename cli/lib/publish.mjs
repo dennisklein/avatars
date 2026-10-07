@@ -1,10 +1,11 @@
 // SPDX-FileCopyrightText: 2026 Dennis Klein <d.klein@gsi.de>
 // SPDX-License-Identifier: Apache-2.0
-// Publish an episode for a docs site: a web-sized MP4 without burned-in
-// captions, a poster, WebVTT captions, and a JSON manifest with the
+// Publish an episode for a docs site: a web-sized WebM (AV1 video and Opus
+// audio, free codecs that browsers decode without extra packages) without
+// burned-in captions, a poster, WebVTT captions, and a JSON manifest with the
 // presenter and the chapters (DESIGN.md, "CLI").
 //
-//   <static>/<id>.mp4, <id>.jpg, <id>.vtt     <data>/<id>.json
+//   <static>/<id>.webm, <id>.jpg, <id>.vtt     <data>/<id>.json
 //
 // The composition must end with Episode.create(...)...done(), which
 // publishes window.__episode (id, title, duration, chapters, caption cues).
@@ -17,7 +18,14 @@ import { launch, openEpisode } from "./browser.mjs";
 import { ffmpeg, hyperframes } from "./run.mjs";
 
 const POSTER_AT = 2.6; // seconds: past the intro's logo animation
-const CRF = 28;
+// SVT-AV1 preset 10 at CRF 40, tuned for visual quality: about 3 MB per
+// minute, smaller and closer to the master than H.264 at CRF 28, and about
+// real time on 4 vCPUs.
+const PRESET = 10;
+const CRF = 40;
+// The published files, and the type a player's <source> gives the video.
+export const MEDIA = ["webm", "jpg", "vtt"];
+export const VIDEO_TYPE = 'video/webm; codecs="av01.0.08M.08, opus"';
 
 // Episode metadata, read from the composition outside the render runtime,
 // and the presenter: the page's own, else the host of Avatars.data.cast.
@@ -84,13 +92,15 @@ export async function publishEpisode(dir, id, out, opts = {}) {
     mkdirSync(out.static, { recursive: true });
     mkdirSync(out.data, { recursive: true });
     const file = (ext) => path.join(out.static, `${id}.${ext}`);
-    ffmpeg(["-i", master, "-c:v", "libx264", "-preset", "slow", "-tune", "animation", "-crf", String(CRF), "-pix_fmt", "yuv420p",
-      "-movflags", "+faststart", "-c:a", "aac", "-b:a", "96k", "-ac", "1", file("mp4")]);
+    // The cues (the seek index) go to the front, so a player seeks before the
+    // whole file has loaded.
+    ffmpeg(["-i", master, "-c:v", "libsvtav1", "-preset", String(PRESET), "-crf", String(CRF), "-svtav1-params", "tune=0", "-pix_fmt", "yuv420p",
+      "-c:a", "libopus", "-b:a", "64k", "-ac", "1", "-cues_to_front", "1", file("webm")]);
     // The poster frame must exist in short episodes too.
     const posterAt = Math.min(POSTER_AT, Math.max(0, ep.duration - 0.5));
     ffmpeg(["-ss", String(posterAt), "-i", master, "-frames:v", "1", "-vf", "scale=1280:-2", "-q:v", "3", file("jpg")]);
     writeFileSync(file("vtt"), webVtt(ep.cues));
-    const manifest = manifestOf(ep, statSync(file("mp4")).size, presenter);
+    const manifest = manifestOf(ep, statSync(file("webm")).size, presenter);
     writeFileSync(path.join(out.data, `${id}.json`), JSON.stringify(manifest, null, 2) + "\n");
     console.log(`published ${id}: ${clock(ep.duration)}, ${(manifest.bytes / 1048576).toFixed(1)} MB, ${ep.cues.length} cues, ${ep.chapters.length} chapters`);
     return manifest;

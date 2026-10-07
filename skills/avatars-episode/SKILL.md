@@ -59,7 +59,7 @@ python3 --version                            # the voice tool needs 3.10 to 3.13
 pip install -r "$AV/voice/requirements.txt"  # in a venv if pip refuses the system Python
 npx avatars voice-setup                      # the Kokoro model, about 350 MB, once
 npx hyperframes browser ensure               # or export HYPERFRAMES_BROWSER_PATH=<chrome>
-ffmpeg -hide_banner -encoders | grep libx264
+ffmpeg -hide_banner -encoders | grep -E 'libx264|libsvtav1|libopus'   # all three
 ```
 
 The CLI runs the voice tool with `python3`; `AVATARS_PYTHON=.venv/bin/python`
@@ -325,13 +325,13 @@ npx hyperframes snapshot --no-end --describe false -o snapshots/extra --at 41.5,
 ```bash
 npx avatars render <id> --draft    # renders/<id>.mp4, fast
 npx avatars render <id>            # standard quality, burned-in captions
-npx avatars publish <id>           # web MP4 without burned-in captions, poster, WebVTT, manifest
+npx avatars publish <id>           # web WebM (AV1, Opus) without burned-in captions, poster, WebVTT, manifest
 ```
 
 A render takes about 3 to 5 times the video's length on 4 CPUs. `publish`
 writes into the `publish` directories of `avatars.json` (or `--static DIR
 --data DIR`); how a site picks them up, and whether CI renders with
-`avatars ci`, is the project's business. Send the MP4 to the user
+`avatars ci`, is the project's business. Send the render (`renders/<id>.mp4`) to the user
 (`SendUserFile`, if you have it) or give its path, instead of describing it.
 
 You cannot hear the result. Before calling an episode done, ask a human to

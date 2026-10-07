@@ -26,7 +26,7 @@ inputs:
     description: Python version for the voice tool (3.10 to 3.13)
     default: "3.12"
   install-ffmpeg:
-    description: Install FFmpeg with apt-get when episodes need rendering; "false" if the runner provides FFmpeg with libx264
+    description: Install FFmpeg with apt-get when episodes need rendering; "false" if the runner provides FFmpeg with libx264, libsvtav1 and libopus
     default: "true"
 
 outputs:

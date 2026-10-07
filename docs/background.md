@@ -24,6 +24,13 @@ At that size ten 3-minute videos take about 120 MB per docs version, well
 under the 1 GB limit of a GitHub Pages site, whose 100 GB per month soft
 bandwidth limit allows roughly 8,000 full views a month.
 
+`publish` encodes AV1 and Opus in WebM instead, which distributions without
+an H.264 decoder, such as Fedora, play out of the box. On the pilot, SVT-AV1
+(preset 10, CRF 40, visual tuning) came out smaller than the H.264 encode and
+closer to the master (SSIM 0.9958 against 0.9951) and encoded at about real
+time on 4 vCPUs; VP9 needed 50% more bytes for the same quality and encoded
+three times slower.
+
 The library is a port of the study's single-avatar pipeline into layers
 (tokens, themes, formats, scenes, rigs, parts, looks, avatars, voices). The
 study's episodes render the same frames with it, apart from the intro's

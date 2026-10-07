@@ -26,7 +26,7 @@ build such as the [Hugo shortcode](../../hugo/README.md).
    model (`avatars voice-setup`, cached under its own key), and sets up the
    Chrome Headless Shell build of the pinned HyperFrames version.
 5. Runs `avatars ci --all --store … --used …`: renders the missing episodes
-   into the store and copies every episode's MP4, poster, captions and
+   into the store and copies every episode's video, poster, captions and
    manifest into the publish directories.
 6. After a successful run, removes store entries that no episode uses any
    more. After a failure it keeps them all, so a retry reuses the renders
@@ -38,8 +38,9 @@ hashes, copies and is done, without FFmpeg, the voice model or a browser.
 
 ## Requirements
 
-- A Linux runner with `apt-get` (`ubuntu-24.04`), or `install-ffmpeg: "false"`
-  and FFmpeg with libx264 on the `PATH`.
+- A Linux runner with `apt-get` (`ubuntu-24.04`, whose FFmpeg has every
+  encoder needed), or `install-ffmpeg: "false"` and FFmpeg with libx264,
+  libsvtav1 and libopus on the `PATH`.
 - Node 22 and the project's npm dependencies installed in the project
   directory before the action runs (`actions/setup-node`, then `npm ci`).
 - `publish` in `avatars.json` pointing where the site expects the files, and
