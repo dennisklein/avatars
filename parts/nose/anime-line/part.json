@@ -1,0 +1,13 @@
+{
+  "id": "nose/anime-line",
+  "category": "nose",
+  "title": "Single-line anime nose",
+  "fits": ["anime-600x800"],
+  "slots": ["nose"],
+  "roles": ["skin.line"],
+  "defaults": {},
+  "colourways": {},
+  "hides": [],
+  "marks": [],
+  "options": {}
+}

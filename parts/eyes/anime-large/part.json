@@ -1,0 +1,24 @@
+{
+  "id": "eyes/anime-large",
+  "category": "eyes",
+  "title": "Large anime eyes with gradient irises and winged lashes",
+  "fits": ["anime-600x800"],
+  "slots": ["eyes"],
+  "roles": [
+    "eyes.white",
+    "eyes.iris-top",
+    "eyes.iris-mid",
+    "eyes.iris-low",
+    "eyes.pupil",
+    "eyes.glint",
+    "eyes.highlight",
+    "eyes.lid-shadow",
+    "eyes.lash",
+    "skin.base"
+  ],
+  "defaults": {},
+  "colourways": {},
+  "hides": [],
+  "marks": [],
+  "options": {}
+}

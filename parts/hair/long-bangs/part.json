@@ -1,0 +1,13 @@
+{
+  "id": "hair/long-bangs",
+  "category": "hair",
+  "title": "Long hair with pointed bangs and side locks",
+  "fits": ["anime-600x800"],
+  "slots": ["hair-back", "face-shadow", "hair-front", "hair-side"],
+  "roles": ["hair.base", "hair.light", "hair.tip", "hair.dark", "hair.shine", "hair.deep", "skin.shade"],
+  "defaults": {},
+  "colourways": {},
+  "hides": [],
+  "marks": [],
+  "options": {}
+}

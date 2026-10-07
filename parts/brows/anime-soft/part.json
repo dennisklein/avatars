@@ -1,0 +1,13 @@
+{
+  "id": "brows/anime-soft",
+  "category": "brows",
+  "title": "Soft tapered anime brows",
+  "fits": ["anime-600x800"],
+  "slots": ["brows"],
+  "roles": ["brows.color"],
+  "defaults": {},
+  "colourways": {},
+  "hides": [],
+  "marks": [],
+  "options": {}
+}

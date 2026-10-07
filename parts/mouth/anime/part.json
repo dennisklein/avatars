@@ -1,0 +1,13 @@
+{
+  "id": "mouth/anime",
+  "category": "mouth",
+  "title": "Anime mouth with teeth and tongue",
+  "fits": ["anime-600x800"],
+  "slots": ["mouth"],
+  "roles": ["mouth.line", "mouth.inside", "mouth.tongue", "mouth.teeth", "mouth.outline"],
+  "defaults": {},
+  "colourways": {},
+  "hides": [],
+  "marks": [],
+  "options": {}
+}

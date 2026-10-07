@@ -1,0 +1,13 @@
+{
+  "id": "face/anime-oval",
+  "category": "face",
+  "title": "Oval anime face with blush",
+  "fits": ["anime-600x800"],
+  "slots": ["face", "blush"],
+  "roles": ["skin.base", "skin.line", "skin.blush"],
+  "defaults": {},
+  "colourways": {},
+  "hides": [],
+  "marks": [],
+  "options": {}
+}

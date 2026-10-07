@@ -1,0 +1,13 @@
+{
+  "id": "accessories/emblem-patch",
+  "category": "accessories",
+  "title": "Brand emblem patch on the chest",
+  "fits": ["anime-600x800"],
+  "slots": ["chest"],
+  "roles": [],
+  "defaults": {},
+  "colourways": {},
+  "hides": [],
+  "marks": ["emblem"],
+  "options": {}
+}

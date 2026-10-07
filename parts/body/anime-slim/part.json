@@ -1,0 +1,13 @@
+{
+  "id": "body/anime-slim",
+  "category": "body",
+  "title": "Slim anime neck and open hand",
+  "fits": ["anime-600x800"],
+  "slots": ["neck", "hand"],
+  "roles": ["skin.base", "skin.shade", "skin.line"],
+  "defaults": {},
+  "colourways": {},
+  "hides": [],
+  "marks": [],
+  "options": {}
+}

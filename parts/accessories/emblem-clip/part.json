@@ -1,0 +1,15 @@
+{
+  "id": "accessories/emblem-clip",
+  "category": "accessories",
+  "title": "Hair clip shaped like the brand mark",
+  "fits": ["anime-600x800"],
+  "slots": ["hair-accessory"],
+  "roles": [],
+  "defaults": {},
+  "colourways": {},
+  "hides": [],
+  "marks": ["badge"],
+  "options": {
+    "side": { "type": "string", "default": "left", "description": "side of the head as the viewer sees it: left or right" }
+  }
+}
