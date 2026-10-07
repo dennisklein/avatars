@@ -47,9 +47,13 @@ const stamp = (t) => {
   return `${h}:${m}:${s}.${String(ms % 1000).padStart(3, "0")}`;
 };
 
+// Cue text is markup in WebVTT: "<" opens a tag, "&" an escape, and a line
+// with "-->" is a timing line, so all three are escaped.
+const cueText = (text) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
 export function webVtt(cues) {
   const vtt = ["WEBVTT", ""];
-  cues.forEach((c, i) => vtt.push(String(i + 1), `${stamp(c.start)} --> ${stamp(c.end)}`, c.text, ""));
+  cues.forEach((c, i) => vtt.push(String(i + 1), `${stamp(c.start)} --> ${stamp(c.end)}`, cueText(c.text), ""));
   return vtt.join("\n");
 }
 
