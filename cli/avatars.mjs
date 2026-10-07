@@ -7,6 +7,7 @@
 //
 // Exit codes: 0 success, 1 a failure (printed as "avatars: <message>"),
 // 2 a usage error.
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
 import { bundleFiles, writeVendor } from "./lib/bundle.mjs";
@@ -19,7 +20,7 @@ import { episodeIds, findProjectRoot, isFile, loadProject, resolveEpisode } from
 import { publishEpisode } from "./lib/publish.mjs";
 import { hyperframes } from "./lib/run.mjs";
 import { SHEET_MODES, renderSheet } from "./lib/sheet.mjs";
-import { newEpisode, newProject } from "./lib/templates.mjs";
+import { UNSAFE_CHARS, isSafeText, newEpisode, newProject } from "./lib/templates.mjs";
 import { packageManifests, projectManifests, uniqueItems, validateItems } from "./lib/validate.mjs";
 import { refreshVendor } from "./lib/vendor.mjs";
 import { castVoiceFiles, phonemes, voiceEpisode, voiceSetup } from "./lib/voice.mjs";
@@ -104,6 +105,21 @@ function idsOf(project, opt, targets, needs) {
   return targets;
 }
 
+// Narration a render can use: lines.js, and audio for every line, which
+// fixture narration (fixture-voice) does not have.
+function requireVoiced(dir, id) {
+  const file = path.join(dir, "assets/voice/lines.js");
+  if (!isFile(file)) throw new Error(`${id}: no narration, run: avatars voice ${id}`);
+  const m = /^window\.AVATAR_LINES = ([\s\S]*);\s*$/.exec(readFileSync(file, "utf8"));
+  let lines = {};
+  try {
+    lines = m ? JSON.parse(m[1]) : {};
+  } catch {
+    // Not as the voice tools write it; the render reports what is wrong.
+  }
+  if (Object.values(lines).some((l) => l && l.fixture)) throw new Error(`${id}: fixture narration has no audio, run: avatars voice ${id}`);
+}
+
 const relTo = (project, p) => path.relative(project.root, p) || ".";
 // Relative to the working directory unless that climbs out of it.
 const shownPath = (p) => {
@@ -129,6 +145,7 @@ async function main(argv) {
     case "new": {
       const [kind, arg, ...rest] = targets;
       if (!arg || rest.length || !["project", "episode"].includes(kind)) throw new UsageError("new project DIR, or new episode ID");
+      if (opt.title != null && !isSafeText(opt.title)) throw new UsageError(`--title must not contain ${UNSAFE_CHARS}`);
       if (kind === "project") {
         const root = newProject(arg, { title: opt.title });
         console.log(`created ${path.relative(process.cwd(), root) || "."}`);
@@ -207,14 +224,14 @@ async function main(argv) {
         break;
       case "render": {
         refreshVendor(resolveEpisode(project, id));
-        if (!isFile(path.join(dir, "assets/voice/lines.js"))) throw new Error(`${id}: no narration, run: avatars voice ${id}`);
+        requireVoiced(dir, id);
         const out = path.join(project.rendersDir, `${id}.mp4`);
         hyperframes(["render", "-q", opt.draft ? "draft" : "standard", "-o", out], dir);
         break;
       }
       case "publish": {
         refreshVendor(resolveEpisode(project, id));
-        if (!isFile(path.join(dir, "assets/voice/lines.js"))) throw new Error(`${id}: no narration, run: avatars voice ${id}`);
+        requireVoiced(dir, id);
         await publishEpisode(dir, id, outDirs(project, opt));
         break;
       }

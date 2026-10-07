@@ -16,6 +16,11 @@ import { PKG, fontFaceCss, locate, readJson } from "./project.mjs";
 
 export const TEMPLATES = path.join(PKG, "templates");
 const ID = /^[a-z0-9][a-z0-9._-]*$/;
+// What a placeholder must not hold: it goes unescaped into JSON strings, HTML
+// and the page's inline script.
+const UNSAFE = /["\\<>\u0000-\u001f\u007f]/;
+export const UNSAFE_CHARS = '" \\ < > or control characters';
+export const isSafeText = (s) => !UNSAFE.test(s);
 
 export const titleOf = (id) => {
   const words = id.replace(/[-_.]+/g, " ").trim();
@@ -66,6 +71,7 @@ export function newProject(dir, opts = {}) {
   const root = path.resolve(dir);
   if (!isEmptyDir(root)) throw new Error(`${root} exists and is not empty`);
   const id = path.basename(root);
+  if (!isSafeText(id)) throw new Error(`the project directory's name "${id}" becomes its id and must not contain ${UNSAFE_CHARS}`);
   // The template names its theme; its fonts come from this package.
   const cfgFile = path.join(src, "avatars.json");
   const theme = (existsSync(cfgFile) && readJson(cfgFile).theme) || "midnight";
