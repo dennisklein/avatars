@@ -1,0 +1,12 @@
+{
+  "id": "blazer-glasses",
+  "title": "Navy blazer and gold round glasses",
+  "wear": ["hair/long-bangs", "sindy/ahoge", "tops/blazer", "eyewear/round-glasses", "accessories/emblem-clip"],
+  "colourways": { "tops/blazer": "navy", "eyewear/round-glasses": "gold" },
+  "palette": {
+    "top.inner": "#f4fbfb",
+    "top.inner-shade": "#b9d3d6",
+    "top.trim": "{color.accent}"
+  },
+  "options": {}
+}
