@@ -7,7 +7,6 @@
 //
 // Exit codes: 0 success, 1 a failure (printed as "avatars: <message>"),
 // 2 a usage error.
-import { readFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
 import { bundleFiles, writeVendor } from "./lib/bundle.mjs";
@@ -23,7 +22,7 @@ import { SHEET_MODES, renderSheet } from "./lib/sheet.mjs";
 import { UNSAFE_CHARS, isSafeText, newEpisode, newProject } from "./lib/templates.mjs";
 import { packageManifests, projectManifests, uniqueItems, validateItems } from "./lib/validate.mjs";
 import { refreshVendor } from "./lib/vendor.mjs";
-import { castVoiceFiles, phonemes, voiceEpisode, voiceSetup } from "./lib/voice.mjs";
+import { castVoiceFiles, narrationProblem, phonemes, voiceEpisode, voiceSetup } from "./lib/voice.mjs";
 
 const USAGE = `usage: avatars <command> [options] [--project DIR]
 
@@ -105,19 +104,9 @@ function idsOf(project, opt, targets, needs) {
   return targets;
 }
 
-// Narration a render can use: lines.js, and audio for every line, which
-// fixture narration (fixture-voice) does not have.
 function requireVoiced(dir, id) {
-  const file = path.join(dir, "assets/voice/lines.js");
-  if (!isFile(file)) throw new Error(`${id}: no narration, run: avatars voice ${id}`);
-  const m = /^window\.AVATAR_LINES = ([\s\S]*);\s*$/.exec(readFileSync(file, "utf8"));
-  let lines = {};
-  try {
-    lines = m ? JSON.parse(m[1]) : {};
-  } catch {
-    // Not as the voice tools write it; the render reports what is wrong.
-  }
-  if (Object.values(lines).some((l) => l && l.fixture)) throw new Error(`${id}: fixture narration has no audio, run: avatars voice ${id}`);
+  const problem = narrationProblem(dir, id);
+  if (problem) throw new Error(problem);
 }
 
 const relTo = (project, p) => path.relative(project.root, p) || ".";

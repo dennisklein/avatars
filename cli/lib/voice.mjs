@@ -4,9 +4,9 @@
 // A resolved episode's voice settings (the host's voice.json, the cast
 // entry's preset, the merged lexicon files) become the tool's --voices, -v
 // and --lexicon flags; narration goes to episodes/<id>/assets/voice/.
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
-import { locate, readJson } from "./project.mjs";
+import { isFile, locate, readJson } from "./project.mjs";
 import { voiceTool, voiceToolOutput } from "./run.mjs";
 
 export function voiceFlags(voice) {
@@ -18,6 +18,23 @@ export function voiceFlags(voice) {
 }
 
 const scriptOf = (r) => path.join(r.dir, "script.json");
+
+// Why the narration in an episode directory cannot be rendered, or null: a
+// render needs lines.js and audio for every line, which fixture narration
+// (fixture-voice) does not have.
+export function narrationProblem(dir, id) {
+  const file = path.join(dir, "assets/voice/lines.js");
+  if (!isFile(file)) return `${id}: no narration, run: avatars voice ${id}`;
+  const m = /^window\.AVATAR_LINES = ([\s\S]*);\s*$/.exec(readFileSync(file, "utf8"));
+  let lines = {};
+  try {
+    lines = m ? JSON.parse(m[1]) : {};
+  } catch {
+    // Not as the voice tools write it; the render reports what is wrong.
+  }
+  if (Object.values(lines).some((l) => l && l.fixture)) return `${id}: fixture narration has no audio, run: avatars voice ${id}`;
+  return null;
+}
 
 export function voiceEpisode(r, opts = {}) {
   const args = ["script", scriptOf(r), "-o", path.join(r.dir, "assets", "voice"), ...voiceFlags(r.voice)];
