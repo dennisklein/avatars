@@ -16,6 +16,7 @@
     "avatars",
     "cli",
     "core",
+    "docs",
     "formats",
     "gallery",
     "icons",
@@ -30,6 +31,7 @@
     "voice/*.py",
     "voice/engines",
     "voice/requirements.txt",
+    "DESIGN.md",
     "LICENSE",
     "NOTICE"
   ],
