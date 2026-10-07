@@ -40,12 +40,6 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
 
-      # The CLI renders and publishes with FFmpeg (libx264).
-      - name: Install FFmpeg
-        run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq --no-install-recommends ffmpeg
-
       # The Chrome Headless Shell build of the pinned HyperFrames version.
       - name: Set up the browser
         env:
