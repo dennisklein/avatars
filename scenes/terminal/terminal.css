@@ -1,0 +1,11 @@
+/* SPDX-FileCopyrightText: 2026 Dennis Klein <d.klein@gsi.de> */
+/* SPDX-License-Identifier: Apache-2.0 */
+/* Terminal window. Its position and size come from the format
+   (format.json "scenes.terminal"); the font size from the fit. */
+.term { position: absolute; border-radius: var(--av-window-radius); background: var(--av-window-bg); border: 2px solid var(--av-window-border); box-shadow: var(--av-window-shadow); overflow: hidden; }
+.term-body { padding: var(--av-terminal-pad-y) var(--av-terminal-pad-x); font-family: var(--av-font-mono); line-height: var(--av-terminal-line-height); color: var(--av-terminal-text); white-space: pre; font-variant-ligatures: none; }
+.term-prompt { color: var(--av-terminal-prompt); font-weight: var(--av-terminal-prompt-weight); }
+.term-out { color: var(--av-terminal-out); }
+.term-cursor { display: inline-block; width: 0.47em; height: 1em; margin-left: 0.06em; vertical-align: -0.18em; background: var(--av-terminal-cursor); }
+.term-hl { color: var(--av-terminal-mark-color); background: var(--av-terminal-mark-bg); border-radius: var(--av-terminal-mark-radius); padding: 0 4px; margin: 0 -4px; }
+.term-ff { position: absolute; right: 26px; top: 76px; padding: 8px 18px; border-radius: var(--av-terminal-ff-radius); background: var(--av-terminal-ff-bg); border: 2px solid var(--av-terminal-ff-border); color: var(--av-terminal-ff-color); font-family: var(--av-font-sans); font-size: var(--av-terminal-ff-size); font-weight: var(--av-terminal-ff-weight); opacity: 0; }

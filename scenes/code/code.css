@@ -1,0 +1,18 @@
+/* SPDX-FileCopyrightText: 2026 Dennis Klein <d.klein@gsi.de> */
+/* SPDX-License-Identifier: Apache-2.0 */
+/* Code panels: a file window whose lines light up on cue, and note chips. */
+.code-panel { position: absolute; border-radius: var(--av-window-radius); background: var(--av-window-bg); border: 2px solid var(--av-window-border); box-shadow: var(--av-window-shadow); overflow: hidden; }
+.code-body { position: absolute; left: 0; right: 0; top: var(--av-window-bar-height); bottom: 0; padding: var(--av-code-pad-y) 0; overflow: hidden; font-family: var(--av-font-mono); color: var(--av-code-text); white-space: pre; font-variant-ligatures: none; }
+.code-line { position: relative; padding: 0 var(--av-code-pad-x); }
+.code-hl { position: absolute; left: 14px; right: 14px; top: 0; bottom: 0; border-radius: var(--av-code-hl-radius); background: var(--av-code-hl-bg); border-left: 6px solid var(--av-code-hl-bar); opacity: 0; }
+.code-txt { position: relative; }
+.code-txt .k { color: var(--av-code-key); }
+.code-txt .s { color: var(--av-code-string); }
+.code-txt .c { color: var(--av-code-comment); font-style: italic; }
+.code-txt .w { color: var(--av-code-keyword); }
+.code-txt .p { color: var(--av-code-punct); }
+.code-note { position: absolute; display: flex; align-items: center; gap: 16px; height: var(--av-code-note-height); padding: 0 24px 0 14px; border-radius: var(--av-code-note-radius); border: 2px solid var(--av-code-note-border); background: var(--av-code-note-bg); font-size: var(--av-code-note-size); font-weight: var(--av-code-note-weight); color: var(--av-code-note-color); }
+.code-note .icon { flex: none; width: 40px; height: 40px; border-radius: var(--av-code-note-icon-radius); display: grid; place-items: center; background: var(--av-icon-bg); }
+.code-note .icon svg { width: 26px; height: 26px; }
+.code-note.warn { border-color: var(--av-code-note-warn); }
+.code-note.warn .icon { background: var(--av-code-note-warn-bg); }

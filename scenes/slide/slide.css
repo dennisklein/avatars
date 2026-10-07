@@ -1,0 +1,12 @@
+/* SPDX-FileCopyrightText: 2026 Dennis Klein <d.klein@gsi.de> */
+/* SPDX-License-Identifier: Apache-2.0 */
+/* Slide scene: bullets below the slide title. */
+.bullets { position: absolute; left: 120px; top: 320px; width: 1260px; display: flex; flex-direction: column; gap: 30px; }
+.bullet { display: flex; align-items: center; gap: 30px; padding: 26px 34px; border-radius: var(--av-slide-bullet-radius); background: var(--av-slide-bullet-bg); border: 2px solid var(--av-slide-bullet-border); }
+.bullet .icon { flex: none; width: 76px; height: 76px; border-radius: var(--av-slide-icon-radius); display: grid; place-items: center; background: var(--av-icon-bg); }
+.bullet .icon svg { width: 46px; height: 46px; }
+.bullet .txt { display: flex; flex-direction: column; gap: 4px; }
+.bullet .t1 { font-size: var(--av-slide-bullet-title-size); font-weight: var(--av-slide-bullet-title-weight); color: var(--av-slide-bullet-title-color); }
+.bullet .t2 { font-size: var(--av-slide-bullet-text-size); color: var(--av-slide-bullet-text-color); }
+/* Four bullets: start higher and closer together, so the last clears the captions. */
+.bullets:has(> .bullet:nth-child(4)) { top: 290px; gap: 20px; }

@@ -1,0 +1,24 @@
+/* SPDX-FileCopyrightText: 2026 Dennis Klein <d.klein@gsi.de> */
+/* SPDX-License-Identifier: Apache-2.0 */
+/* Diagram scene: nodes and labels in HTML over an SVG layer of groups and edges. */
+.dlines { position: absolute; left: 0; top: 0; overflow: visible; }
+.dgroup { fill: var(--av-diagram-group-fill); stroke: var(--av-diagram-group-stroke); stroke-width: 2; stroke-dasharray: 10 8; }
+.dgroup.accent { stroke: var(--av-diagram-group-accent); stroke-dasharray: none; }
+.dgroup-label { position: absolute; font-size: var(--av-diagram-group-label-size); font-weight: var(--av-diagram-group-label-weight); color: var(--av-diagram-group-label-color); white-space: nowrap; }
+.dedge { fill: none; stroke: var(--av-diagram-edge); stroke-width: 3; stroke-linecap: round; }
+.dedge.accent { stroke: var(--av-diagram-edge-accent); }
+.dedge.dashed { stroke-dasharray: 10 9; }
+.dreveal { fill: none; stroke: var(--av-diagram-reveal-mask); stroke-width: 30; stroke-linecap: round; }
+.dnode { position: absolute; display: flex; align-items: center; gap: 14px; padding: 0 20px; border-radius: var(--av-diagram-node-radius); background: var(--av-diagram-node-bg); border: 2px solid var(--av-diagram-node-border); box-shadow: var(--av-diagram-node-shadow); }
+.dnode.accent { border-color: var(--av-diagram-node-accent-border); background: var(--av-diagram-node-accent-bg); }
+.dnode.ghost { border-style: dashed; background: var(--av-diagram-ghost-bg); box-shadow: none; }
+.dnode .icon { flex: none; width: 46px; height: 46px; border-radius: var(--av-diagram-icon-radius); display: grid; place-items: center; background: var(--av-icon-bg); }
+.dnode .icon svg { width: 30px; height: 30px; }
+.dnode .txt { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.dnode .t1 { font-size: var(--av-diagram-title-size); font-weight: var(--av-diagram-title-weight); color: var(--av-diagram-title-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dnode .t2 { font-size: var(--av-diagram-text-size); color: var(--av-diagram-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dnode .t2.code { font-family: var(--av-font-mono); font-size: var(--av-diagram-code-size); }
+.dlabel-at { position: absolute; width: 0; height: 0; display: flex; align-items: center; justify-content: center; }
+.dlabel { flex: none; padding: 4px 14px; border-radius: var(--av-diagram-label-radius); background: var(--av-diagram-label-bg); border: 2px solid var(--av-diagram-label-border); font-size: var(--av-diagram-label-size); font-weight: var(--av-diagram-label-weight); color: var(--av-diagram-label-color); white-space: nowrap; }
+.diagram-art { position: absolute; }
+.diagram-art > svg { width: 100%; height: 100%; }

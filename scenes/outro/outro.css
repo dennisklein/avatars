@@ -1,0 +1,11 @@
+/* SPDX-FileCopyrightText: 2026 Dennis Klein <d.klein@gsi.de> */
+/* SPDX-License-Identifier: Apache-2.0 */
+/* Outro scene: a card with thanks, links and the next episode, beside the
+   presenter on the left. */
+.scene-outro .card { position: absolute; left: 1000px; top: 230px; width: 820px; }
+.scene-outro .links { display: flex; flex-direction: column; gap: 18px; }
+.scene-outro .link { display: flex; align-items: center; gap: 20px; font-size: var(--av-outro-link-size); font-weight: var(--av-outro-link-weight); color: var(--av-outro-link-color); }
+.scene-outro .link span { font-size: var(--av-outro-label-size); color: var(--av-outro-label-color); width: 140px; text-transform: uppercase; letter-spacing: 0.12em; }
+.scene-outro .next { padding: 26px 32px; border-radius: var(--av-outro-next-radius); border: 2px solid var(--av-outro-next-border); background: var(--av-outro-next-bg); }
+.scene-outro .next .kicker { font-size: var(--av-outro-next-kicker-size); }
+.scene-outro .next .t { font-size: var(--av-outro-next-size); font-weight: var(--av-outro-next-weight); color: var(--av-outro-next-color); margin-top: 6px; }

@@ -1,0 +1,20 @@
+/* SPDX-FileCopyrightText: 2026 Dennis Klein <d.klein@gsi.de> */
+/* SPDX-License-Identifier: Apache-2.0 */
+/* Intro scene: brand lockup (emblem, wordmark, tagline), episode title and
+   the presenter's disclosure. */
+
+/* Brand lockup. */
+.wordmark { font-weight: var(--av-intro-wordmark-weight); color: var(--av-intro-wordmark-color); letter-spacing: -0.03em; }
+.tagline { font-size: var(--av-intro-tagline-size); letter-spacing: 0.32em; color: var(--av-intro-tagline-color); font-weight: var(--av-intro-tagline-weight); }
+.disclosure { position: absolute; right: 60px; bottom: 40px; font-size: var(--av-intro-disclosure-size); color: var(--av-intro-disclosure-color); }
+
+.scene-intro .brand { position: absolute; left: 150px; top: 270px; display: flex; flex-direction: column; gap: 40px; }
+.scene-intro .lockup { display: flex; align-items: center; gap: 48px; }
+/* The emblem keeps its viewBox's aspect ratio; overflow stays visible so its
+   pieces can overshoot while they pop in. */
+.scene-intro .emblem { flex: none; display: block; width: 250px; height: auto; overflow: visible; }
+.scene-intro .wordmark { font-size: var(--av-intro-wordmark-size); line-height: 1; }
+.scene-intro .ep { display: flex; flex-direction: column; gap: 14px; margin-top: 30px; }
+.scene-intro .ep .kicker { font-size: var(--av-intro-kicker-size); }
+.scene-intro .ep .headline { font-size: var(--av-intro-headline-size); max-width: 880px; }
+.scene-intro .disclosure { left: 150px; right: auto; }

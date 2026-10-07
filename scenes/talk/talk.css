@@ -1,0 +1,16 @@
+/* SPDX-FileCopyrightText: 2026 Dennis Klein <d.klein@gsi.de> */
+/* SPDX-License-Identifier: Apache-2.0 */
+/* Talk scene: a title card on the right of the full-size presenter, and the
+   name tag (lower third). */
+
+/* Lower third. */
+.lower-third { position: absolute; left: 100px; bottom: 170px; display: flex; flex-direction: column; gap: 6px; padding: 18px 30px 20px; border-left: 8px solid var(--av-talk-tag-accent); background: var(--av-talk-tag-bg); border-radius: 0 var(--av-talk-tag-radius) var(--av-talk-tag-radius) 0; z-index: 15; }
+.lower-third .name { font-size: var(--av-talk-name-size); font-weight: var(--av-talk-name-weight); color: var(--av-talk-name-color); }
+.lower-third .role { font-size: var(--av-talk-role-size); font-weight: var(--av-talk-role-weight); color: var(--av-talk-role-color); }
+
+/* Title card. */
+.scene-talk .card { position: absolute; left: 1020px; top: 250px; width: 800px; }
+.sub { font-size: var(--av-talk-sub-size); font-weight: var(--av-talk-sub-weight); color: var(--av-talk-sub-color); line-height: 1.35; }
+.chips { display: flex; gap: 16px; }
+.chip { display: block; padding: 10px 22px; border-radius: var(--av-talk-chip-radius); border: 2px solid var(--av-talk-chip-border); font-size: var(--av-talk-chip-size); font-weight: var(--av-talk-chip-weight); color: var(--av-talk-chip-color); background: var(--av-talk-chip-bg); }
+.chip.accent { border-color: var(--av-talk-chip-accent); color: var(--av-talk-chip-accent-color); }
