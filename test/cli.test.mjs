@@ -1,14 +1,17 @@
 // SPDX-FileCopyrightText: 2026 Dennis Klein <d.klein@gsi.de>
 // SPDX-License-Identifier: Apache-2.0
 // The command line (cli/avatars.mjs): exit codes and messages of usage
-// errors and failures, and `avatars new` with the package's templates.
-// Commands that load pages are covered by browser.test.mjs.
+// errors and failures, `avatars new` with the package's templates, what
+// render, publish and gallery refuse before they open a browser, and the
+// WebVTT captions of publish. Commands that load pages are covered by
+// browser.test.mjs.
 import assert from "node:assert/strict";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { describe, test } from "node:test";
 import { fontFaceProblems } from "../cli/lib/check.mjs";
 import { loadProject, resolveEpisode } from "../cli/lib/project.mjs";
+import { webVtt } from "../cli/lib/publish.mjs";
 import { titleOf } from "../cli/lib/templates.mjs";
 import { DEMO, copyProject, fixture, outputOf, runCli, tempDir, walkFiles } from "./helpers.mjs";
 
@@ -82,6 +85,8 @@ describe("avatars new", () => {
     for (const f of files) assert.doesNotMatch(readFileSync(path.join(root, f), "utf8"), PLACEHOLDER, f);
     assert.equal(JSON.parse(readFileSync(path.join(root, "package.json"), "utf8")).name, "my-videos");
     assert.equal(JSON.parse(readFileSync(path.join(root, "brand", "brand.json"), "utf8")).name, "My videos");
+    // The render store of avatars ci (the GitHub action's default) is build output.
+    assert.match(readFileSync(path.join(root, ".gitignore"), "utf8"), /^\.avatars-store\/$/m);
     // The page head declares exactly the theme's fonts.
     const project = loadProject(root);
     const ep = resolveEpisode(project, "hello");
@@ -113,5 +118,64 @@ describe("avatars new", () => {
     assert.equal(r.status, 1);
     assert.match(r.stderr, /already exists/);
     assert.equal(runCli(["validate", "--project", root]).status, 0);
+  });
+
+  test("titles and directory names go into JSON, HTML and scripts, so they hold no quotes, backslashes, < > or control characters", (t) => {
+    const tmp = tempDir(t);
+    for (const title of ['The "Q" show', "Back\\slash", "line\nbreak", "a </script> b"]) {
+      const root = path.join(tmp, "titled");
+      const r = runCli(["new", "project", root, "--title", title]);
+      assert.equal(r.status, 2, `${title}: ${outputOf(r)}`);
+      assert.ok(r.stderr.startsWith('avatars: --title must not contain " \\ < > or control characters\n'), r.stderr);
+      assert.ok(!existsSync(root), "nothing created");
+    }
+    let r = runCli(["new", "project", path.join(tmp, 'q"dir')]);
+    assert.equal(r.status, 1, outputOf(r));
+    assert.match(r.stderr, /becomes its id and must not contain/);
+    // & is text in HTML and harmless in JSON and scripts.
+    const root = path.join(tmp, "qa");
+    r = runCli(["new", "project", root, "--title", "Q&A sessions"]);
+    assert.equal(r.status, 0, outputOf(r));
+    r = runCli(["new", "episode", "two", "--title", 'Say "hi"', "--project", root]);
+    assert.equal(r.status, 2, outputOf(r));
+    assert.ok(!existsSync(path.join(root, "episodes", "two")));
+    assert.equal(runCli(["validate", "--project", root]).status, 0);
+  });
+});
+
+describe("refusals before a browser starts", () => {
+  test("render and publish refuse fixture narration, which has no audio", (t) => {
+    const root = path.join(tempDir(t), "videos");
+    assert.equal(runCli(["new", "project", root]).status, 0);
+    let r = runCli(["render", "hello", "--draft", "--project", root]);
+    assert.equal(r.status, 1, outputOf(r));
+    assert.equal(r.stderr, "avatars: hello: no narration, run: avatars voice hello\n");
+    r = runCli(["fixture-voice", "hello", "--project", root]);
+    assert.equal(r.status, 0, outputOf(r));
+    for (const args of [["render", "hello", "--draft"], ["publish", "hello"]]) {
+      r = runCli([...args, "--project", root]);
+      assert.equal(r.status, 1, `${args.join(" ")}: ${outputOf(r)}`);
+      assert.equal(r.stderr, "avatars: hello: fixture narration has no audio, run: avatars voice hello\n", args.join(" "));
+    }
+    assert.ok(!existsSync(path.join(root, "renders")), "no render started");
+  });
+
+  test("gallery refuses an output directory that holds files it did not write", (t) => {
+    const tmp = tempDir(t);
+    const root = copyProject(DEMO, path.join(tmp, "demo"));
+    const r = runCli(["gallery", "--out", root], { cwd: tmp });
+    assert.equal(r.status, 1, outputOf(r));
+    assert.match(r.stderr, /^avatars: .*episodes holds files avatars gallery did not write \(episodes\/[^)]+\); choose an empty or gallery output directory\n$/);
+    for (const f of ["episodes/tour/index.html", "episodes/wardrobe/script.json", "avatars.json"]) assert.ok(existsSync(path.join(root, f)), `${f} is kept`);
+  });
+});
+
+describe("publish", () => {
+  test("WebVTT cue text escapes &, < and >, so text such as <Enter> or --> stays text", () => {
+    const vtt = webVtt([
+      { start: 0, end: 1.5, text: "Press <Enter> & x --> y" },
+      { start: 1.5, end: 3, text: "Q&amp;A" },
+    ]);
+    assert.equal(vtt, "WEBVTT\n\n1\n00:00:00.000 --> 00:00:01.500\nPress &lt;Enter&gt; &amp; x --&gt; y\n\n2\n00:00:01.500 --> 00:00:03.000\nQ&amp;amp;A\n");
   });
 });

@@ -1,6 +1,6 @@
 {
   "_comment": "Fixture project of test/resolve.test.mjs: the avatar kit on the base box-200x200, both in the project library, and episodes whose episode.json pick a case.",
-  "cast": { "host": { "avatar": "kit", "palette": { "cap.e": "#555555" } } },
+  "cast": { "host": { "avatar": "kit", "palette": { "cap.e": "#555555" }, "options": { "tops/box-shirt": { "pocket": true } } } },
   "theme": "midnight",
   "format": "landscape-1080p",
   "brand": "brand/brand.json",

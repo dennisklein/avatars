@@ -22,6 +22,12 @@ describe("flatten and merge", () => {
     assert.deepEqual(all.get("color.bg"), { value: "#000000", alpha: undefined, type: "color", source: "t" });
   });
 
+  test("skips _ keys, which are comments, in groups and in tokens", () => {
+    const all = flatten({ _comment: "x", color: { _c: "y", bg: { $value: "#000000", _why: "z" } } }, "t");
+    assert.deepEqual([...all.keys()], ["color.bg"]);
+    assert.equal(all.get("color.bg").value, "#000000");
+  });
+
   test("rejects a leaf that is neither a token nor a group", () => {
     assert.throws(() => flatten({ color: { bg: "#000000" } }, "theme.tokens.json"), /theme\.tokens\.json: color\.bg is not a token or group/);
     assert.throws(() => flatten({ size: [1, 2] }, "x"), /size is not a token or group/);

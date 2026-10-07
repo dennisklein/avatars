@@ -57,7 +57,7 @@ describe("broken manifests", () => {
     "episodes/dup/episode.json": ['top level: unknown key "look"', 'theme is "Midnight"; expected a library id: lowercase letters, digits, dots, dashes and underscores'],
     "episodes/dup/script.json": ['lines[2]: missing "text"', 'line id "intro" appears twice'],
     "library/avatars/echo/avatar.json": [],
-    "library/avatars/echo/voice.json": ['the default preset "loud" is not one of the presets (soft)'],
+    "library/avatars/echo/voice.json": ['presets.soft: missing "mix"', 'the default preset "loud" is not one of the presets (soft)'],
     "library/avatars/echo/looks/odd.json": [
       'top level: unknown key "colours"',
       /^palette\["top\.base"\] is "reddish"; expected a colour \(#rgb, .*\) or a token reference such as \{color\.accent\}$/,
@@ -129,6 +129,29 @@ describe("validateData", () => {
     assert.deepEqual(validateData("look", { id: "x", wear: ["tops/hoodie"], palette: { "top.base": "{color.accent}", "top.trim": "#14b8a6" } }), []);
     assert.equal(validateData("look", { id: "x", wear: ["hoodie"] }).length, 1);
     assert.match(validateData("look", { id: "x", wear: ["hoodie"] })[0], /^wear\[0\] is "hoodie"; expected <category>\/<name> for a library part/);
+  });
+
+  test("line ids are file names that a URL can load", () => {
+    const ids = (id) => validateData("script", { lines: [{ id, text: "x" }] });
+    for (const id of ["why?", "100%", "a#b", "a/b", "a\\b", ".", ".."]) {
+      assert.deepEqual(ids(id), [`lines[0].id is "${id}"; expected a file name without ?, # or %: it names the line's files, which the page loads by URL`], id);
+    }
+    for (const id of ["b.2", "intro", "step_3-a"]) assert.deepEqual(ids(id), [], id);
+  });
+
+  test("Kokoro presets (engine kokoro or none) need a mix and a speed from 0.5 to 2", () => {
+    const presets = (p) => validateData("voice", { presets: { p } });
+    assert.deepEqual(presets({ engine: "kokoro", voice: "af_heart" }), ['presets.p: missing "mix"']);
+    assert.deepEqual(presets({ voice: "af_heart" }), ['presets.p: missing "mix"']);
+    assert.deepEqual(presets({ mix: { af_heart: 1 }, speed: 0.3 }), ["presets.p.speed must be >= 0.5"]);
+    assert.deepEqual(presets({ mix: { af_heart: 1 }, speed: 2.5 }), ["presets.p.speed must be <= 2"]);
+    assert.deepEqual(presets({ mix: { af_heart: 1 }, speed: 2 }), []);
+    assert.deepEqual(presets({ engine: "other", voice: "x" }), [], "other engines take their own keys");
+  });
+
+  test("token trees take comments in groups and in tokens", () => {
+    assert.deepEqual(validateData("tokens", { _comment: "x", color: { _n: "y", bg: { $value: "#000", _why: "z" } } }), []);
+    assert.deepEqual(validateData("tokens", { color: { bg: { $value: "#000", why: "z" } } }), ['color.bg: unknown key "why"']);
   });
 
   test("an unknown kind is an error", () => {

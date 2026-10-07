@@ -3,11 +3,12 @@
 // The vendor bundle (cli/lib/bundle.mjs, vendor.mjs) and the render hash
 // (hash.mjs). The bundle is byte-identical across runs and checkouts and
 // follows the load order of DESIGN.md. The hash is stable, changes with the
-// episode, a lexicon entry its lines use and a library file its bundle
-// includes, and ignores unused lexicon entries, other library files and
-// generated files. The hash needs Python for the voice tool's keys.
+// episode (files behind symbolic links included), a lexicon entry its lines
+// use and a library file its bundle includes, and ignores unused lexicon
+// entries, other library files and generated files. The hash needs Python
+// for the voice tool's keys.
 import assert from "node:assert/strict";
-import { appendFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { appendFileSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { after, before, describe, test } from "node:test";
 import { pathToFileURL } from "node:url";
@@ -125,6 +126,23 @@ describe("vendor output across runs and checkouts", () => {
   });
 });
 
+describe("episode files", () => {
+  test("a symbolic link counts as what it points to; dangling links and links to a directory above are left out", (t) => {
+    const tmp = tempDir(t);
+    const dir = path.join(tmp, "episode");
+    mkdirSync(path.join(tmp, "imgdir"), { recursive: true });
+    mkdirSync(dir);
+    writeFileSync(path.join(dir, "a.txt"), "a\n");
+    writeFileSync(path.join(tmp, "outside.css"), "b {}\n");
+    writeFileSync(path.join(tmp, "imgdir", "p.png"), "png\n");
+    symlinkSync("../outside.css", path.join(dir, "ext.css"));
+    symlinkSync("../imgdir", path.join(dir, "img"), "dir");
+    symlinkSync(".", path.join(dir, "loop"), "dir");
+    symlinkSync("nowhere", path.join(dir, "dangling"));
+    assert.deepEqual(episodeFiles(dir), ["a.txt", "ext.css", "img/p.png"]);
+  });
+});
+
 describe("render hash", { skip: HAS_PYTHON ? false : "needs python3 (or AVATARS_PYTHON) for the voice tool's keys" }, () => {
   const tmp = suiteDir(before, after, "avatars-hash-");
   let a;
@@ -175,6 +193,22 @@ describe("render hash", { skip: HAS_PYTHON ? false : "needs python3 (or AVATARS_
       assert.notEqual(hashA(), h);
     } finally {
       rmSync(extra);
+    }
+    assert.equal(hashA(), h);
+  });
+
+  test("changes with a file behind a symbolic link", () => {
+    const h = hashA();
+    const target = path.join(tmp.path, "a", "shared.css");
+    const link = path.join(a.project, "episodes", ID, "shared.css");
+    writeFileSync(target, ".x { }\n");
+    symlinkSync(target, link);
+    try {
+      const linked = hashA();
+      assert.notEqual(linked, h);
+      assert.notEqual(withEdit(target, (s) => `${s}.y { }\n`, hashA), linked, "an edit of the target");
+    } finally {
+      rmSync(link);
     }
     assert.equal(hashA(), h);
   });

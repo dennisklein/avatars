@@ -213,7 +213,9 @@ describe("cast members", () => {
     const opts = (r, id) => r.cast.host.parts.find((p) => p.id === id).options;
     assert.deepEqual(opts(resolve("basic"), "headwear/box-cap"), { brim: "back", logo: true });
     assert.deepEqual(opts(resolve("basic"), "tops/box-shirt"), { pocket: true, tuck: false });
-    assert.deepEqual(opts(resolve("override"), "tops/box-shirt"), { pocket: false, tuck: true });
+    // The project's cast sets pocket over the bare look's false; the
+    // episode's cast sets tuck, and the two merge per option.
+    assert.deepEqual(opts(resolve("override"), "tops/box-shirt"), { pocket: true, tuck: true });
   });
 
   test("the bases and parts of the cast are in the data block", () => {
@@ -299,7 +301,7 @@ describe("episode.json", () => {
   test("leaves the project's own configuration alone", () => {
     resolve("override");
     assert.equal(project.config.theme, "midnight");
-    assert.deepEqual(project.config.cast, { host: { avatar: "kit", palette: { "cap.e": "#555555" } } });
+    assert.deepEqual(project.config.cast, { host: { avatar: "kit", palette: { "cap.e": "#555555" }, options: { "tops/box-shirt": { pocket: true } } } });
   });
 
   test("a brand's marks are parsed SVG", () => {

@@ -4,12 +4,14 @@
 // CLAUDE.md "Rules"): runtime code is a pure function of timeline time,
 // scenes and the core take colours from tokens only, every source file
 // carries the SPDX lines, every JSON file parses, the library names no
-// consuming project, and the plugin's version follows the package's.
+// consuming project, the plugin's version follows the package's, and the
+// package ships no generated files.
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { describe, test } from "node:test";
-import { REPO, walkFiles } from "./helpers.mjs";
+import { REPO, copyPackage, isGenerated, tempDir, walkFiles } from "./helpers.mjs";
 
 // Every file of the repository without generated ones (helpers.mjs mirrors
 // .gitignore), as paths with forward slashes.
@@ -169,10 +171,34 @@ describe("package", () => {
   });
 
   test("every path the package ships exists, and the command has a shebang", () => {
-    for (const entry of pkg.files) {
+    // Entries starting with ! leave files out.
+    for (const entry of pkg.files.filter((e) => !e.startsWith("!"))) {
       const literal = entry.replace(/\/\*.*$/, "");
       assert.ok(FILES.some((f) => f === literal || f.startsWith(`${literal}/`)), `files entry ${entry}`);
     }
     for (const bin of Object.values(pkg.bin)) assert.match(text(bin), /^#!\/usr\/bin\/env node\n/, bin);
+  });
+
+  // With a files list npm ignores the root .gitignore, so a pack from a
+  // working tree would ship what the gallery and Python leave there.
+  const npm = spawnSync("npm", ["--version"], { encoding: "utf8" });
+  test("npm pack leaves out the files the gallery and Python generate", { skip: npm.error || npm.status !== 0 ? "no npm" : false }, (t) => {
+    const tmp = tempDir(t);
+    const root = copyPackage(path.join(tmp, "package"));
+    for (const f of ["gallery/out/index.html", "gallery/out/avatars/sindy-hoodie-expr.png", "voice/engines/__pycache__/kokoro.cpython-312.pyc", "voice/__pycache__/avatar_voice.cpython-312.pyc"]) {
+      mkdirSync(path.dirname(path.join(root, f)), { recursive: true });
+      writeFileSync(path.join(root, f), "generated\n");
+    }
+    const r = spawnSync("npm", ["pack", "--dry-run", "--json", "--ignore-scripts"], {
+      cwd: root,
+      encoding: "utf8",
+      env: Object.assign({}, process.env, { npm_config_cache: path.join(tmp, "npm-cache"), npm_config_update_notifier: "false", npm_config_loglevel: "error" }),
+    });
+    assert.equal(r.status, 0, r.stderr);
+    const packed = JSON.parse(r.stdout)[0].files.map((f) => f.path);
+    assert.ok(packed.includes("cli/avatars.mjs") && packed.includes("gallery/sheet.html"), packed.join(", "));
+    // A path is generated when it or a directory above it is.
+    const generated = (f) => f.split("/").some((_, i, parts) => isGenerated(parts.slice(0, i + 1).join(path.sep)));
+    assert.deepEqual(packed.filter((f) => generated(f) || f.endsWith(".pyc")), []);
   });
 });

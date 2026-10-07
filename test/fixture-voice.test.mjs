@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 // Fixture narration (cli/lib/fixture-voice.mjs, `avatars fixture-voice`):
 // line JSON without audio that is deterministic and has plausible timings,
-// in the files the voice tool writes.
+// in the files the voice tool writes, for line ids that name files.
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { describe, test } from "node:test";
 import vm from "node:vm";
@@ -102,6 +102,26 @@ describe("writeFixtureVoice", () => {
     vm.runInContext(js, ctx);
     assert.deepEqual(Object.keys(ctx.window.AVATAR_LINES), ids);
     assert.equal(ctx.window.AVATAR_LINES[ids[0]].duration, index[0].duration);
+  });
+
+  test("refuses line ids that are not file names before it writes anything", (t) => {
+    const tmp = tempDir(t);
+    const script = path.join(tmp, "script.json");
+    const out = path.join(tmp, "voice");
+    const refuse = (lines, re) => {
+      writeFileSync(script, JSON.stringify({ lines }));
+      assert.throws(() => writeFixtureVoice(script, out), re, JSON.stringify(lines));
+      assert.ok(!existsSync(out), "nothing written");
+    };
+    for (const id of ["../x", "a/b", "a\\b", "why?", "100%", "a#b", ".", "..", ""]) {
+      refuse([{ id, text: "Hi." }], (e) => e.message === `script ${script}: line id "${id}" must be a file name without / \\ ? # %`);
+    }
+    refuse([{ id: "a", text: "Hi." }, { id: "a", text: "Ho." }], /line id "a" appears twice$/);
+    refuse([{ id: "a" }], /line 1 needs a string id and text$/);
+    refuse({}, /expected \{"lines": /);
+    writeFileSync(script, '{ "lines": [');
+    assert.throws(() => writeFixtureVoice(script, out), /^Error: script .*script\.json: /);
+    assert.ok(!existsSync(out));
   });
 
   test("avatars fixture-voice --all writes the same files on every run", (t) => {
