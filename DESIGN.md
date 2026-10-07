@@ -965,7 +965,8 @@ and `library`, no tokens, no grounding, no checks, and `publish` into
 - `scenes` lists project scenes by id; each needs `<id>.js` and may have
   `<id>.css` and `tokens.json`.
 - `episodes/<id>/episode.json` (optional) overrides `cast` (merged per role
-  and key), `theme`, `format` and `tokens` for one episode.
+  and key; `palette` per role name, `options` per part and option),
+  `theme`, `format` and `tokens` for one episode.
 - `grounding` turns on the check that every terminal command and output line
   and every code line an episode shows appears in a page that embeds it.
   Pages are the Markdown files (`.md`, `.markdown`) under `sources` (files

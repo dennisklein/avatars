@@ -283,9 +283,10 @@ describe("episode.json", () => {
     assert.deepEqual(r.episode.cast.host.voice, "calm");
   });
 
-  test("merges cast entries per role, the episode's entry over the project's", () => {
+  test("merges cast entries per role and key, the episode's entry over the project's", () => {
     const { palette } = resolve("override").cast.host;
     assert.equal(palette["pin.base"], "#00b000", "the episode's cast palette, {color.info} after the project's override");
+    assert.equal(palette["cap.e"], "#555555", "the project's cast palette merges per role name");
   });
 
   test("may switch the avatar", () => {

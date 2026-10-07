@@ -376,9 +376,10 @@ The demo's `wardrobe` episode wears another look on the light theme:
 ```
 
 - `cast` merges over the project's cast per role and key: `avatar`, `look`,
-  `palette` (role → colour or `{token}`), `options` (part id → options) and
-  `voice` (a preset of the avatar's `voice.json`). A new `avatar` keeps the
-  project's `look` name, so name its look too.
+  `palette` (role → colour or `{token}`, merged per role name), `options`
+  (part id → options, merged per part and option) and `voice` (a preset of
+  the avatar's `voice.json`). A new `avatar` keeps the project's `look`
+  name, so name its look too.
 - `theme` and `format` are ids. The page head must declare exactly the
   theme's `@font-face` rules; `check` prints them when they differ. A format
   with another canvas also needs the viewport meta and the root's

@@ -129,11 +129,22 @@ function svgFiles(dir) {
     .sort();
 }
 
-// Cast entries: the project's, with the episode's merged in per role.
+// Cast entries: the project's, with the episode's merged in per role and
+// key; palette merges per role name and options per part and option, so an
+// episode can change one colour without restating the others.
 function mergeCast(base, over) {
   const out = {};
   for (const [role, m] of Object.entries(base || {})) out[role] = Object.assign({}, m);
-  for (const [role, m] of Object.entries(over || {})) out[role] = Object.assign({}, out[role] || {}, m);
+  for (const [role, m] of Object.entries(over || {})) {
+    const prev = out[role] || {};
+    const entry = Object.assign({}, prev, m);
+    if (prev.palette || m.palette) entry.palette = Object.assign({}, prev.palette, m.palette);
+    if (prev.options || m.options) {
+      entry.options = Object.assign({}, prev.options);
+      for (const [id, o] of Object.entries(m.options || {})) entry.options[id] = Object.assign({}, entry.options[id], o);
+    }
+    out[role] = entry;
+  }
   if (!out.host) throw new Error("the cast has no host");
   return out;
 }
