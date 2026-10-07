@@ -3,13 +3,14 @@
 // `avatars check`: load an episode's composition outside the render runtime
 // and report what an author cannot see in a still: the timeline, console
 // warnings, page errors, missing files and network fetches, narration that
-// is never said or changed since it was voiced, dead air, clipped diagram
-// text, terminal and code content that is not grounded in the episode's
-// pages, the project's own checks, then lint and two stills per chapter as
-// contact sheets. Before loading it validates the project's and the
-// episode's manifests, rebuilds a stale vendor/, and compares the page's
-// @font-face rules with the theme's fonts; it also checks the theme's
-// contrast pairs and gestures the presenter's base cannot perform.
+// is never said, changed since it was voiced or voiced with other settings,
+// dead air, clipped diagram text, a wordmark that runs under the presenter,
+// terminal and code content that is not grounded in the episode's pages,
+// the project's own checks, then lint and two stills per chapter as contact
+// sheets. Before loading it validates the project's and the episode's
+// manifests, rebuilds a stale vendor/, and compares the page's @font-face
+// rules with the theme's fonts; it also checks the theme's contrast pairs
+// and gestures the presenter's base cannot perform.
 // Errors fail the command; warnings do not.
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
@@ -22,6 +23,7 @@ import { snapshot, stillTimes } from "./stills.mjs";
 import { contrast } from "./tokens.mjs";
 import { validateItems } from "./validate.mjs";
 import { refreshVendor } from "./vendor.mjs";
+import { voiceKeys } from "./voice.mjs";
 
 // m:ss.s, rounded first so that 59.96 s prints as 1:00.0, not 0:60.0.
 export const clock = (t) => {
@@ -198,6 +200,7 @@ export async function checkEpisode(project, id, opts = {}) {
 
   // The composition, loaded as a browser would.
   let ep = null;
+  let voiced = {};
   const browser = await launch();
   try {
     const { page, log } = await openEpisode(browser, dir, { width: r.format.width, height: r.format.height, init: [recordPresenters] });
@@ -209,6 +212,21 @@ export async function checkEpisode(project, id, opts = {}) {
       [...document.querySelectorAll(".dnode .t1, .dnode .t2")].filter((e) => e.scrollWidth > e.clientWidth + 1).map((e) => e.textContent)
     );
     for (const text of clipped) warnings.push(`text cut off in a diagram node: "${text}"; widen the node (width) or shorten the text`);
+    // The intro draws the brand's wordmark at a fixed size beside the hero shot's presenter.
+    const hero = ((r.format.shots || {}).hero || {}).frame;
+    const marks = await page.evaluate(() =>
+      [...document.querySelectorAll(".scene-intro .wordmark")].map((e) => {
+        const range = document.createRange();
+        range.selectNodeContents(e);
+        const box = range.getBoundingClientRect();
+        return { text: e.textContent, right: box.width ? box.right : null };
+      })
+    );
+    for (const m of hero ? marks : []) {
+      if (m.right != null && m.right > hero.left + 0.5) {
+        warnings.push(`wordmark "${m.text}" runs under the presenter (it ends at x=${Math.round(m.right)}, the presenter starts at x=${hero.left}); shorten brand.wordmark or set a smaller intro.wordmark-size in the brand's tokens`);
+      }
+    }
     // Fixture narration (fixture-voice) has timings but no audio files.
     const fixture = new Set(await page.evaluate(() => Object.keys(window.AVATAR_LINES || {}).filter((k) => window.AVATAR_LINES[k] && window.AVATAR_LINES[k].fixture)));
     const silent = (f) => {
@@ -216,6 +234,10 @@ export async function checkEpisode(project, id, opts = {}) {
       return m && fixture.has(m[1]);
     };
     if (fixture.size) warnings.push(`${fixture.size} lines have fixture narration without audio; run: avatars voice ${id} before rendering`);
+    voiced = await page.evaluate(() => {
+      const L = window.AVATAR_LINES || {};
+      return Object.fromEntries(Object.keys(L).filter((k) => L[k] && !L[k].fixture).map((k) => [k, { text: L[k].text, hash: L[k].hash }]));
+    });
     for (const w of log.warnings) warnings.push(`console: ${w}`);
     for (const e of log.errors) errors.push(`page error: ${e}`);
     for (const f of log.missing) if (!silent(f)) errors.push(`missing file: ${path.relative(dir, f)}`);
@@ -239,6 +261,21 @@ export async function checkEpisode(project, id, opts = {}) {
     const said = ep.lines.find((l) => l.id === line.id);
     if (!said) warnings.push(`line "${line.id}" is in script.json but never said`);
     else if (said.text !== line.text) errors.push(`line "${line.id}" changed since it was voiced, run: avatars voice ${id}`);
+  }
+  // A voiced line whose cache key changed (the preset, the lexicon entries
+  // its words use, its lead) would sound different voiced again. The keys
+  // come from the voice tool, so fixture narration needs no Python.
+  const keyed = (script.lines || []).filter((l) => l && Object.hasOwn(voiced, l.id) && voiced[l.id].text === l.text);
+  if (keyed.length) {
+    let keys = null;
+    try {
+      keys = voiceKeys(r);
+    } catch (e) {
+      errors.push(`cannot compare the narration with its voice keys: ${e.message}`);
+    }
+    for (const line of keys ? keyed : []) {
+      if (voiced[line.id].hash !== keys[line.id]) errors.push(`line "${line.id}" is stale (its voice, lexicon entries or lead changed), run: avatars voice ${id}`);
+    }
   }
   for (let i = 1; i < ep.lines.length; i++) {
     const gap = ep.lines[i].start - ep.lines[i - 1].end;
