@@ -316,6 +316,13 @@ describe("parseSvg", () => {
     assert.deepEqual(parseSvg(svg, "x.svg"), { viewBox: [0, 0, 24, 24], body: '<path d="M1 1"/><circle r="2"/>' });
   });
 
+  test("leaves no comment or title that one pass of removal would join together", () => {
+    const body = (inner) => parseSvg(`<svg viewBox="0 0 1 1">${inner}</svg>`, "x.svg").body;
+    assert.equal(body('<!-<!-- a -->-- b --><path d="M0 0"/>'), '<path d="M0 0"/>');
+    assert.equal(body('<tit<title>a</title>le>b</title><path d="M0 0"/>'), '<path d="M0 0"/>');
+    assert.equal(body('<path d="M0 0"/><!-- unterminated <circle r="1"/>'), '<path d="M0 0"/>');
+  });
+
   test("rejects files without an svg element or a viewBox", () => {
     assert.throws(() => parseSvg("<g/>", "a.svg"), /a\.svg: not an SVG document/);
     assert.throws(() => parseSvg('<svg width="24"></svg>', "b.svg"), /b\.svg: the <svg> element has no viewBox/);

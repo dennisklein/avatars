@@ -105,7 +105,21 @@ function need(project, rel, what) {
 
 const optional = (project, rel) => locate(project, rel);
 
-// The viewBox and inner markup of an SVG file (marks, icons).
+// `text` without any match of `re`. One pass can join the text around a
+// match into another one ("<!-<!-- x -->-" leaves "<!--"), so it repeats
+// until nothing matches.
+function removeAll(text, re) {
+  let prev;
+  do {
+    prev = text;
+    text = text.replace(re, "");
+  } while (text !== prev);
+  return text;
+}
+
+// The viewBox and inner markup of an SVG file (marks, icons), without
+// comments (an unterminated one runs to the end, as browsers read it) and
+// titles.
 export function parseSvg(text, what) {
   const m = /<svg\b([^>]*)>([\s\S]*)<\/svg>\s*$/i.exec(text.trim());
   if (!m) throw new Error(`${what}: not an SVG document`);
@@ -113,9 +127,7 @@ export function parseSvg(text, what) {
   if (!vb) throw new Error(`${what}: the <svg> element has no viewBox`);
   const viewBox = vb[1].trim().split(/[\s,]+/).map(Number);
   if (viewBox.length !== 4 || viewBox.some((n) => !Number.isFinite(n))) throw new Error(`${what}: bad viewBox "${vb[1]}"`);
-  const body = m[2]
-    .replace(/<!--[\s\S]*?-->/g, "")
-    .replace(/<title\b[\s\S]*?<\/title>/gi, "")
+  const body = removeAll(removeAll(m[2], /<!--[\s\S]*?(?:-->|$)/g), /<title\b[\s\S]*?<\/title>/gi)
     .split("\n")
     .map((l) => l.trim())
     .filter(Boolean)
