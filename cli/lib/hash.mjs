@@ -6,7 +6,7 @@
 // change re-renders exactly the episodes whose bundle or voice it changes.
 // Nothing in it depends on where the project or this package are checked out.
 import { createHash } from "node:crypto";
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, realpathSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { bundleFiles } from "./bundle.mjs";
@@ -21,14 +21,30 @@ const PUBLISH = fileURLToPath(new URL("./publish.mjs", import.meta.url));
 const SKIP_NAMES = new Set(["node_modules", "vendor", "renders", "snapshots", ".hyperframes"]);
 const SKIP_PATHS = new Set(["assets/voice"]);
 
-// The episode's own files, as sorted paths relative to its directory.
-export function episodeFiles(dir, prefix = "") {
+const statOrNull = (p) => {
+  try {
+    return statSync(p);
+  } catch {
+    return null;
+  }
+};
+
+// The episode's own files, as sorted paths relative to its directory. A
+// symbolic link counts as what it points to (a dangling one is left out, and
+// a link to a directory above is not followed again).
+export function episodeFiles(dir, prefix = "", above = new Set()) {
   if (!existsSync(dir)) return [];
+  const real = realpathSync(dir);
+  if (above.has(real)) return [];
+  const inside = new Set(above).add(real);
   const out = readdirSync(dir, { withFileTypes: true }).flatMap((d) => {
     const rel = prefix + d.name;
     if (SKIP_NAMES.has(d.name) || SKIP_PATHS.has(rel)) return [];
-    if (d.isDirectory()) return episodeFiles(path.join(dir, d.name), `${rel}/`);
-    return d.isFile() ? [rel] : [];
+    const full = path.join(dir, d.name);
+    const kind = d.isSymbolicLink() ? statOrNull(full) : d;
+    if (!kind) return [];
+    if (kind.isDirectory()) return episodeFiles(full, `${rel}/`, inside);
+    return kind.isFile() ? [rel] : [];
   });
   return out.sort();
 }
