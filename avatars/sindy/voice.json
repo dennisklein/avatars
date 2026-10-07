@@ -1,0 +1,10 @@
+{
+  "default": "sindy",
+  "sample": "Hi, I'm Sindy! Today we'll build something together, one step at a time. Ready? Let's go!",
+  "presets": {
+    "sindy": { "engine": "kokoro", "mix": { "af_heart": 0.6, "af_bella": 0.4 }, "speed": 1.05, "lang": "en-us" },
+    "sindy-anime": { "engine": "kokoro", "mix": { "af_heart": 0.6, "af_bella": 0.4 }, "speed": 1.05, "pitch": 2.5, "lang": "en-us" },
+    "sindy-bright": { "engine": "kokoro", "mix": { "af_heart": 0.5, "af_sky": 0.3, "af_nicole": 0.2 }, "speed": 1.08, "pitch": 1.5, "lang": "en-us" },
+    "sindy-soft": { "engine": "kokoro", "mix": { "af_bella": 0.5, "af_aoede": 0.5 }, "speed": 1.0, "lang": "en-us" }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "sindy/ahoge",
+  "category": "hair",
+  "title": "Sindy's ahoge (antenna strand)",
+  "fits": ["anime-600x800"],
+  "slots": ["hair-top"],
+  "roles": ["hair.base"],
+  "defaults": {},
+  "colourways": {},
+  "hides": [],
+  "marks": [],
+  "options": {}
+}

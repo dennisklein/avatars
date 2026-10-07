@@ -1,0 +1,16 @@
+{
+  "id": "hoodie",
+  "title": "Slate hoodie with the brand emblem",
+  "wear": ["hair/long-bangs", "sindy/ahoge", "tops/hoodie", "accessories/emblem-patch", "accessories/emblem-clip"],
+  "colourways": {},
+  "palette": {
+    "top.base": "{color.slate.800}",
+    "top.light": "{color.slate.700}",
+    "top.dark": "{color.slate.900}",
+    "top.inner": "#e6f6f8",
+    "top.seam": "{color.slate.600}",
+    "top.trim": "{color.accent}",
+    "top.trim-tip": "{color.info}"
+  },
+  "options": {}
+}
