@@ -1,0 +1,50 @@
+/* SPDX-FileCopyrightText: 2026 Dennis Klein <d.klein@gsi.de> */
+/* SPDX-License-Identifier: Apache-2.0 */
+/* Shared look of every episode: page, scene layers, backgrounds, chapter
+   label, presenter frame, captions, card text, window bar, slide title and
+   the final fade. Colours, fonts, text sizes and radii are tokens; the canvas
+   size comes from the format. */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: var(--av-format-width); height: var(--av-format-height); overflow: hidden; background: var(--av-color-bg); }
+#root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: var(--av-font-sans); color: var(--av-color-text); }
+
+/* Scenes: full-frame layers; the timeline owns their visibility. */
+.scene { position: absolute; inset: 0; overflow: hidden; visibility: hidden; opacity: 0; background: var(--av-color-bg); }
+.bg-glow { position: absolute; inset: 0; background: radial-gradient(circle at 72% 45%, var(--av-glow-accent) 0%, var(--av-glow-fade) 55%), radial-gradient(circle at 12% 90%, var(--av-glow-info) 0%, var(--av-glow-fade) 45%), var(--av-color-bg); }
+.bg-grid { position: absolute; inset: 0; opacity: var(--av-grid-opacity); background-image: linear-gradient(var(--av-grid-line) 1px, var(--av-grid-fade) 1px), linear-gradient(90deg, var(--av-grid-line) 1px, var(--av-grid-fade) 1px); background-size: var(--av-grid-size) var(--av-grid-size); }
+
+/* Chapter label (top-left). */
+.chapter { position: absolute; left: 80px; top: 56px; display: flex; align-items: center; gap: 16px; font-size: var(--av-chapter-size); font-weight: var(--av-chapter-weight); color: var(--av-chapter-color); letter-spacing: 0.02em; }
+.chapter b { color: var(--av-chapter-accent); font-weight: var(--av-chapter-weight); }
+.chapter .dot { width: 10px; height: 10px; border-radius: var(--av-chapter-dot-radius); background: var(--av-chapter-dot); }
+
+/* Presenter frame: backdrop and ring show in the round shots. */
+.presenter-frame { position: absolute; z-index: 10; overflow: hidden; }
+.presenter-bg { position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(circle at 50% 40%, var(--av-presenter-backdrop-inner) 0%, var(--av-presenter-backdrop-outer) 70%); opacity: 0; }
+.presenter-ring { position: absolute; inset: 0; border-radius: inherit; border: 6px solid var(--av-presenter-ring); box-shadow: inset 0 0 0 3px var(--av-presenter-ring-inset); opacity: 0; z-index: 2; }
+.presenter-stage { position: absolute; }
+
+/* Captions. */
+#captions { position: absolute; z-index: 20; left: 0; right: 0; bottom: 48px; display: flex; justify-content: center; pointer-events: none; }
+.cap-box { max-width: 1000px; padding: 14px 30px; border-radius: var(--av-caption-radius); background: var(--av-caption-bg); border: 1px solid var(--av-caption-border); font-size: var(--av-caption-size); font-weight: var(--av-caption-weight); line-height: 1.3; text-align: center; color: var(--av-caption-text); opacity: 0; }
+.cap-w.on { color: var(--av-caption-text-on); }
+
+/* Title cards (talk, outro) and their text. */
+.card { display: flex; flex-direction: column; gap: 28px; }
+.kicker { font-size: var(--av-kicker-size); font-weight: var(--av-kicker-weight); color: var(--av-kicker-color); text-transform: uppercase; letter-spacing: 0.14em; }
+.headline { font-size: var(--av-headline-size); font-weight: var(--av-headline-weight); line-height: 1.02; color: var(--av-headline-color); letter-spacing: -0.02em; }
+
+/* Slide frame (slide, diagram, code and custom scenes). */
+.slide-title { position: absolute; left: 120px; top: 150px; font-size: var(--av-slide-title-size); font-weight: var(--av-slide-title-weight); color: var(--av-slide-title-color); letter-spacing: -0.02em; }
+
+/* Window bar of terminals and file panels. */
+.term-bar { height: var(--av-window-bar-height); display: flex; align-items: center; gap: 12px; padding: 0 22px; background: var(--av-window-bar-bg); border-bottom: 2px solid var(--av-window-bar-border); }
+.term-bar i { width: 16px; height: 16px; border-radius: var(--av-radius-circle); display: block; }
+.term-bar .dot-close { background: var(--av-window-dot-close); }
+.term-bar .dot-min { background: var(--av-window-dot-min); }
+.term-bar .dot-max { background: var(--av-window-dot-max); }
+.term-bar .title { margin-left: 18px; font-family: var(--av-font-mono); font-size: var(--av-window-title-size); color: var(--av-window-title-color); }
+
+/* Final fade. */
+#blackout { position: absolute; inset: 0; z-index: 50; background: var(--av-blackout-bg); opacity: 0; }
