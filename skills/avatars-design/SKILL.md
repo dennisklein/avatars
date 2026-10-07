@@ -151,8 +151,10 @@ others reference `url(#${ctx.clip("face").id})`), `color(role)`,
   at 300, 283, the neck pivot at 300, 500).
 - `build` creates the nodes once; `update` sets every per-frame attribute
   from the pose alone (`t`, `expr`, `mouth`, `gaze`, `head`, `headLag`,
-  `breath`, `blink`, `gestures`), so frames render in any order. Hair and
-  accessories lag behind the head with `pose.head` minus `pose.headLag`.
+  `breath`, `blink`, `gestures`), so frames render in any order. An
+  attribute set on some frames is set on every frame, also while its element
+  is hidden. Hair and accessories lag behind the head with `pose.head` minus
+  `pose.headLag`.
 - A part that draws a mark draws nothing without one, fits the mark's
   `viewBox` centred into its square and inserts the markup as is.
 - Never crossfade stacked features with opacity (the result looks ghosted);

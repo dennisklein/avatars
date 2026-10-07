@@ -43,8 +43,14 @@
         r.mouthFill.setAttribute("d", "");
         r.mouthOutline.setAttribute("d", "");
         r.mouthClip.setAttribute("d", "");
+        // Hidden elements return to their built state, so a frame's markup
+        // never depends on the frames rendered before it.
         r.teeth.setAttribute("opacity", "0");
+        r.teeth.setAttribute("y", "-20");
+        r.teeth.setAttribute("height", "8");
         r.tongue.setAttribute("opacity", "0");
+        r.tongue.setAttribute("cy", "16");
+        r.tongue.setAttribute("rx", "16");
       } else {
         const top = -h * 0.28 - smile * 2;
         const bot = h * 0.72 + smile * 3;
@@ -53,6 +59,7 @@
           `M${f1(L)},${f1(cornerY)} ` +
           `C${f1(L + w * 0.12 - rr)},${f1(top)} ${f1(R - w * 0.12 + rr)},${f1(top)} ${f1(R)},${f1(cornerY)} ` +
           `C${f1(R - w * 0.02 + rr)},${f1(bot)} ${f1(L + w * 0.02 - rr)},${f1(bot)} ${f1(L)},${f1(cornerY)} Z`;
+        r.mouthLine.setAttribute("d", "");
         r.mouthLine.setAttribute("opacity", "0");
         r.mouthFill.setAttribute("d", d);
         r.mouthOutline.setAttribute("d", d);

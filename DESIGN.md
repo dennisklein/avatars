@@ -430,10 +430,13 @@ The part context:
 | `base` | the base's `base.json` |
 
 Parts draw in base units and set every per-frame attribute in `update` from
-the pose alone, so frames render in any order. A part may keep an element in
-screen orientation by counter-rotating it in `update` (round glasses keep the
-angle of their glint with `rotate(-pose.head.rot)` about the lens centre and
-slide it by `-pose.head.yaw`), still from the pose alone.
+the pose alone, so frames render in any order. An attribute set on some frames
+is set on every frame, hidden elements included (a hidden element returns to
+its built state), so a frame's markup never depends on the frames rendered
+before it; a base's `apply` follows the same rule. A part may keep an element
+in screen orientation by counter-rotating it in `update` (round glasses keep
+the angle of their glint with `rotate(-pose.head.rot)` about the lens centre
+and slide it by `-pose.head.yaw`), still from the pose alone.
 
 Palette roles are named `<group>.<name>`. The `anime-600x800` parts paint
 with `skin.base`, `skin.shade`, `skin.line`, `skin.blush`; `hair.base`,

@@ -20,10 +20,9 @@ const FRAME_DIFF = path.join(REPO, "cli", "tools", "frame-diff.mjs");
 const THEMES = readdirSync(path.join(REPO, "themes")).sort();
 
 // In the page: a presenter with speech, moods, gaze and every gesture its
-// base animates, rendered at times forward and backward. A frame is the SVG
-// markup that can reach pixels: a group hidden with opacity="0" or
-// display="none" may keep stale attributes, as in frame-diff. Returns what
-// the test asserts on.
+// base animates, rendered at times forward and backward. A frame is the
+// presenter's whole SVG markup, hidden groups included: every attribute must
+// follow from the pose at that time. Returns what the test asserts on.
 function renderFrames() {
   const A = window.Avatars;
   const member = A.data.cast.host;
@@ -39,7 +38,6 @@ function renderFrames() {
   });
   const times = [0, 0.35, 0.8, 1.6, 2.4, 3.3, 5.1, 9.7, 31.4];
   const shown = (n) => {
-    if (n.getAttribute("opacity") === "0" || n.getAttribute("display") === "none") return "";
     const attrs = [...n.attributes].map((a) => ` ${a.name}="${a.value}"`).join("");
     return `<${n.tagName}${attrs}>${[...n.children].map(shown).join("")}</${n.tagName}>`;
   };

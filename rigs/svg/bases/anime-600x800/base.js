@@ -98,7 +98,14 @@
         b.armRot.setAttribute("transform", `rotate(${(5 + wag * 8).toFixed(2)})`);
         b.hand.setAttribute("transform", `translate(0,-310) rotate(${(wag * 12).toFixed(2)})`);
       }
-      if (!armShown) b.arm.setAttribute("opacity", "0");
+      // Between waves the arm returns to its rest state, so a frame's markup
+      // never depends on the frames rendered before it.
+      if (!armShown) {
+        b.arm.setAttribute("opacity", "0");
+        b.arm.removeAttribute("transform");
+        b.armRot.removeAttribute("transform");
+        b.hand.setAttribute("transform", "translate(0,-310)");
+      }
     },
   });
 })(typeof window !== "undefined" ? window : globalThis);
