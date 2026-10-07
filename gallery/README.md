@@ -55,6 +55,10 @@ the next run publishes only the videos whose episode, narration, theme or
 library code changed. A run that made every video removes the `gallery-*`
 entries it did not use, so the store holds only the current videos.
 
+`.github/workflows/gallery.yml` builds the gallery of `main` this way: it
+voices the demo with the voice model from the Actions cache, keeps the store
+in the Actions cache, and deploys the page to GitHub Pages.
+
 ## Avatar sheets
 
 `sheet.html` draws one avatar. `avatars sheet` copies it into a temporary

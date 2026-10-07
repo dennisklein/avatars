@@ -250,7 +250,8 @@ has a complete workflow that builds and deploys a Hugo site to GitHub Pages.
 
 The library's own workflows are `.github/workflows/ci.yml` (Node and Python
 tests, schema validation, REUSE, and a quick check of the demo episodes with
-fixture narration) and `gallery.yml` (the gallery on GitHub Pages).
+fixture narration) and `gallery.yml` (the gallery with the demo videos,
+voiced and rendered in CI, on GitHub Pages).
 
 ## The Hugo shortcode
 
