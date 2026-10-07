@@ -1,7 +1,5 @@
-/*
- * SPDX-FileCopyrightText: 2026 Dennis Klein <d.klein@gsi.de>
- * SPDX-License-Identifier: Apache-2.0
- */
+/* SPDX-FileCopyrightText: 2026 Dennis Klein <d.klein@gsi.de> */
+/* SPDX-License-Identifier: Apache-2.0 */
 
 /* The player of the video shortcode (layouts/shortcodes/video.html).
    Colours are custom properties whose fallbacks derive from the text colour,
