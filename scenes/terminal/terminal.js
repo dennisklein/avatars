@@ -14,6 +14,20 @@
 
   const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
   const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const reEsc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  // The HTML of a line with every occurrence of the marks in a highlight.
+  // Marks match the raw text in one pass, longest first, and each piece is
+  // escaped once, so a mark never matches markup or an entity.
+  function highlight(text, marks) {
+    const list = [...new Set(marks.filter(Boolean))].sort((a, b) => b.length - a.length);
+    if (!list.length) return esc(text);
+    const re = new RegExp(`(${list.map(reEsc).join("|")})`);
+    return text
+      .split(re)
+      .map((s, i) => (i % 2 ? `<span class="term-hl">${esc(s)}</span>` : esc(s)))
+      .join("");
+  }
 
   // steps: [{ at, cmd } | { at, out } | { at, prompt: true } | { at, ff, hold? } | { at, mark, until? } | { at, clear: true }]
   // cmd lines are typed (deterministic per-char timing), out lines appear at once.
@@ -67,8 +81,7 @@
       lastKey = key;
       body.innerHTML = view
         .map((l, i) => {
-          let html = esc(l.text);
-          for (const m of marks) html = html.split(esc(m)).join(`<span class="term-hl">${esc(m)}</span>`);
+          const html = highlight(l.text, marks);
           const isLast = i === view.length - 1;
           const cur = isLast && cursorOn ? '<span class="term-cursor"></span>' : "";
           return l.kind === "cmd"
