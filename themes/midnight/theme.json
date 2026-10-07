@@ -1,0 +1,36 @@
+{
+  "id": "midnight",
+  "title": "Midnight",
+  "fonts": [
+    { "family": "Inter", "weight": "400", "file": "inter-400.woff2", "src": "@fontsource/inter/files/inter-latin-400-normal.woff2" },
+    { "family": "Inter", "weight": "600", "file": "inter-600.woff2", "src": "@fontsource/inter/files/inter-latin-600-normal.woff2" },
+    { "family": "Inter", "weight": "700 800", "file": "inter-800.woff2", "src": "@fontsource/inter/files/inter-latin-800-normal.woff2" },
+    { "family": "JetBrains Mono", "weight": "400", "file": "jetbrains-mono-400.woff2", "src": "@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2" },
+    { "family": "JetBrains Mono", "weight": "700", "file": "jetbrains-mono-700.woff2", "src": "@fontsource/jetbrains-mono/files/jetbrains-mono-latin-700-normal.woff2" }
+  ],
+  "contrast": [
+    ["color.text", "color.bg", 4.5],
+    ["color.text-strong", "color.bg", 4.5],
+    ["color.text-muted", "color.bg", 4.5],
+    ["color.accent-soft", "color.bg", 4.5],
+    ["color.text", "color.surface", 4.5],
+    ["color.text-strong", "color.surface", 4.5],
+    ["color.text-muted", "color.surface", 4.5],
+    ["color.accent-soft", "color.surface", 4.5],
+    ["color.text-strong", "color.surface-raised", 4.5],
+    ["color.text-muted", "color.surface-raised", 4.5],
+    ["color.text", "color.surface-sunken", 4.5],
+    ["color.text-dim", "color.surface-sunken", 4.5],
+    ["color.accent", "color.surface-sunken", 4.5],
+    ["color.info-soft", "color.surface-sunken", 4.5],
+    ["color.code-comment", "color.surface-sunken", 4.5],
+    ["color.code-keyword", "color.surface-sunken", 4.5],
+    ["color.text-muted", "color.surface-bar", 4.5],
+    ["color.on-accent", "color.accent-soft", 4.5],
+    ["caption.text-on", "caption.bg", 4.5],
+    ["caption.text", "caption.bg", 4.5],
+    ["intro.disclosure-color", "color.bg", 4.4],
+    ["diagram.title-color", "diagram.node-accent-bg", 4.5],
+    ["diagram.text-color", "diagram.node-accent-bg", 4.5]
+  ]
+}

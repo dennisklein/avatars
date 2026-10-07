@@ -1,0 +1,40 @@
+{
+  "$description": "Midnight: slate surfaces with a teal accent and a sky-blue second accent.",
+  "color": {
+    "bg": { "$value": "{color.slate.900}", "$type": "color" },
+    "bg-alt": { "$value": "#111c33", "$type": "color" },
+    "surface": { "$value": "{color.slate.800}", "$type": "color" },
+    "surface-raised": { "$value": "#16213a", "$type": "color" },
+    "surface-sunken": { "$value": "#0b1220", "$type": "color" },
+    "surface-bar": { "$value": "#111a2c", "$type": "color" },
+    "border": { "$value": "{color.slate.700}", "$type": "color" },
+    "border-subtle": { "$value": "#1c2740", "$type": "color" },
+    "text": { "$value": "{color.slate.200}", "$type": "color" },
+    "text-strong": { "$value": "{color.white}", "$type": "color" },
+    "text-muted": { "$value": "{color.slate.400}", "$type": "color" },
+    "text-dim": { "$value": "#a3b3c9", "$type": "color" },
+    "accent": { "$value": "{color.teal.500}", "$type": "color" },
+    "accent-strong": { "$value": "{color.teal.600}", "$type": "color" },
+    "accent-soft": { "$value": "{color.teal.300}", "$type": "color" },
+    "info": { "$value": "{color.sky.500}", "$type": "color" },
+    "info-soft": { "$value": "{color.sky.400}", "$type": "color" },
+    "ok": { "$value": "{color.emerald.400}", "$type": "color" },
+    "warn": { "$value": "{color.amber.400}", "$type": "color" },
+    "danger": { "$value": "{color.red.400}", "$type": "color" },
+    "on-accent": { "$value": "#0b1220", "$type": "color" },
+    "code-comment": { "$value": "#8a9bb3", "$type": "color" },
+    "code-keyword": { "$value": "{color.violet.300}", "$type": "color" }
+  },
+  "font": {
+    "sans": { "$value": "{font.family.inter}", "$type": "fontFamily" },
+    "mono": { "$value": "{font.family.jetbrains-mono}", "$type": "fontFamily" },
+    "mono-advance": { "$value": 0.6, "$type": "number", "$description": "advance width of font.mono per character, in em" }
+  },
+  "presenter": {
+    "backdrop-inner": { "$value": "#155e63", "$type": "color" },
+    "backdrop-outer": { "$value": "#0f2a3a", "$type": "color" }
+  },
+  "diagram": {
+    "node-accent-bg": { "$value": "#12303a", "$type": "color" }
+  }
+}
