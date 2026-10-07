@@ -1,0 +1,12 @@
+node_modules/
+__pycache__/
+*.pyc
+.hyperframes/
+**/.hyperframes/
+# Generated per episode by the CLI (vendor, voice, check) and by renders.
+**/vendor/
+**/assets/voice/
+**/snapshots/
+renders/
+**/renders/
+gallery/out/

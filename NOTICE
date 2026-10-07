@@ -1,0 +1,10 @@
+avatars
+Copyright 2026 Dennis Klein <d.klein@gsi.de>
+
+This product is licensed under the Apache License, Version 2.0 (LICENSE).
+
+It installs, but does not include, third-party software under its own
+licenses, among them GSAP (Standard "no charge" license), HyperFrames
+(Apache-2.0), puppeteer-core (Apache-2.0), the Inter and JetBrains Mono fonts
+(SIL Open Font License 1.1) and, at setup time, the Kokoro-82M voice model
+(Apache-2.0).

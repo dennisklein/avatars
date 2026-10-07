@@ -1,0 +1,19 @@
+version = 1
+
+# Files that cannot carry a comment header (data, markup without comments,
+# images) are covered here; source files carry SPDX headers themselves.
+[[annotations]]
+path = [
+  "**/*.json",
+  "**/*.md",
+  "**/*.svg",
+  "**/*.png",
+  "**/*.html",
+  "**/*.txt",
+  ".gitignore",
+  "**/.gitignore",
+  "NOTICE",
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Dennis Klein <d.klein@gsi.de>"
+SPDX-License-Identifier = "Apache-2.0"

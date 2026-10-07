@@ -1,0 +1,52 @@
+{
+  "name": "@dennisklein/avatars",
+  "version": "0.1.0",
+  "description": "Instructor avatars, scenes and a design system for deterministic motion-graphics tutorial videos rendered with HyperFrames",
+  "license": "Apache-2.0",
+  "author": "Dennis Klein <d.klein@gsi.de>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dennisklein/avatars.git"
+  },
+  "type": "module",
+  "bin": {
+    "avatars": "cli/avatars.mjs"
+  },
+  "files": [
+    "avatars",
+    "cli",
+    "core",
+    "formats",
+    "gallery",
+    "icons",
+    "integrations",
+    "lexicons",
+    "parts",
+    "rigs",
+    "scenes",
+    "templates",
+    "themes",
+    "tokens",
+    "voice/*.py",
+    "voice/engines",
+    "voice/requirements.txt",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test test/",
+    "test:voice": "python3 -m unittest discover -s voice/tests -t .",
+    "gallery": "node cli/avatars.mjs gallery --out gallery/out"
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "ajv": "^8.17.1",
+    "gsap": "^3.15.0",
+    "hyperframes": "0.8.115",
+    "puppeteer-core": "^25.12.0"
+  }
+}
