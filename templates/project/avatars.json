@@ -1,0 +1,8 @@
+{
+  "cast": { "host": { "avatar": "sindy", "look": "hoodie" } },
+  "theme": "midnight",
+  "format": "landscape-1080p",
+  "brand": "brand/brand.json",
+  "lexicons": ["en-us/core", "./lexicon.json"],
+  "icons": ["core", "tech"]
+}

@@ -1,0 +1,4 @@
+{
+  "_comment": "Pronunciations of this project's words, merged over the library packs and the presenter's own lexicon. Keys are lowercase whole words; values are espeak IPA with spaces between spoken parts. Find out how a word sounds with: npx avatars phonemes <episode> --flagged",
+  "words": {}
+}

@@ -1,0 +1,9 @@
+{
+  "name": "{{title}}",
+  "wordmark": "{{id}}",
+  "tagline": "VIDEO · GUIDES",
+  "role": "your guide",
+  "links": [["Docs", "example.org/docs"], ["Code", "example.org/code"]],
+  "marks": { "emblem": "emblem.svg", "badge": "emblem-badge.svg" },
+  "tokens": {}
+}

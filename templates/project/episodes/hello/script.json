@@ -1,0 +1,10 @@
+{
+  "lines": [
+    { "id": "intro", "text": "Hi, I'm Sindy! Welcome to the videos of {{title}}." },
+    { "id": "me", "text": "I'm a virtual presenter, and my voice is made by AI. In short videos like this one, I'll show your viewers around." },
+    { "id": "how", "text": "Every video takes four steps. You write the script and the scenes, voice the narration, check the result, and render it." },
+    { "id": "next", "text": "Your next episode is one command away. Run avatars new episode, and give it a name." },
+    { "id": "fixture", "text": "Fixture voice needs no speech model, so you can check it right away." },
+    { "id": "outro", "text": "That's it for now. See you in the next video!" }
+  ]
+}

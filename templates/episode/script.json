@@ -1,0 +1,8 @@
+{
+  "lines": [
+    { "id": "intro", "text": "Hi there! Welcome to {{title}}." },
+    { "id": "why", "text": "Every episode starts with why it matters. Name the viewer's problem first, then what they'll have at the end." },
+    { "id": "steps", "text": "Then show the way there. Each line of narration is one beat, scenes show what it talks about, and its words cue what appears." },
+    { "id": "outro", "text": "That's the shape of an episode. Swap in your own lines and scenes, and see you in the next one!" }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "{{id}}",
+  "private": true,
+  "type": "module",
+  "description": "Tutorial videos of {{title}}, made with the avatars library",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "voice-setup": "avatars voice-setup",
+    "validate": "avatars validate",
+    "voice": "avatars voice --all",
+    "check": "avatars check --all",
+    "render": "avatars render --all"
+  },
+  "dependencies": {
+    "@dennisklein/avatars": "github:dennisklein/avatars#semver:^0.1"
+  }
+}

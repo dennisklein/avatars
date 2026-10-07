@@ -1,0 +1,9 @@
+# Dependencies, and files that the avatars CLI and HyperFrames generate.
+node_modules/
+.venv/
+.hyperframes/
+**/vendor/
+**/assets/voice/
+**/snapshots/
+renders/
+publish/
