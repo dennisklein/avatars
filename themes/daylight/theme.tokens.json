@@ -1,0 +1,88 @@
+{
+  "$description": "Daylight: a light slate page with white cards, a deep teal accent and a sky-blue second accent. Terminals and code panels stay dark, as screens on a light page, so commands and syntax colours read as they do in midnight; the component overrides below repaint them for that.",
+  "color": {
+    "bg": { "$value": "{color.slate.50}", "$type": "color" },
+    "bg-alt": { "$value": "{color.slate.100}", "$type": "color" },
+    "surface": { "$value": "{color.white}", "$type": "color" },
+    "surface-raised": { "$value": "{color.white}", "$type": "color" },
+    "surface-sunken": { "$value": "#0f1729", "$type": "color", "$description": "terminals and code panels, which stay dark" },
+    "surface-bar": { "$value": "#1b2538", "$type": "color" },
+    "border": { "$value": "{color.slate.300}", "$type": "color" },
+    "border-subtle": { "$value": "{color.slate.200}", "$type": "color" },
+    "text": { "$value": "{color.slate.700}", "$type": "color" },
+    "text-strong": { "$value": "{color.slate.900}", "$type": "color" },
+    "text-muted": { "$value": "#56657a", "$type": "color" },
+    "text-dim": { "$value": "#a3b3c9", "$type": "color", "$description": "terminal output, on surface-sunken" },
+    "accent": { "$value": "{color.teal.600}", "$type": "color" },
+    "accent-strong": { "$value": "{color.teal.800}", "$type": "color" },
+    "accent-soft": { "$value": "{color.teal.700}", "$type": "color", "$description": "the accent for text and thin lines on the page, so darker than accent" },
+    "info": { "$value": "{color.sky.600}", "$type": "color" },
+    "info-soft": { "$value": "{color.sky.700}", "$type": "color" },
+    "ok": { "$value": "{color.emerald.600}", "$type": "color" },
+    "warn": { "$value": "{color.amber.600}", "$type": "color" },
+    "danger": { "$value": "{color.red.600}", "$type": "color" },
+    "on-accent": { "$value": "{color.white}", "$type": "color" },
+    "code-comment": { "$value": "#95a6bd", "$type": "color", "$description": "on surface-sunken" },
+    "code-keyword": { "$value": "{color.violet.300}", "$type": "color", "$description": "on surface-sunken" }
+  },
+  "font": {
+    "sans": { "$value": "{font.family.inter}", "$type": "fontFamily" },
+    "mono": { "$value": "{font.family.jetbrains-mono}", "$type": "fontFamily" },
+    "mono-advance": { "$value": 0.6, "$type": "number", "$description": "advance width of font.mono per character, in em" }
+  },
+  "glow": {
+    "accent": { "$value": "{color.teal.300}", "$type": "color", "$extensions": { "avatars": { "alpha": 0.3 } } },
+    "info": { "$value": "{color.sky.300}", "$type": "color", "$extensions": { "avatars": { "alpha": 0.22 } } }
+  },
+  "grid": {
+    "line": { "$value": "{color.slate.400}", "$type": "color", "$extensions": { "avatars": { "alpha": 0.3 } } }
+  },
+  "presenter": {
+    "backdrop-inner": { "$value": "{color.white}", "$type": "color" },
+    "backdrop-outer": { "$value": "#d5ecf2", "$type": "color" },
+    "ring-inset": { "$value": "{color.white}", "$type": "color", "$extensions": { "avatars": { "alpha": 0.7 } } }
+  },
+  "caption": {
+    "bg": { "$value": "{color.white}", "$type": "color", "$extensions": { "avatars": { "alpha": 0.9 } } },
+    "border": { "$value": "{color.slate.300}", "$type": "color" },
+    "text": { "$value": "{color.slate.900}", "$type": "color", "$extensions": { "avatars": { "alpha": 0.62 } }, "$description": "words not yet spoken" }
+  },
+  "talk": {
+    "tag-bg": { "$value": "{color.white}", "$type": "color", "$extensions": { "avatars": { "alpha": 0.92 } } }
+  },
+  "intro": {
+    "disclosure-color": { "$value": "{color.text-muted}", "$type": "color" }
+  },
+  "diagram": {
+    "node-shadow": { "$value": "0 10px 26px rgba(15, 23, 42, 0.1)", "$type": "shadow" },
+    "node-accent-bg": { "$value": "{color.teal.50}", "$type": "color" },
+    "ghost-bg": { "$value": "{color.white}", "$type": "color", "$extensions": { "avatars": { "alpha": 0.55 } } },
+    "group-fill": { "$value": "{color.accent}", "$type": "color", "$extensions": { "avatars": { "alpha": 0.06 } } },
+    "label-bg": { "$value": "{color.white}", "$type": "color" }
+  },
+  "window": {
+    "border": { "$value": "#26334a", "$type": "color" },
+    "shadow": { "$value": "0 24px 60px rgba(15, 23, 42, 0.24)", "$type": "shadow" },
+    "bar-border": { "$value": "#2a364c", "$type": "color" },
+    "title-color": { "$value": "{color.slate.400}", "$type": "color" },
+    "dot-close": { "$value": "{color.red.400}", "$type": "color" },
+    "dot-min": { "$value": "{color.amber.400}", "$type": "color" },
+    "dot-max": { "$value": "{color.emerald.400}", "$type": "color" }
+  },
+  "terminal": {
+    "text": { "$value": "{color.slate.200}", "$type": "color" },
+    "prompt": { "$value": "{color.teal.400}", "$type": "color" },
+    "cursor": { "$value": "{color.teal.300}", "$type": "color" },
+    "mark-bg": { "$value": "{color.teal.300}", "$type": "color" },
+    "mark-color": { "$value": "#0b1220", "$type": "color" },
+    "ff-color": { "$value": "{color.sky.300}", "$type": "color" }
+  },
+  "code": {
+    "text": { "$value": "{color.slate.200}", "$type": "color" },
+    "key": { "$value": "{color.teal.300}", "$type": "color" },
+    "string": { "$value": "{color.sky.400}", "$type": "color" },
+    "punct": { "$value": "{color.slate.400}", "$type": "color" },
+    "hl-bg": { "$value": "{color.teal.300}", "$type": "color", "$extensions": { "avatars": { "alpha": 0.16 } } },
+    "hl-bar": { "$value": "{color.teal.300}", "$type": "color" }
+  }
+}
